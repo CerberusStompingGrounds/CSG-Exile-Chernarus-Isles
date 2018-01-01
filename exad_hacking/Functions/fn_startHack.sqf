@@ -24,6 +24,8 @@ if(isNull _object || isNull _player)exitWith{false};
 
 _flag = ((getPos _object) nearObjects ["Exile_Construction_Flag_Static", 150]) select 0;
 
+if(_flag isEqualTo objNull)exitWith{false};
+
 if(ExAd_HACKING_PLAYER_ONLINE && !([_flag] call ExAdServer_fnc_territoryPlayerPresent))exitWith{
 	[STR_ExAd_HACKING_NOTI_NO_PLAYER_PRESENT ,0,0.6,2,0] remoteExec ["BIS_fnc_dynamicText",owner _player];
 };
@@ -44,6 +46,14 @@ if(isNil "ExAd_HACKS_IN_PROGRESS")then{
 
 ["Hacking", format["Hack started: Player - %1(%2)|Territory - %3|Hacks in motion - %4",name _player, getPlayerUID _player, _flag getVariable ["ExileTerritoryName", "Unknown"], ExAd_HACKS_IN_PROGRESS]] call ExAdServer_fnc_log;
 
+_territory = _flag call ExileClient_util_world_getTerritoryAtPosition;
+_serverTime = time;
+if(_serverTime > ((_territory getVariable ["ExileXM8MobileNotifiedTime",-1800]) + 1800))then
+{
+	_territory call ExileServer_system_xm8_sendBaseRaid;
+	_territory setVariable ["ExileXM8MobileNotifiedTime", _serverTime];
+};
+
 _pos = _player modelToWorld [0, +0.5, 0];
 _pos set [2,((getPosATL _player) select 2)];
 
@@ -59,7 +69,7 @@ _player removeItem "Exile_Item_Laptop";
 	params ["_object","_player","_laptop","_flag","_markers","_marker","_success","_ticks","_newSize","_destroy","_msg"];
 	UISleep 2;
 	
-	(parseText (format["<t color='%1' size='%2' font='%3'>%4</t><br/><t color='%5' size='%6' font='%7'>%8</t>", ExAd_Hint_Title_Color, ExAd_Hint_Title_Size, ExAd_Hint_Title_Font,STR_ExAd_HACKING_HINT_TITLE, ExAd_Hint_Msg_Color, ExAd_Hint_Msg_Size, ExAd_Hint_Msg_Font, STR_ExAd_HACKING_HINT_HACK_START])) remoteExec ["hint", -2];
+	["baguetteRequest", ["Hacktivity Detected on the Grid!"]] call ExileServer_system_network_send_broadcast; 
 	
 	if(ExAd_HACKS_IN_PROGRESS >= ExAd_HACKING_ALLOWED_HACKS)exitWith{
 		_laptop setVariable ["ExAd_HACKING_IN_PROGRESS", false, true];
