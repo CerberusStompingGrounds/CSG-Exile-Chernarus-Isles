@@ -1,5 +1,0 @@
-version  
-1.11 fixed and embarrasing mistake
-
-1,10
-first release
