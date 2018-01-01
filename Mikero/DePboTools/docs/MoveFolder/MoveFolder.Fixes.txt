@@ -1,0 +1,76 @@
+min dll is 5.xx
+1.32 mqde compat to dll with imroved sorting list
+1.31
+config.cpp
+fixed sometimes missing replacements when same filename was mentioned twice or more affected cpp only, the file itself
+was always copied and processed
+1.30
+added diagnistic check button to keep the generated replacement text for tracing file replacements (or lack of them)
+
+1.29 made compatible to dll
+1.28 made compatible to dll
+1.27 made compatible to dll
+
+1.26 improved utf8 file handling
+	now exports as utf8 text files not unicode
+1.25
+separate checkboxes for moving ca/a3 proxies vs the others.
+typically a mod doesn't want to touch it's own furniture, but wants to pull out ca dependency
+more intuitive usage panel
+1.24
+
+allowed illegal surfaceinfo=\some\file
+removed file compare routines whihc had a forever loop. now, files are force over-written if they are there to copy
+
+
+1.23 removed 1.22
+changed locn of the movefolder.lst to the dest dir (temporary) for multi instances of this app
+changed wording of the pause checkbox
+revised the gui panel so that it's less confusing
+1.22
+retained P:\MoveFolder.lst after processing for the curious
+1.21 
+public release
+1.20
+beta release to jakerod
+
+fixed error in not renaming tga files
+fixed: prevented listing of wrp rvmat files(too many) and erroneous copying of unused ones
+
+
+1.18 made compat to dll
+	fixed rep.lst creation
+1.17 made compatible to dll
+1.16
+created unsorted replacement list for moveobject to deal with
+removed a few redundant api calls
+
+1.15
+added a drive specifer when files not found because some p3ds illegally have the drive specifier already embedded
+it is confusing otherwise to see a file that exists, fail because of p:\p:\some\where
+
+removed p: drive dependency when creating a rep.lst
+
+1.14
+changed wording of source and dest for first startup
+fixed proxies to actually be changed in the p3d of interest
+added a delete all content button
+1.13
+auto copied any stringtables (if present) for crunch via config
+severe surgury for moving islands
+auto copied model.cfg and friends for p3ds
+better detection (and auto fixing) of colliding source files (diffferent default.rvmats eg)
+
+1.12
+improved mesg output
+fixed bad tga decode for proxies
+improved sqx file reference detection
+1.11 
+added pause option
+auto detected model.cfg based on p3d location
+changed source folder to source config.cpp
+provided modest support for moving islands
+rewrote readme
+1.10
+first release
+

@@ -1,0 +1,11 @@
+from mikero
+
+drag n drop your aia >>>mod<<< folder onto this, OR
+
+aia2p  \where\ever\your\AIA\modFolder\is
+
+----
+
+be warned that extracting aia2p over-writes the ca folder on your p:\ drive (if present)
+
+the contents of aia contains only those models that are usable in arma THREE. it is NOT the equivalent of extracting armaTWO game data

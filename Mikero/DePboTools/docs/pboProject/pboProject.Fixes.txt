@@ -1,0 +1,289 @@
+-----------------
+min dll is 5.5x
+-----------------
+1.73
+gave proper p:\.source message if it's encountered
+
+freebie release: disabled obfuscation selection in gui It was disabled in the dll, but the user was unaware of that.
+
+1.72:
+fixed unpleasant bug if binarise crashes where pbo project might too!
+
+1.71
+restored persistency to rebuild cfgPatches
+fixed bug introduced in 1.70 where cmdline would often not return bad status
+
+1.70
+	renamed rebuildreqaddins in setup and documentation to rebuild cfgPatches to be less confusing
+	removed persistency of rebuild cfgPatches so that user must force set this paramater on each instantiation
+	now continues processing each job rather than stoppin gon the first job where an error has been detected (except wrps, it stops immediately)
+
+1.69
+	stopped crash when bad syntax on command line
+	added +-R  rebuild reqaddons
+	now fails if a texheader should have been created and hasn't been
+1.68
+	wrp
+		full build is forced if any unbinarised p3d's are repacked in same session.
+		automatically (re)builds pbos which a wrp uses and they have been detected as stale or not present in temp
+1.67	free tools release
+1.66
+	wrp builds only
+		checks p3d's in temp are, in fact, binarised
+		checks binarised p3d is a later filedate than the source
+1.65
+	added option to not binarise (or compress) mission.sqm 
+	BUT the resulting text file will be reduced to remove all comments and includes (if any)
+	cmdline option is +/-Q
+
+1.64
+fixed error in creating a bisprivatekey file
+1.63:
+fixed del pbo to fail if game is running
+added delete all temp and delete all mods buttons
+added ! to deprecate & for obfuscate in cmd line (quotes are not required for !, and ! is identical to makepbo -option
+changed initial default startup engine from arrowhead to arma3
+tested for a blank source folder for joblists. can only happen as a result ofg changing work drives
+added personal copy of dsCreateKey.exe for those installs of arma2 which don't have it or can't be found
+	made sure, 'correct' of dsCreateKey version is used based on engine type (they are currently the same)
+1.62:
+	fixed dos cmdline obfuscate
+
+1.61: improved rapify support
+1.60
+	improved utf8 filename builds
+	now stops if binarise crashes
+
+wrp
+	setup->island builds
+		now checks that all folders are on same drive
+		prevents a drive only, being specified
+	
+1.59
+	reworded to gui to "sign pbo(s)"
+	reworded rtm skeleton usage
+
+1.58
+changed titlebar to nameof folder being crunched to assist with selecting one, of multiple instances
+of pboProject
+
+forced extern references for where legacy versions *might* have it unset in registry
+
+logged command line for makepbo
+
+1.57
+subscriber version of 1.56 with all features enabled
+1.56
+revised mod.cpp
+reverted source saving to p:(dot) source
+1.55
+removed striplog as an option. it's now permanently set but actually irrelevent for a3 builds
+
+restored the moving of source folders back to p:\\(dot)source. read the readme
+
+1.54
+minor fix to speed up checking of roadslib cfg
+fixed texheaders.bin generation if a spaced path argument
+blocked appid being set unless a3 dlc is being produced
+
+a source folder is ignored for all processing, BUT, only one source folder can exist per pbo to be made, each one joblist
+
+source folder now also hidden from view during generation of texheaders.bin
+
+1.53
+fixed error in checking model.cfg for skeleton names
+
+1.52
+better wording if a (dot)source folder is detected and what to do about it after a crash
+silently fixed (dot)ignore files after a crash
+
+
+allowed tweaking of the default compression list
+fixed potential argument error for raw prefix if a spaced arg (temp folder)
+1.51:
+fixed missing roadslib.cfg for wrps
+
+1.50:
+desensitised rtm file checking
+added model.cfg deep checks for parent externals
+honored Clean setting of dos mode
+added compress (-Z) to cmd line mode
+crippled bis binarize to ignore source\ folders
+fixed a del/q error for textheaders.bin
+added optional rebuilding of required addons
+1.49
+added appID to setup panel
+added bimpas to transferrable files
+added compression to setup
+
+1.48
+fixed bad status value from bis binarise
+forced user to select a mod FOLDER, not a drive
+added jpg to lst of packable files
+
+1.47
+update for latest bis binarise
+ignores bis binarise error status as being faulty
+
+1.46
+correction to the method by which exlcudes are excludes (internal)
+too many terrain builder files were appearing in temp. my bad
+
+1.45
+provided a (default) exclude list
+1.44
+fixed 'no wrp' in pbo !!!!
+
+1.43
+island builds: now autoscans for land_xx classes by default. manual now optional.
+1.42
+added obfuscation
+1.41
+small improvements to potential ctd's before the gui can initialise
+
+improved cli (dos prompt) for bat processing. 
+
+
+1.40
+now accounts for binarised odol p3d's that it cannot decode (version unknown) by ignoring them for file checking purposes
+added a timestamp to ending message so that multiple instances can be checked for when last one was completed
+
+1.39
+crippled check extern button so that it's permanently forced on. This because ppl were abusing it's use and stating pboProject reported no errors (because they disabled it)
+
+1.38 made compat to dll
+1.37
+added a jobs completed msg to dos screen when building multiple pbo's to avoid confusion whether processing has finished or not
+p3d: now checks integrity of p3d's before further processing
+
+1.36
+corrected command line version to reflect the proper <workspace>\temp folder NOT the <mod> folder
+added (optional) no file datestamps to ensure successive builds of same pbo result in same sha
+
+1.35 
+multiple pbo crunching:
+	delayed wrp creation(s) until all other PBO types (if any) are made. 
+	this because p3d's it might be using need to be packed first
+
+1.34
+
+added a Keys folder to the mod folder and copied the public key used to sign the pbo's
+
+1.33 fix to 1.32 when creating temp folders
+
+1.32
+
+added work around for arma3 'no icon' island builds. This will unfortunalety add to processing time. Do not blame me!
+
+changed message from 'cannot insert files' to makepbo failed 
+
+1.31
+
+multi pbo makes:
+	showed which packer failed when packing failed if running multiple copies of pboProject
+
+islands:
+	roadlibs.cfg inclusion (for road shape files) revised
+
+mod.cpp:
+	correct mymod website to contain quotes
+
+stripped 'preloadconfig' warning from log file
+
+ignores a source\ folder when scanning for jobs-to-do
+
+allowed folders to have .extensions
+
+internal:
+	added independent bisfileio
+	used io_rmdir function rather than dep3d
+	removed reliance on dep3d module to provide io
+
+
+
+1.30
+individual packing logs for each pbo
+change of wording to locating tools...
+corrected dos mode to return bad status
+
+1.29
+added ogv to be included in pbo's
+added more messages when a fail occurs
+.log is stripped whether fail or otherwise
+1.28
+for non p: drive setup: restored current drive&folder rather than c: drive (and current folder)
+fixed createkeys for uac enabled windoze
+
+1.27
+unicode release
+ignores source\ folder
+added mod.cpp creation in setup->
+
+1.26
+now copies over hpp files
+fixed create key AGAIN!!!!
+1.25
+minor change to finding tools display
+respects prefix file when binarising
+moved statics into class to make independent running copies of pboproject
+1.24
+enabled view binlog semi permanently
+now shows folder of <temp>*.log if it can't find a specific log
+provided a dscreatekey.exe for arma2
+fixed non existent file error msg when pre-scanning files
+deleted stale temp\whatever.logs prior to a pack
+mod folder creation and output fixed when a root drive specified  (p:\ rather than p:\somehere)
+
+1.23 
+fixed errors in creating (and using) bikeys with spaced file arguments. plus some illogic with the dsutils where the outputs are sent
+
+converted to unicode
+
+1.22
+re-enabled P:\ drive only specifier (faulty by accident)
+introduced dos mode
+1.21
+removed stale bisign from mod folder 
+changed to allow for either standard 'Pdrive' packing or no virtual drive at all.
+added tool tips for most controls
+removed compress option as being too un-tested for a3
+
+
+1.20
+accounted for binarising a pbo containing only rtms
+brought dos console forward whenever crunch is hit
+
+1.19
+islands only: accounted for shp, dbf and other road files
+
+signfile enabled only if a key is present
+
+1.18
+set default engine to arrowead on first start
+removed erroneous 'fileserver error' when creating texheaders
+removed w:\assertion failed msg when creating texheaders
+ignores source\*.png/tag files (and source\*.pew)
+checked for existence of makepbo, rapify and bistools at startup
+minor changes to display error message boxes when missing specific tools
+1.17
+fixed potential failure of external file checks for pre-binarised files
+
+1.16
+fixed mod folder to accept a spaced destination such as "program files"
+set standard mikero icon for gui titlebar
+1.15 
+enabled dsCreateKey if found in registry (steamtools)
+1.14
+added dsCreatekey for signing files
+added arma3 binarise (and friends)
+de-cluttered the gui interface
+allowed other than P:\ for pFrive
+fixed copying of pre-binarised rvmat files (among others)
+
+1.13 removed texheaders.bin from source folder after use
+
+1.12 fixed missing land classes for island wrp creation
+removed additional noise strings in striplog.bat
+1.11 to cwr2 and general public release
+1.10a to bushlurker
+1.10 initial alpha release to Q
