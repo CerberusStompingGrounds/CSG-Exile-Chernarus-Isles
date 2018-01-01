@@ -53,7 +53,7 @@ goto started
 
 :loop
 
-::Monitorting Loop
+::Monitoring Loop
 cls
 echo Server is already running, running monitoring loop
 
