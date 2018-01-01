@@ -1,0 +1,136 @@
+class CaucasusInsurgencyUniforms
+{
+	name = "Caucasus Insurgency Uniforms";
+	icon = "a3\ui_f\data\gui\Rsc\RscDisplayArsenal\uniform_ca.paa";
+	items[] =
+	{
+		"FGN_RU_Gorka_Skol",					
+		"FGN_RU_Gorka_Leto",				
+		"FGN_RU_Krot_Berezhka",			
+		"FGN_RU_Krot_Skol",					
+		"FGN_M88_Khaki_VV",					
+		"FGN_M88_KhakiVSR_VV",				
+		"FGN_CauR_M88_M81Black",				
+		"FGN_CauR_M88_Tiger",					
+		"FGN_M88_VSR2_VV",				
+		"FGN_M88_VSRKhaki_VV",				
+		"FGN_CauR_M88_M81",				
+		"FGN_CauR_M88_M81Green",				
+		"FGN_CauR_M88_M81Tiger",				
+		"FGN_M88_VSR2_VDV",				
+		"FGN_M88_Kamysh_blue",				
+		"FGN_M88_TTsKOVSR_VMF",				
+		"FGN_M88_VSRTTsKO_VMF",			
+		"FGN_CauR_M93_M81",					
+		"FGN_CauR_M93_M81Green",				
+		"FGN_RU_NPOSM_Podlesok",				
+		"FGN_RU_NPOSM_Podlesok_Urban",		
+		"FGN_RU_SKLON_Kamysh_blue",		
+		"FGN_CauR_Sklon_Kamysh",				
+		"FGN_CauR_Smock_BlackWoodland",		
+		"FGN_CauR_Smock_Flecktarn",	
+		"FGN_CauR_Smock_Woodland",			
+		"FGN_RU_Splav_SMK_Winter",			
+		"FGN_RU_Splav_SMK",					
+		"FGN_RU_SPOSN_Leto",				
+		"FGN_RU_Sumrak_BerezhkaY",
+	};
+};
+class CaucasusInsurgencyVests
+{
+	name = "Caucasus Insurgency Vests";
+	icon = "a3\ui_f\data\gui\Rsc\RscDisplayArsenal\vest_ca.paa";
+	items[] =
+	{
+		"FGN_RU_6B513_Khaki",
+		"FGN_RU_6B513_Khaki_Medic",
+		"FGN_RU_6B513_Khaki_Officer",
+		"FGN_RU_6B513_Khaki_Sniper",
+		"FGN_RU_6B513",
+		"FGN_RU_6B513_Medic",
+		"FGN_RU_6B513_Officer",
+		"FGN_RU_6B513_Sniper",
+		"FGN_RU_6B513_TTsKO",
+		"FGN_RU_6B513_TTsKO_Medic",
+		"FGN_RU_6B513_TTsKO_Officer",
+		"FGN_RU_6B513_TTsKO_Sniper",
+		"FGN_RU_6B513_VSR",
+		"FGN_RU_6B513_VSR_Medic",
+		"FGN_RU_6B513_VSR_Officer",
+		"FGN_RU_6B513_VSR_Sniper",
+		"FGN_RU_6B519_Khaki",
+		"FGN_RU_6B519_Khaki_Medic",
+		"FGN_RU_6B519_Khaki_Officer",
+		"FGN_RU_6B519_Khaki_Sniper",
+		"FGN_RU_6B519",
+		"FGN_RU_6B519_Medic",
+		"FGN_RU_6B519_Officer",
+		"FGN_RU_6B519_Sniper",
+		"FGN_RU_6B519_TTsKO",
+		"FGN_RU_6B519_TTsKO_Medic",
+		"FGN_RU_6B519_TTsKO_Officer",
+		"FGN_RU_6B519_TTsKO_Sniper",
+		"FGN_RU_6B519_VSR",
+		"FGN_RU_6B519_VSR_Medic",
+		"FGN_RU_6B519_VSR_Officer",
+		"FGN_RU_6B519_VSR_Sniper",
+		"FGN_RU_V95_Black",
+		"FGN_RU_V95_Kamysh_Blue",
+		"FGN_RU_V95_Kamysh",
+		"FGN_RU_V95_KKO_Urban",
+		"FGN_RU_V95_KKO",
+		"FGN_RU_V95_Podlesok_Urban",
+		"FGN_RU_V95_Podlesok",
+		"FGN_RU_V95_VSR",
+		"FGN_RU_V95_Black_OMON",
+		"FGN_RU_V95_Kamysh_Blue_OMON",
+		"FGN_RU_V95_Kamysh_OMON",
+		"FGN_RU_V95_KKO_Urban_OMON",
+		"FGN_RU_V95_KKO_OMON",
+		"FGN_RU_V95_Podlesok_Urban_OMON",
+		"FGN_RU_V95_Podlesok_OMON",
+		"FGN_RU_V95_VSR_OMON",
+		"FGN_RU_V95_Black_2",
+		"FGN_RU_V95_Kamysh_Blue_2",
+		"FGN_RU_V95_Kamysh_2",
+		"FGN_RU_V95_KKO_Urban_2",
+		"FGN_RU_V95_KKO_2",
+		"FGN_RU_V95_Podlesok_Urban_2",
+		"FGN_RU_V95_Podlesok_2",
+		"FGN_RU_V95_VSR_2"
+	};
+};
+class CaucasusInsurgencyHeadgear
+{
+	name = "Caucasus Insurgency Headgear";
+	icon = "a3\ui_f\data\gui\Rsc\RscDisplayArsenal\headgear_ca.paa";
+	items[] =
+	{
+		"FGN_CauR_Beanie_Black",
+		"FGN_CauR_Beanie_Brown",
+		"FGN_CauR_Beanie_Woodland",
+		"FGN_RU_Beret_OMON_New",
+		"FGN_RU_OSNBeret",
+		"FGN_CauR_Boonie_M81",
+		"FGN_FieldCap_Kamysh_Blue",
+		"FGN_FieldCap_Kamysh",
+		"FGN_CauR_Pakol_03",
+		"FGN_CauR_Pakol_01",
+		"FGN_CauR_Pakol_02",
+		"FGN_CauR_PatrolCap_M81",
+		"FGN_SSH68_Flora",
+		"FGN_SSH68_Khaki",
+		"FGN_SSH68_KLMK",
+		"FGN_SSH68_TTsKO",
+		"FGN_SSH68_TTsKO2",
+		"FGN_SSH68_VSR2",
+		"FGN_SSH68_VSR",
+		"FGN_SferaS_Green",
+		"FGN_SferaS_VSR",
+		"FGN_Sfera_Green",
+		"FGN_Sfera_VSR",
+		"FGN_ZSH12",
+		"FGN_ZSH12_Black",
+		"FGN_ZSH12_Balaclava"
+	};
+};

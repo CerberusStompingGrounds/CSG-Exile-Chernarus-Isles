@@ -1,0 +1,14 @@
+class Exile_Item_SheepSteak_Cooked { quality = 1; price = 300; };
+class Exile_Item_GoatSteak_Cooked { quality = 1; price = 300; };
+class Exile_Item_RabbitSteak_Cooked { quality = 1; price = 300; };
+class Exile_Item_ChickenFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_RoosterFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_SnakeFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_AlsatianSteak_Cooked { quality = 1; price = 300; };
+class Exile_Item_SnakeFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_SheepSteak_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_GoatSteak_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_ChickenFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_RoosterFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_RabbitSteak_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_AlsatianSteak_Raw { quality = 1; SellPrice = 1500; };

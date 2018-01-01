@@ -1,0 +1,16 @@
+class Exile_Item_CatSharkFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_FinSteak_Cooked { quality = 1; price = 300; };
+class Exile_Item_TurtleFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_TunaFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_MulletFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_SalemaFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_MackerelFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_OrnateFilet_Cooked { quality = 1; price = 300; };
+class Exile_Item_CatSharkFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_TunaFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_TurtleFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_FinSteak_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_MackerelFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_MulletFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_OrnateFilet_Raw { quality = 1; SellPrice = 1500; };
+class Exile_Item_SalemaFilet_Raw { quality = 1; SellPrice = 1500; };

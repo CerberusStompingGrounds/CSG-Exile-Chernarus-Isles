@@ -1,0 +1,14 @@
+[
+	["Land_Wreck_Ural_F",[7.30089,-2.18457,0],0,true],
+	["Land_Wreck_Truck_dropside_F",[-4.10828,7.21436,0],123,true],
+	["B_Slingload_01_Ammo_F",[0.53881,-7.08447,0],90,true],
+	["ca\buildings\furniture\hromada_beden_dekorativnix.p3d",[5.95104,2.55713,0],0,true],
+	["ca\buildings\furniture\hromada_beden_dekorativnix.p3d",[4.31615,1.0874,0],90,true],
+	["a3\structures_f_epb\items\military\ammobox_rounds_f.p3d",[-1.57508,4.47021,0],65,true],
+	["a3\structures_f_epb\items\military\ammobox_rounds_f.p3d",[-2.54896,4.19287,0],180,true],
+	["a3\structures_f_epb\items\military\ammobox_rounds_f.p3d",[-2.18397,3.70215,0],227,true],
+	["ca\weapons\ammoboxes\usspecialweapons.p3d",[1.55212,-5.07813,0],344,true],
+	["ca\weapons\ammoboxes\usspecialweapons.p3d",[0.18029,-5.27734,0],0,true],
+	["ca\buildings\furniture\ammobednax.p3d",[-1.48121,-5.40332,0],0,true],
+	["ca\weapons\ammoboxes\usbasicweapons.p3d",[3.22375,-5.03955,0],0,true]
+]

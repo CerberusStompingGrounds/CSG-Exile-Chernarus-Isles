@@ -1,0 +1,14 @@
+[
+	["Land_Cargo_House_V3_F",[0,15,0],0,true],
+	["Land_Cargo_House_V3_F",[6.2,15,0],0,true],
+	["Land_Cargo_House_V3_F",[-6.2,15,0],0,true],
+	["Land_Cargo_House_V3_F",[15,0,0],90,true],
+	["Land_Cargo_House_V3_F",[15,6.2,0],90,true],
+	["Land_Cargo_House_V3_F",[15,-6.2,0],90,true],
+	["Land_Cargo_House_V3_F",[0,-15,0],180,true],
+	["Land_Cargo_House_V3_F",[-6.2,-15,0],180,true],
+	["Land_Cargo_House_V3_F",[6.2,-15,0],180,true],
+	["Land_Cargo_House_V3_F",[-15,0,0],270,true],
+	["Land_Cargo_House_V3_F",[-15,-6.2,0],270,true],
+	["Land_Cargo_House_V3_F",[-15,6.2,0],270,true]
+]

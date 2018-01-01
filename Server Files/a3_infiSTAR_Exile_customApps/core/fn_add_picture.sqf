@@ -1,0 +1,16 @@
+_display = _this select 0;
+_ctrl = _this select 1;
+_picture = _this select 2;
+_idc = (ctrlIDC _ctrl)+10000;
+_ctrlPos = ctrlPosition _ctrl;
+_ctrlPos set[0,(_ctrlPos select 0)+((_ctrlPos select 2)/1.3)];
+_ctrlPos set[1,(_ctrlPos select 1)+((_ctrlPos select 3)/2)];
+_ctrl = [_display,'RscPicture',_idc] call apps_fnc_createctrl;
+_ctrl ctrlSetText _picture;
+_ctrl ctrlSetPosition _ctrlPos;
+_ctrl ctrlSetScale 0.5;
+_ctrl ctrlSetFade 1;
+_ctrl ctrlCommit 0;
+_ctrl ctrlSetFade 0.2;
+_ctrl ctrlCommit 1;
+createdCtrls pushBackUnique _idc;
