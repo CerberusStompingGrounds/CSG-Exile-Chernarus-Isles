@@ -123,6 +123,7 @@ DMS_SpawnMissions_Scheduled = false;	// Whether or not to spawn missions in a sc
 	DMS_HideBox							= false;					// "Hide" the box from being visible by players until the mission is completed.
 	DMS_EnableBoxMoving					= false;					// Whether or not to allow the box to move and/or be lifted by choppers.
 	DMS_SpawnBoxSmoke					= true;						// Spawn a smoke grenade on mission box upon misson completion during daytime
+	DMS_DefaultSmokeClassname 			= "SmokeShellRed";		// Classname of the smoke you want to spawn.
 	DMS_SpawnBoxIRGrenade				= true;						// Spawn an IR grenade on mission box upon misson completion during nighttime
 	/*Mine settings*/
 	DMS_SpawnMinefieldForEveryMission	= false;					// Whether or not to spawn a minefield for every dynamic mission.
@@ -447,7 +448,8 @@ DMS_SpawnMissions_Scheduled = false;	// Whether or not to spawn missions in a sc
 	DMS_ai_default_items =				[							// Toolbelt items each AI will spawn with
 											"ItemWatch",
 											"ItemMap",
-											"ItemCompass"
+											"ItemCompass",
+											"ItemRadio"
 										];
 	DMS_ai_BipodList =					[
 											"bipod_01_F_blk",
@@ -2397,7 +2399,6 @@ DMS_SpawnMissions_Scheduled = false;	// Whether or not to spawn missions in a sc
 											"Exile_Item_WoodGateKit",
 											"Exile_Item_WoodFloorKit",
 											"Exile_Item_WoodStairsKit",
-											"Exitem_documents",
 											"Exitem_documents"
 										];
 	DMS_Box_BaseParts_Concrete =		[							// List of concrete base parts
