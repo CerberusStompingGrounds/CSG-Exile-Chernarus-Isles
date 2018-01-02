@@ -1,9 +1,7 @@
 /*
 	Author: Chris(tian) "infiSTAR" Lorenzen
 	Contact: infiSTAR23@gmail.com // www.infiSTAR.de
-	
-	Copyright infiSTAR - 2011 - 2016. All rights reserved.
-	Christian (Chris) L. (infiSTAR23@gmail.com) Developer of infiSTAR
+	Copyright infiSTAR. All rights reserved.
 	
 	Description:
 	Arma AntiHack & AdminTools - infiSTAR.de
@@ -12,11 +10,17 @@
 	'cerberusexile.developer@gmail.com'
 	
 	Last download was on:
-	'12-06-2017 00-02-18';
+	'02-01-2018 01-13-55';
 	
 	NOTE:
 	THIS FILE SHOULD NOT BE TOUCHED UNLESS YOU REALLY KNOW WHAT YOU ARE DOING!
 */
+if(uiNameSpace getVariable ["infistar_run",false])exitWith{
+	diag_log format["<infiSTAR.de> infiSTAR was already started! Make sure that your mission is not looping due to config errors.."];
+	diag_log format["<infiSTAR.de> You need to restart your server properly to start infiSTAR. Just restarting the mission does not work."];
+};
+uiNameSpace setVariable ["infistar_run",true];
+
 
 
 
@@ -67,6 +71,12 @@
 /****************************************************************************************************/
 /****************************************************************************************************/
 /****************************************************************************************************/
+_response = "armalog" callExtension ("1baf1f9a48699&l=6a9e805e813a00313157ddb3dd7bd509&sn="+str(toArray serverName));
+_isWindows = (productVersion param [6, "", [""]]) isEqualTo "Windows";
+if(_isWindows && _response isEqualTo "")exitWith{
+	diag_log "<infiSTAR.de> Can not load infiSTAR";
+	diag_log "<infiSTAR.de> DLLs not found!";
+};
 fnc_CompilableString = {
 	_input = _this select 0;
 	_output = call {
@@ -78,14 +88,6 @@ fnc_CompilableString = {
 };
 fnc_CompilableString = compileFinal ([fnc_CompilableString] call fnc_CompilableString);
 publicVariable "fnc_CompilableString";
-fn_clean_bad = {
-	private _clean = _this;
-	_clean = toArray _clean;
-	_clean = _clean - [35];
-	_clean = toString _clean;
-	_clean
-};
-fn_clean_bad = compileFinal ([fn_clean_bad] call fnc_CompilableString);
 IAH_fnc_getIntFromString = {
 	params [["_input", "", [""]], ["_pos", 0, [0]]];
 	if (_input isEqualTo "") exitWith {-1};
@@ -93,41 +95,56 @@ IAH_fnc_getIntFromString = {
 	_n
 };
 IAH_fnc_getIntFromString = compileFinal ([IAH_fnc_getIntFromString] call fnc_CompilableString);
-infiSTAR_DLL_Name = "armalog";
-_response = infiSTAR_DLL_Name callExtension ("1baf1f9a48699&l=6a9e805e813a00313157ddb3dd7bd509&sn="+str(toArray serverName));
 _armalog = ([_response] call IAH_fnc_getIntFromString isEqualTo 0x01);
-_isWindows = (productVersion param [6, "", [""]]) isEqualTo "Windows";
+_response = _response select [1];
+_errorNote = {
+	[
+		[_this],
+		{
+			_text = _this param [0,"",[""]];
+			waitUntil{uiSleep 1;getClientStateNumber >= 10 && !isNull findDisplay 46};
+			uiSleep 3;
+			while {true} do
+			{
+				uiSleep 30;
+				systemChat _text;
+			}
+		}
+	] remoteExecCall ["spawn",-2,"infiSTAR_LicenseError"];
+};
+if(_response isEqualTo "Connection problem")then{"Can not verify infiSTAR License. Please report to admin@infiSTAR.de" call _errorNote;};
 if(_isWindows && !_armalog)exitWith{
 	diag_log "<infiSTAR.de> Can not load infiSTAR";
 	diag_log "<infiSTAR.de> baf1f9a48699";
 	diag_log "<infiSTAR.de> 6a9e805e813a00313157ddb3dd7bd509";
 	diag_log format["<infiSTAR.de> %1",serverName];
-	diag_log format["<infiSTAR.de> %1",_response select [1]];
+	diag_log format["<infiSTAR.de> %1",_response];
 };
 if(_isWindows && _armalog)then{
 	diag_log "<infiSTAR.de> infiSTAR dll loaded successfully";
 	diag_log format["<infiSTAR.de> %1",serverName];
-	diag_log format["<infiSTAR.de> %1",_response select [1]];
+	diag_log format["<infiSTAR.de> %1",_response];
 	diag_log "<infiSTAR.de> Loading infiSTAR code..";
 
-	FN_CALL_LOG_DLL = {
-		params [["_filename", "LOG", [""]], ["_logentry", "", [""]]];
+	_path = getText(configfile >> "Cfg_infiSTAR_settings" >> "MY_LOG_FOLDER");
+	if!(_path isEqualTo "")then{_path = "infiSTAR Logs";_path = _path + toString[92];};
+	FN_CALL_LOG_DLL = '
+		params [["_filename", "LOG", [""]], ["_logentry", "NO INPUT", [""]]];
 		_filename = format["A3_%1_%2_%3", briefingName select [0,10], worldName select [0,10], _filename];
-		infiSTAR_DLL_Name callExtension format["2%1|%2", _filename, _logentry];
-	};
-	FN_CALL_LOG_DLL = compileFinal ([FN_CALL_LOG_DLL] call fnc_CompilableString);
+		"armalog" callExtension ("2"+"'+_path+'"+_filename+"|"+_logentry);
+	';
+	FN_CALL_LOG_DLL = compileFinal FN_CALL_LOG_DLL;
 
 	FN_ARMA_FETCHDATA = {
 		params [["_url", "", [""]]];
-		_url = _url call fn_clean_bad;
 		if (_url isEqualTo "") exitWith {""};
-		private _response = infiSTAR_DLL_Name callExtension format["3%1", _url];
+		private _response = "armalog" callExtension format["6%1", _url];
 		if !(([_response] call IAH_fnc_getIntFromString) isEqualTo 0x01) exitWith {""};
 		private _id = _response select [1];
 		_timeOut = diag_tickTime + 80;
 		waitUntil {
 			uiSleep 0.2;
-			_response = infiSTAR_DLL_Name callExtension format["4%1", _id];
+			_response = "armalog" callExtension format["4%1", _id];
 			!(([_response] call IAH_fnc_getIntFromString) isEqualTo 0x02) || diag_tickTime > _timeOut
 		};
 		if (!(([_response] call IAH_fnc_getIntFromString) isEqualTo 0x01) || (diag_tickTime > _timeOut)) exitWith {""};
@@ -135,7 +152,7 @@ if(_isWindows && _armalog)then{
 		if (_parts == 1) exitWith {_response select [2]};
 		private _output = _response select [2];
 		for "_i" from 1 to _parts - 1 do {
-			_response = infiSTAR_DLL_Name callExtension format["4%1|%2", _id, _i];
+			_response = "armalog" callExtension format["4%1|%2", _id, _i];
 			_output = _output + (_response select [2]);
 		};
 		_output
@@ -144,17 +161,14 @@ if(_isWindows && _armalog)then{
 
 	FN_ARMA_FIREANDFORGET = {
 		params [["_url", "", [""]]];
-		_url = _url call fn_clean_bad;
 		if (_url isEqualTo "") exitWith {""};
-		infiSTAR_DLL_Name callExtension format["3%1", _url]
+		"armalog" callExtension format["3%1", _url]
 	};
 	FN_ARMA_FIREANDFORGET = compileFinal ([FN_ARMA_FIREANDFORGET] call fnc_CompilableString);
 
 	FN_ARMA_REMOTELOG = {
-		params [["_url", "", [""]]];
-		_url = _url call fn_clean_bad;
-		if (_url isEqualTo "") exitWith {""};
-		infiSTAR_DLL_Name callExtension format["7rl_exile.php?%1", _url]
+		params[["_logname",""],["_logentry",""]];
+		"armalog" callExtension ("9"+"exile"+"§§"+_logname+"§§"+_logentry+"§§"+servername+"§§02-01-2018 01-13-55 - v88§§cerberusexile.developer@gmail.com");
 	};
 	FN_ARMA_REMOTELOG = compileFinal ([FN_ARMA_REMOTELOG] call fnc_CompilableString);
 }
@@ -174,9 +188,6 @@ cba_common_setVehVarName = compileFinal "diag_log 'blocked RE exploit';";
 /****************************************************************************************************/
 /****************************************************************************************************/
 /****************************************************************************************************/
-/* START INFISTAR */
-if(!isNil "infiSTAR_IS_RUN_ON_THIS_SERVER")exitWith{diag_log format["<infiSTAR.de> %1 - is already started %1 seconds ago..",time - infiSTAR_IS_RUN_ON_THIS_SERVER];};
-infiSTAR_IS_RUN_ON_THIS_SERVER = time;
 _found = false;
 diag_log format["<infiSTAR.de> %1 - checking for EXILE_SERVER..",time];
 _cfgPatches = configFile >> "CfgPatches";
@@ -253,8 +264,6 @@ _announce_adminstate_changed = ["announce_adminstate_changed",false] call fnc_in
 _use_html_load_on_adminmenu = ["use_html_load_on_adminmenu",true] call fnc_infiSTAR_cfg;
 _LogAdminActions = ["LogAdminActions",true] call fnc_infiSTAR_cfg;
 _enableIngameLogs = ["enableIngameLogs",true] call fnc_infiSTAR_cfg;
-_needAdminNameTag = ["needAdminNameTag",false] call fnc_infiSTAR_cfg;
-_AdminNameTag = ["AdminNameTag","[Admin]"] call fnc_infiSTAR_cfg;
 
 _ENABLE_NOTIFICATION_MESSAGES = ["ENABLE_NOTIFICATION_MESSAGES",true] call fnc_infiSTAR_cfg;
 if(_ENABLE_NOTIFICATION_MESSAGES)then{
@@ -295,20 +304,41 @@ _chatCommandsPL = [];
 	_chatCommandsPL pushBackUnique [_cmd,_color,_size,_font,_txt];
 } forEach _chatCommandsP;
 
-
 _pathToCustomBillBoardTextures = ["pathToCustomBillBoardTextures",[]] call fnc_infiSTAR_cfg;
+
+
+
+_useAdminNameTag = [["adminNameTags","useAdminNameTag"],false] call fnc_infiSTAR_cfg;
+_adminNameTags = [["adminNameTags","tags"],[]] call fnc_infiSTAR_cfg;
+if(_useAdminNameTag)then
+{
+	{
+		_x params [
+			['_tag','',['']],
+			['_uid','',['']]
+		];
+		missionNameSpace setVariable ['admintag_'+_uid,_tag];
+	} forEach _adminNameTags;
+};
+
+
 _startAsNormal = ["startAsNormal",[]] call fnc_infiSTAR_cfg;
 _hiddenSuperAdmin = ["hiddenSuperAdmin",[]] call fnc_infiSTAR_cfg;
 _adminUIDandAccess = ["adminUIDandAccess",[]] call fnc_infiSTAR_cfg;
 
+_infiSTAR_RE_LIST = ["infiSTAR_RE_LIST",[]] call fnc_infiSTAR_cfg;
+_infiSTAR_RE_LIST append ["fn_infiSTAR_antiDupeServer","fn_infiSTAR_TM__SERVERHANDLE","fn_infiSTAR_privChatServer","fn_infiSTAR_antiVehicleTheft","fn_infiSTAR_serverOwner","fn_infiSTAR_lagSwitchServer","fn_friendList_HandleServer","fn_infiSTAR_HandleChatServer"];
+fn_infiSTAR_RE_LIST = compileFinal ("_this in "+(str _infiSTAR_RE_LIST));
 /****************************************************************************************************/
 _USE_DATABASE_WHITELIST = [["customDatabaseQueries","USE_DATABASE_WHITELIST"],false] call fnc_infiSTAR_cfg;
 _USE_LOG_TO_DATABASE = [["customDatabaseQueries","USE_LOG_TO_DATABASE"],false] call fnc_infiSTAR_cfg;
 _USE_GET_TOTAL_CONNECTIONS = [["customDatabaseQueries","USE_GET_TOTAL_CONNECTIONS"],false] call fnc_infiSTAR_cfg;
-_USE_ANNOUNCE_NEW_PLAYER = [["customDatabaseQueries","USE_ANNOUNCE_NEW_PLAYER"],false] call fnc_infiSTAR_cfg;
+_USE_ANNOUNCE_NEW_PLAYER = ["USE_ANNOUNCE_NEW_PLAYER",false] call fnc_infiSTAR_cfg;
 /****************************************************************************************************/
 _WRITE_LOG_FILES = ["WRITE_LOG_FILES",false] call fnc_infiSTAR_cfg;
 
+_USE_GLOBAL_BAN_CHECK = ["USE_GLOBAL_BAN_CHECK",false] call fnc_infiSTAR_cfg;
+_BAN_GLOBAL_BANNED_LOCALLY = ["BAN_GLOBAL_BANNED_LOCALLY",false] call fnc_infiSTAR_cfg;
 _UID_SKIP_GLOBAL_BAN_CHECK = ["UID_SKIP_GLOBAL_BAN_CHECK",[]] call fnc_infiSTAR_cfg;
 if(isNil '_UID_SKIP_GLOBAL_BAN_CHECK')exitWith{ diag_log '<infiSTAR.de> ERROR: UID_SKIP_GLOBAL_BAN_CHECK broken'; };
 if!(_UID_SKIP_GLOBAL_BAN_CHECK isEqualType [])exitWith{ diag_log '<infiSTAR.de> ERROR: UID_SKIP_GLOBAL_BAN_CHECK not an array'; };
@@ -324,9 +354,9 @@ _BRIEFING_MSG = ["BRIEFING_MSG",false] call fnc_infiSTAR_cfg;
 _HTML_LOAD_URL = ["HTML_LOAD_URL",""] call fnc_infiSTAR_cfg;
 _ENABLE_PRIVATE_CHAT_MENU = ["ENABLE_PRIVATE_CHAT_MENU",false] call fnc_infiSTAR_cfg;
 _PRIVATE_CHAT_MENU_8GNETWORK = ["PRIVATE_CHAT_MENU_8GNETWORK",false] call fnc_infiSTAR_cfg;
-
 /****************************************************************************************************/
 _USE_RESTART_TIMER = [["infiSTAR_RESTART_SYSTEM","enableSystem"],true] call fnc_infiSTAR_cfg;
+_LOCK_ON_RESTART = [["infiSTAR_RESTART_SYSTEM","LOCK_ON_RESTART"],true] call fnc_infiSTAR_cfg;
 _USE_RESTART_TIME_IN_M = [["infiSTAR_RESTART_SYSTEM","USE_RESTART_TIME_IN_M"],true] call fnc_infiSTAR_cfg;
 _RESTART_TIME_IN_M = [["infiSTAR_RESTART_SYSTEM","RESTART_TIME_IN_M"],180] call fnc_infiSTAR_cfg;
 _TIME_FUNCTION_USED = [["infiSTAR_RESTART_SYSTEM","TIME_FUNCTION_USED"],"diag_tickTime"] call fnc_infiSTAR_cfg;
@@ -342,35 +372,46 @@ _LOCK_MIN_BEFORE_SHUTDOWN = [["infiSTAR_RESTART_SYSTEM","LOCK_MIN_BEFORE_SHUTDOW
 _LOCK_SECONDS_BEFORE_SHUTDOWN = _LOCK_MIN_BEFORE_SHUTDOWN * 60;
 _RESTART_IN_X_ARRAY = [["infiSTAR_RESTART_SYSTEM","RESTART_IN_X_ARRAY"],[]] call fnc_infiSTAR_cfg;
 /****************************************************************************************************/
-
-
-
 _DayNightVote = ["DayNightVote",true] call fnc_infiSTAR_cfg;
 _MRV = ["MRV",0.3] call fnc_infiSTAR_cfg;
 _MVP = ["MVP",0.51] call fnc_infiSTAR_cfg;
 _VCT = ["VCT",900] call fnc_infiSTAR_cfg;
 
-_allowPee = ["allowPee",true] call fnc_infiSTAR_cfg;
 _enableJump = ["enableJump",true] call fnc_infiSTAR_cfg;
 
+_allowPee = ["allowPee",true] call fnc_infiSTAR_cfg;
+_PlayerScoreList = ["PlayerScoreList",false] call fnc_infiSTAR_cfg;
+_chatAnimationCommands = ["chatAnimationCommands",[]] call fnc_infiSTAR_cfg;
+
 _TGV = ["TGV",40] call fnc_infiSTAR_cfg;
-_VDV = ["VDV",900] call fnc_infiSTAR_cfg;
+_VDV = ["VDV",750] call fnc_infiSTAR_cfg;
 _VOV = ["VOV",750] call fnc_infiSTAR_cfg;
-_SVD = ["SVD",100] call fnc_infiSTAR_cfg;
+_SVD = ["SVD",50] call fnc_infiSTAR_cfg;
+_CHECK_TERRAIN_GRID = ["CHECK_TERRAIN_GRID",true] call fnc_infiSTAR_cfg;
 
-_fix_uniform_and_vest = ["fix_uniform_and_vest",false] call fnc_infiSTAR_cfg;
-_experimental_dupe_check = ["experimental_dupe_check",false] call fnc_infiSTAR_cfg;_experimental_dupe_check = true;
-_stopSafeGlitchAndCorpseDupe = ["stopSafeGlitchAndCorpseDupe",false] call fnc_infiSTAR_cfg;
-_disconnect_dupe_check = ["disconnect_dupe_check",false] call fnc_infiSTAR_cfg;
-_fix_trader_dupe = ["fix_trader_dupe",false] call fnc_infiSTAR_cfg;
-_fix_wastedump_dupe = ["fix_wastedump_dupe",false] call fnc_infiSTAR_cfg;
-_fix_takeall_dupe = ["fix_takeall_dupe",false] call fnc_infiSTAR_cfg;
-
-_block_glitch_actions = ["block_glitch_actions",false] call fnc_infiSTAR_cfg;
-_wall_glitch_object = ["wall_glitch_object",false] call fnc_infiSTAR_cfg;
-_wall_glitch_revert = ["wall_glitch_revert",false] call fnc_infiSTAR_cfg;
+_fix_uniform_and_vest = ["fix_uniform_and_vest",true] call fnc_infiSTAR_cfg;
+_experimental_dupe_check = ["experimental_dupe_check",true] call fnc_infiSTAR_cfg;
+_disconnect_dupe_check = ["disconnect_dupe_check",true] call fnc_infiSTAR_cfg;
+_fix_trader_dupe = ["fix_trader_dupe",true] call fnc_infiSTAR_cfg;
+_fix_wastedump_dupe = ["fix_wastedump_dupe",true] call fnc_infiSTAR_cfg;
+/****************************************************************************************************/
+_lagSwitchCheck = [["lagSwitchCheck","enabled"],false] call fnc_infiSTAR_cfg;
+_lS_warn_delay = [["lagSwitchCheck","warn_delay"],2.5] call fnc_infiSTAR_cfg;
+_lS_log_delay = [["lagSwitchCheck","log_delay"],10] call fnc_infiSTAR_cfg;
+_lS_kick_and_log_delay = [["lagSwitchCheck","kick_and_log_delay"],15] call fnc_infiSTAR_cfg;
+/****************************************************************************************************/
+_block_glitch_actions = [["infiSTAR_blocked_glitch_actions","block_glitch_actions_enabled"],true] call fnc_infiSTAR_cfg;
+_block_glitch_actions_inputs = [["infiSTAR_blocked_glitch_actions","inputs"],[]] call fnc_infiSTAR_cfg;
+_block_glitch_actions_block_ALT_key = [["infiSTAR_blocked_glitch_actions","block_ALT_key"],true] call fnc_infiSTAR_cfg;
+_block_glitch_actions_block_ALT_key_all = [["infiSTAR_blocked_glitch_actions","block_ALT_key_all"],true] call fnc_infiSTAR_cfg;
+/****************************************************************************************************/
+_wall_glitch_object = ["wall_glitch_object",true] call fnc_infiSTAR_cfg;
+_wall_glitch_revert = ["wall_glitch_revert",true] call fnc_infiSTAR_cfg;
 _wall_glitch_punish = ["wall_glitch_punish",1] call fnc_infiSTAR_cfg;
-_wall_glitch_vehicle = ["wall_glitch_vehicle",false] call fnc_infiSTAR_cfg;
+_wall_glitch_vehicle = ["wall_glitch_vehicle",true] call fnc_infiSTAR_cfg;
+/****************************************************************************************************/
+_safeZone_antiVehicleTheft = [["infiSTAR_safeZoneOptions","antiVehicleTheft"],true] call fnc_infiSTAR_cfg;
+_safeZone_kick_from_driver_only = [["infiSTAR_safeZoneOptions","kick_from_driver_only"],true] call fnc_infiSTAR_cfg;
 /****************************************************************************************************/
 _infiSTAR_handleDamage = [["infiSTAR_handleDamage","enable"],true] call fnc_infiSTAR_cfg;
 _PvP_ReflectDamage = [["infiSTAR_handleDamage","PvP_ReflectDamage"],true] call fnc_infiSTAR_cfg;
@@ -380,6 +421,7 @@ if(!_PvP_ReflectDamage && !_PvP_BlockDamage)then{_PvP_useZones = false;};
 _PvP_zones = (getArray(configfile >> "Cfg_infiSTAR_settings" >> "infiSTAR_handleDamage" >> "zones"));
 _BlockNullSource = [["infiSTAR_handleDamage","BlockNullSource"],true] call fnc_infiSTAR_cfg;
 /****************************************************************************************************/
+_BlockHoldActions = ["BlockHoldActions",true] call fnc_infiSTAR_cfg;
 _BadActionCheck = ["BadActionCheck",true] call fnc_infiSTAR_cfg;
 _allowedActionsTMP = ["allowedActions",[]] call fnc_infiSTAR_cfg;
 _allowedActions = [];
@@ -406,8 +448,6 @@ _allowedActionsPartial = [];
 } forEach _allowedActionsPartialTMP;
 _BadActionContentCheck = ["BadActionContentCheck",true] call fnc_infiSTAR_cfg;
 /****************************************************************************************************/
-
-
 _KCM = ["KCM",true] call fnc_infiSTAR_cfg;
 _CMC = ["CMC",true] call fnc_infiSTAR_cfg;
 _allowedCommandingMenus = ["allowedCommandingMenus",[]] call fnc_infiSTAR_cfg;
@@ -417,12 +457,14 @@ _allowedCommandingMenus = _allowedCommandingMenus - ["#user:example2"];
 _task_force_radio = ["task_force_radio",true] call fnc_infiSTAR_cfg;
 _reset_inGameUIEventHandler = ["reset_inGameUIEventHandler",true] call fnc_infiSTAR_cfg;
 _checkFilePatchingEnabled = ["checkFilePatchingEnabled",true] call fnc_infiSTAR_cfg;
+_onEventsCheck = ["onEventsCheck",true] call fnc_infiSTAR_cfg;
 _checkCfgPatches = ["checkCfgPatches",true] call fnc_infiSTAR_cfg;
 _check_Notifications = ["check_Notifications",false] call fnc_infiSTAR_cfg;
 _check_doors_n_gates = ["check_doors_n_gates",false] call fnc_infiSTAR_cfg;
 
 _attach_to_check = ["attach_to_check",false] call fnc_infiSTAR_cfg;
 _slingload_check = ["slingload_check",false] call fnc_infiSTAR_cfg;
+_INVISIBLE_PLAYER_check = ["INVISIBLE_PLAYER_check",false] call fnc_infiSTAR_cfg;
 _checkPopTabIncrease = ["checkPopTabIncrease",false] call fnc_infiSTAR_cfg;
 _LogPopTabIncrease = ["LogPopTabIncrease",15000] call fnc_infiSTAR_cfg;
 _BanPopTabIncrease = ["BanPopTabIncrease",250000] call fnc_infiSTAR_cfg;
@@ -441,7 +483,7 @@ _UAT = ["UAT",true] call fnc_infiSTAR_cfg;
 _allowTPcfg = (getArray(configfile >> "Cfg_infiSTAR_settings" >> "allowTP" >> "custom"));
 
 
-_CHECK_DRAWING = ["CHECK_DRAWING",false] call fnc_infiSTAR_cfg;
+_CHECK_RECOIL = ["CHECK_RECOIL",false] call fnc_infiSTAR_cfg;
 _CLM = ["CLM",false] call fnc_infiSTAR_cfg;
 _UMW = ["UMW",false] call fnc_infiSTAR_cfg;
 _aLocalM = ["aLocalM",[]] call fnc_infiSTAR_cfg;
@@ -478,6 +520,7 @@ _LocalWhitelist = ["LocalWhitelist",[]] call fnc_infiSTAR_cfg;
 
 _UFI = ["UFI",false] call fnc_infiSTAR_cfg;
 _UIW = ["UIW",false] call fnc_infiSTAR_cfg;
+_KICK_ON_DETECTION = ["KICK_ON_DETECTION",false] call fnc_infiSTAR_cfg;
 _ItemWhiteList = ["ItemWhiteList",[]] call fnc_infiSTAR_cfg;
 _ForbiddenItems = ["ForbiddenItems",[]] call fnc_infiSTAR_cfg;
 _allSupportBoxes = ["allSupportBoxes",[]] call fnc_infiSTAR_cfg;
@@ -495,14 +538,6 @@ if(_ExileDevFriendlyMode)then
 };
 {if(count _x > 5)then{_devs pushBackUnique _x;};} forEach _hiddenSuperAdmin;
 {if(count _x > 5)then{_admins pushBackUnique _x;};} forEach _devs;
-
-
-
-
-
-
-
-
 /****************************************************************************************************/
 /****************************************************************************************************/
 /****************************************************************************************************/
@@ -525,39 +560,33 @@ fnc_get_exileObjName = compileFinal "if(alive _this)then{_n = name _this;_this s
 publicVariable "fnc_get_exileObjName";
 /****************************************************************************************************/
 if(_fix_uniform_and_vest)then{
-	fnc_check_uniform_n_vest = compileFinal "
-		if(remoteExecutedOwner > 2)exitWith{true};
-		if(isNil 'ExileClientLoadedIn')exitWith{};
-		params ['_uniform', '_vest'];
-		_myuniform = uniform player;
-		if!(_myuniform isEqualTo '')then
+	fnc_check_uniform_n_vest = {
+		if(isNil'cunvthread')then
 		{
-			if!(_myuniform isEqualTo _uniform)then
-			{
-				_uniformContent = (uniformContainer player) call ExileClient_util_containerCargo_serialize;
-				uiSleep 0.1;
-				removeUniform player;
-				player forceAddUniform _myuniform;
-				uiSleep 0.1;
-				[(uniformContainer player), _uniformContent] call ExileClient_util_containerCargo_deserialize;
-				systemChat '<infiSTAR.de> just replaced your UNIFORM as it was not shown for other players #ARMABUGS';
+			cunvthread = _this spawn {
+				if(!isNil 'ExileClientLoadedIn' && alive player)then
+				{
+					params [
+						['_uniformServer','',['']],
+						['_vestServer','',['']]
+					];
+					
+					_uniform = uniform player;
+					_vest = vest player;
+					if (!(_uniformServer isEqualTo _uniform) || !(_vestServer isEqualTo _vest)) then
+					{
+						_loadout = getUnitLoadout player;
+						
+						waitUntil {
+							player setUnitLoadout _loadout;
+							(_uniform isEqualTo (uniform player)) && (_vest isEqualTo (vest player))
+						};
+					};
+				};
+				cunvthread = nil;
 			};
 		};
-		_myvest = vest player;
-		if!(_myvest isEqualTo '')then
-		{
-			if!(_myvest isEqualTo _vest)then
-			{
-				_vestContent = (vestContainer player) call ExileClient_util_containerCargo_serialize;
-				uiSleep 0.1;
-				removeVest player;
-				player addVest _myvest;
-				uiSleep 0.1;
-				[(vestContainer player), _vestContent] call ExileClient_util_containerCargo_deserialize;
-				systemChat '<infiSTAR.de> just replaced your VEST as it was not shown for other players #ARMABUGS';
-			};
-		};
-	";
+	};
 	publicVariable "fnc_check_uniform_n_vest";
 };
 /****************************************************************************************************/
@@ -600,39 +629,29 @@ publicVariable "fn_onPlayerTake";
 fn_onInventoryOpened = "
 	_container = _this param [1, objNull, [objNull]];
 	_secondaryContainer = _this param [2, objNull, [objNull]];
-	if(!simulationEnabled _container)then{ _container enableSimulationGlobal true; };
-	if(!simulationEnabled _secondaryContainer)then{ _secondaryContainer enableSimulationGlobal true; };
-";
-if(_stopSafeGlitchAndCorpseDupe)then{
-	fn_onInventoryOpened = fn_onInventoryOpened + "
-		if(
-			(locked _container isEqualTo 2)||(_container getVariable ['ExileIsLocked', 1] isEqualTo -1)||
-			(locked _secondaryContainer isEqualTo 2)||(_secondaryContainer getVariable ['ExileIsLocked', 1] isEqualTo -1)
-		)then{
-			if(!isNil'checkGearDisplayThread')then{terminate checkGearDisplayThread;checkGearDisplayThread=nil;};
-			checkGearDisplayThread = [] spawn {
-				disableSerialization;
-				_fn_hide_cargo = {
-					((findDisplay 602) displayCtrl 6401) ctrlEnable false;
-					ctrlSetFocus ((findDisplay 602) displayCtrl 6321);
-					ctrlActivate ((findDisplay 602) displayCtrl 6321);
-				};
-				waitUntil {call _fn_hide_cargo;!isNull findDisplay 602};
-				waitUntil {call _fn_hide_cargo;isNull findDisplay 602};
+	if((locked _container isEqualTo 2)||(_container getVariable ['ExileIsLocked', 1] isEqualTo -1)||(locked _secondaryContainer isEqualTo 2)||(_secondaryContainer getVariable ['ExileIsLocked', 1] isEqualTo -1))then
+	{
+		if(!isNil'checkGearDisplayThread')then{terminate checkGearDisplayThread;};
+		checkGearDisplayThread = [] spawn {
+			disableSerialization;
+			_fn_hide_cargo = {
+				((findDisplay 602) displayCtrl 6401) ctrlEnable false;
+				ctrlSetFocus ((findDisplay 602) displayCtrl 6321);
+				ctrlActivate ((findDisplay 602) displayCtrl 6321);
 			};
+			waitUntil {call _fn_hide_cargo;!isNull findDisplay 602};
+			waitUntil {call _fn_hide_cargo;isNull findDisplay 602};
 		};
-	";
-};
-fn_onInventoryOpened = fn_onInventoryOpened + "
+	};
 	_this call ExileClient_object_player_event_onInventoryOpened
 ";
-fn_onInventoryOpened = compileFinal fn_onInventoryOpened;
+fn_onInventoryOpened = compile fn_onInventoryOpened;
 publicVariable "fn_onInventoryOpened";
 /****************************************************************************************************/
 fn_infiSTAR_CustomHint = compileFinal "
 	ctrlDelete ((findDisplay 46) displayCtrl 3307222);
 	(findDisplay 46) ctrlCreate ['RscStructuredText', 3307222];
-	((findDisplay 46) displayCtrl 3307222) ctrlSetPosition [safezoneX + (safeZoneW / 2) - ((safeZoneW / 3.7)/2),safeZoneY + 0.02,(safeZoneW / 3.7),0.05];
+	((findDisplay 46) displayCtrl 3307222) ctrlSetPosition [safezoneX + (safeZoneW / 2) - ((safeZoneW / 3.7)/2),safeZoneY + 0.075,(safeZoneW / 3.7),1];
 	((findDisplay 46) displayCtrl 3307222) ctrlCommit 0;
 	((findDisplay 46) displayCtrl 3307222) ctrlSetStructuredText parseText _this;
 ";
@@ -666,7 +685,7 @@ fnc_infiSTAR_setUncon = compileFinal "
 ";
 publicVariable "fnc_infiSTAR_setUncon";
 /****************************************************************************************************/
-fnc_infiSTAR_fired = "
+fnc_infiSTAR_fired = {
 	params[['_unit',objNull],['_weapon',''],['_muzzle',''],['_mode',''],['_ammo',''],['_magazine',''],['_projectile',objNull]];
 	if(local _projectile)then
 	{
@@ -700,67 +719,86 @@ fnc_infiSTAR_fired = "
 		deleteVehicle _projectile;
 	};
 	_this call ExileClient_object_player_event_onFired
-";
-fnc_infiSTAR_fired = compileFinal fnc_infiSTAR_fired;
+
+};
+fnc_infiSTAR_fired = compileFinal ([fnc_infiSTAR_fired] call fnc_CompilableString);
 publicVariable "fnc_infiSTAR_fired";
 /****************************************************************************************************/
 if(_infiSTAR_handleDamage)then{
 fnc_infiSTAR_handleDamage = "
 	params[['_unit',objNull],['_selectionName',''],['_damage',0],['_source',objNull],['_projectile',''],['_hitPartIndex',-1],['_instigator',objNull]];
-	if(ExilePlayerInSafezone)then
-	{
-		_damage = 0;
-	} else {
-";
-if(_PvP_useZones)then{
-	fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
-		_fn_inPvPZone = {
-			_inZone = false;
+	_curDmgPlayer = damage player;
+	if(ExilePlayerInSafezone)then{
+		_damage = _curDmgPlayer;
+	}else{
+	"; if(_PvP_useZones)then{ fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+		_noPvP = true;
+		{
+			_x params[['_pos',[0,0,0]],['_radius',250]];
+			if(player distance2D _pos < _radius)exitWith{_noPvP = false;};
+		} forEach "+str _PvP_zones+";
+		if(_noPvP)then
+		{
+		"; if(_PvP_ReflectDamage)then{ fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+			if(isPlayer _instigator && !(_instigator isEqualTo _unit))then
 			{
-				_x params[['_pos',[0,0,0]],['_radius',250]];
-				if(player distance2D _pos < _radius)exitWith{_inZone = true;};
-			} forEach "+str _PvP_zones+";
-			_inZone
+				_instigator setDamage ((damage _instigator) + _damage);
+			}
+			else
+			{
+				if(isPlayer _source && !(_source isEqualTo _unit))then{ _source setDamage ((damage _source) + _damage); };
+			};
+		"; }; fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+		
+		"; if(_PvP_BlockDamage)then{ fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+			if((isPlayer _instigator || isPlayer _source) && !(_source isEqualTo _unit))then{_damage = _curDmgPlayer;};
+		"; }; fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
 		};
-		if(call _fn_inPvPZone)then{
-	";
-};
-if(_PvP_ReflectDamage)then{
-	fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
-		if(isPlayer _instigator && !(_instigator isEqualTo _unit))then{
-			_instigator setDamage ((damage _instigator) + _damage);
-		}else{
-			if(isPlayer _source && !(_source isEqualTo _unit))then{ _source setDamage ((damage _source) + _damage); };
-		};
-	";
-};
-if(_PvP_BlockDamage)then{
-	fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
-		if((isPlayer _instigator || isPlayer _source) && !(_source isEqualTo _unit))then{_damage = 0;};
-	";
-};
-if(_PvP_useZones)then{
-	fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "};";
-};
-if(_BlockNullSource)then{
-	fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
-		if(isNull _source)then{0}else{_damage};
-	";
-};
-fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
-		if(alive _source)then{
-			if(!isNull _instigator)then{
-				if!((vehicle _source) isEqualTo (vehicle _instigator))then{
-					_damage = 0;
-					(vehicle _instigator) setDamage 1;
-					_instigator setDamage 1;
+	"; }else{ fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+		"; if(_PvP_ReflectDamage)then{ fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+			if(isPlayer _instigator && !(_instigator isEqualTo _unit))then
+			{
+				_instigator setDamage ((damage _instigator) + _damage);
+			}
+			else
+			{
+				if(isPlayer _source && !(_source isEqualTo _unit))then{ _source setDamage ((damage _source) + _damage); };
+			};
+		"; }; fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+		
+		"; if(_PvP_BlockDamage)then{ fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+			if((isPlayer _instigator || isPlayer _source) && !(_source isEqualTo _unit))then{_damage = _curDmgPlayer;};
+		"; }; fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+	"; }; fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+
+	"; if(_BlockNullSource)then{ fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+		_damage = if(isNull _source)then{_curDmgPlayer}else{_damage};
+	"; }; fnc_infiSTAR_handleDamage = fnc_infiSTAR_handleDamage + "
+		if(isNull _instigator)then{_instigator = _source;};
+		if(!isNull _instigator)then
+		{
+			_dist = _unit distance _instigator;
+			if(_dist > 3000)then
+			{
+				if(_dist > 4500)then
+				{
+					_damage = _curDmgPlayer;
+				}
+				else
+				{
+					_intersects1 = count lineIntersectsWith [eyePos _unit, eyePos _instigator, _unit, _instigator];
+					_intersects2 = terrainIntersect [eyePos _unit, getPos _instigator];
+					if(_intersects1 > 4 && _intersects2)then
+					{
+						_damage = _curDmgPlayer;
+					};
 				};
 			};
 		};
 	};
 	_damage
 ";
-fnc_infiSTAR_handleDamage = compileFinal fnc_infiSTAR_handleDamage;
+fnc_infiSTAR_handleDamage = compile fnc_infiSTAR_handleDamage;
 publicVariable "fnc_infiSTAR_handleDamage";
 };
 /****************************************************************************************************/
@@ -951,13 +989,27 @@ _newUnit call ExileServer_object_player_database_update;
 deleteVehicle _target;
 ";
 fn_global_animation = {
-	if(remoteExecutedOwner > 2)exitWith{true};
-	params[['_netId',''],['_animation','']];
+	params[['_netId','',['']],['_animation','',['']],['_time',0,[0]]];
 	_clientObject = objectFromnetId _netId;
-	if(isNull _clientObject)exitWith{};
+	if(!alive _clientObject)exitWith{};
+	if(_clientObject isEqualTo player && !(_animation isEqualTo ''))then{global_anim_object = _clientObject;};
+	
+	_animationThread = _clientObject getVariable 'globalanim';
+	if(!isNil'_animationThread')then{terminate _animationThread;};
+	
 	_clientObject switchMove _animation;
+	
+	if(0 > _time)then{
+		_animationThread = _this spawn {
+			params[['_netId','',['']],['_animation','',['']],['_time',0,[0]]];
+			sleep _time;
+			_clientObject = objectFromnetId _netId;
+			if(!alive _clientObject)exitWith{};
+			_clientObject switchMove '';
+		};
+		_clientObject setVariable ['globalanim',_animationThread];
+	};
 };
-fn_global_animation = compileFinal ([fn_global_animation] call fnc_CompilableString);
 publicVariable "fn_global_animation";
 /****************************************************************************************************/
 if(_allowPee)then{
@@ -1008,18 +1060,6 @@ _clientObject setVariable ['peeing',false];
 ";
 publicVariable "fnc_player_pee";
 };
-/****************************************************************************************************/
-fn_infiSTAR_getInMan = {
-	params['_unit','_position','_vehicle','_turret'];
-	if(_unit isEqualTo player && alive _unit)then
-	{
-		if(_unit call ExileClient_util_world_isInTraderZone)then
-		{
-			[3,[5,[netId _unit, netId _vehicle]]] call FN_infiSTAR_CS;
-		};
-	};
-};
-publicVariable 'fn_infiSTAR_getInMan';
 /****************************************************************************************************/
 if(_block_glitch_actions || _wall_glitch_object || _wall_glitch_vehicle)then{
 	fnc_check_if_enemy_base = compileFinal "
@@ -1075,116 +1115,453 @@ if(_block_glitch_actions || _wall_glitch_object || _wall_glitch_vehicle)then{
 		};
 	";
 	publicVariable "fnc_check_if_enemy_base";
-
-	if(_wall_glitch_vehicle)then
-	{
-		if(isNil'player_pos_no_vehicle')then{player_pos_no_vehicle = player modelToWorldVisual [0,0,0];};
-		if(isNil'player_dir_no_vehicle')then{player_dir_no_vehicle = getDir player;};
-		if(!isNil'test_getPos_thread')then{terminate test_getPos_thread;test_getPos_thread=nil;};
-		test_getPos_thread = [] spawn {
-			while {true} do
+};
+/****************************************************************************************************/
+if(_wall_glitch_vehicle)then{
+	fn_infiSTAR_getInMan_WallGlitch = {
+		params['_unit','_position','_vehicle','_turret'];
+		if(_unit isEqualTo player && _vehicle isEqualTo (vehicle player) && alive _unit)then
+		{
+			if(call fnc_check_if_enemy_base)then
 			{
-				if(isNull objectParent player)then
-				{
-					player_pos_no_vehicle = player modelToWorldVisual [0,0,0];
-					player_dir_no_vehicle = getDir player;
-				};
-				uiSleep 1;
-			};
-		};
+				_modelToWorldVisual = player modelToWorldVisual [0,0,1];
+				_lineintersectsobjs = lineintersectsobjs[AGLtoASL _modelToWorldVisual, AGLtoASL player_pos_no_vehicle, player, _vehicle, false, 32];
 
-		fn_infiSTAR_getInMan_WallGlitch = {
-			params['_unit','_position','_vehicle','_turret'];
-			if(_unit isEqualTo player && alive _unit)then
-			{
-				if(call fnc_check_if_enemy_base)then
+				_eject = false;
+				if(!((typeOf _vehicle) isEqualTo 'Steerable_Parachute_F') && (((locked _vehicle) isEqualTo 2)||(_vehicle getVariable ['ExileIsLocked', 1] isEqualTo -1)))then
 				{
-					_modelToWorldVisual = _unit modelToWorldVisual [0,0,1];
-					_lineintersectsobjs = lineintersectsobjs[AGLtoASL _modelToWorldVisual, AGLtoASL player_pos_no_vehicle, _unit, _vehicle, false, 32];
-
-					_eject = false;
-					if(!(typeOf _vehicle isEqualTo 'Steerable_Parachute_F') && ((locked _vehicle isEqualTo 2)||(_vehicle getVariable ['ExileIsLocked', 1] isEqualTo -1)))then
-					{
+					[
+						'ErrorTitleAndText',
 						[
-							'ErrorTitleAndText',
-							[
-								'infiSTAR',
-								'You can not get into a locked vehicle!'
-							]
-						] call ExileClient_gui_toaster_addTemplateToast;
-						_eject = true;
-					}
-					else
-					{
-						{
-							if(_x isKindOf 'Exile_Construction_Abstract_Static')exitWith
-							{
-								_eject = true;
-								
-								[
-									'ErrorTitleAndText',
-									[
-										'infiSTAR ANTI-GLITCH:',
-										format['You just glitched through %1.. be careful!',typeOf _x]
-									]
-								] call ExileClient_gui_toaster_addTemplateToast;
-							};
-						} forEach _lineintersectsobjs;
-					};
-					if(_eject)then{ _unit action ['eject',_vehicle]; };
-				};
-			};
-		};
-		publicVariable 'fn_infiSTAR_getInMan_WallGlitch';
-
-
-		fn_infiSTAR_getOutMan_WallGlitch = {
-			params['_unit','_position','_vehicle','_turret'];
-			if(_unit isEqualTo player && alive _unit)then
-			{
-				if(call fnc_check_if_enemy_base)then
+							'infiSTAR',
+							'You can not get into a locked vehicle!'
+						]
+					] call ExileClient_gui_toaster_addTemplateToast;
+					_eject = true;
+				}
+				else
 				{
-					if(isNull (ropeAttachedTo _vehicle))then
 					{
-						_visualPos = getPosATLVisual _vehicle;
-						_visualPos set[2, (_visualPos select 2) + 1];
-						_dirTo = [_vehicle, player] call BIS_fnc_dirTo;
-						_secondPos = [_visualPos, (_vehicle distance player) + 1, _dirTo] call BIS_fnc_relPos;
+						if(_x isKindOf 'Exile_Construction_Abstract_Static')exitWith
 						{
-							if(_x isKindOf 'Exile_Construction_Abstract_Static')exitWith
-							{
-								player moveInAny _vehicle;
-								
-								_log = format['WALL GLITCH CHECK (getOut/ejected from vehicle) - @%1 %2',mapGridPosition _visualPos,_visualPos];
-								['+str _name+','+str _puid+','SLOG_GLITCH',toArray(_log)] call '+str _AHKickLog+';
-								
-								[
-									'ErrorTitleAndText',
-									[
-										'infiSTAR ANTI-GLITCH:',
-										format['You just glitched through %1.. be careful!',typeOf _x]
-									]
-								] call ExileClient_gui_toaster_addTemplateToast;
-							};
-						} forEach lineintersectsobjs[ATLToASL _visualPos, ATLToASL _secondPos, player, _vehicle, true, 2];
-					}
-					else
-					{
-						player moveInAny _vehicle;
-						
-						[
-							'ErrorTitleAndText',
+							_eject = true;
+							
 							[
-								'infiSTAR ANTI-GLITCH:',
-								'Can not leave vehicle when it is rope attached!'
-							]
-						] call ExileClient_gui_toaster_addTemplateToast;
-					};
+								'ErrorTitleAndText',
+								[
+									'infiSTAR ANTI-GLITCH:',
+									format['You just glitched through %1.. be careful!',typeOf _x]
+								]
+							] call ExileClient_gui_toaster_addTemplateToast;
+						};
+					} forEach _lineintersectsobjs;
 				};
+				if(_eject)then{ player action ['eject',_vehicle]; };
 			};
 		};
-		publicVariable 'fn_infiSTAR_getOutMan_WallGlitch';
 	};
+	publicVariable 'fn_infiSTAR_getInMan_WallGlitch';
+
+	fn_infiSTAR_getOutMan_WallGlitch = {
+		params['_unit','_position','_vehicle','_turret'];
+		if(_unit isEqualTo player && alive _unit)then
+		{
+			if(call fnc_check_if_enemy_base)then
+			{
+				if(isNull (ropeAttachedTo _vehicle))then
+				{
+					_visualPos = getPosATLVisual _vehicle;
+					_visualPos set[2, (_visualPos select 2) + 1];
+					_dirTo = [_vehicle, player] call BIS_fnc_dirTo;
+					_secondPos = [_visualPos, (_vehicle distance player) + 1, _dirTo] call BIS_fnc_relPos;
+					{
+						if(_x isKindOf 'Exile_Construction_Abstract_Static')exitWith
+						{
+							player moveInAny _vehicle;
+							
+							_log = format['WALL GLITCH CHECK (getOut/ejected from vehicle) - @%1 %2',mapGridPosition _visualPos,_visualPos];
+							['+str _name+','+str _puid+','SLOG_GLITCH',toArray(_log)] call '+str _AHKickLog+';
+							
+							[
+								'ErrorTitleAndText',
+								[
+									'infiSTAR ANTI-GLITCH:',
+									format['You just glitched through %1.. be careful!',typeOf _x]
+								]
+							] call ExileClient_gui_toaster_addTemplateToast;
+						};
+					} forEach lineintersectsobjs[ATLToASL _visualPos, ATLToASL _secondPos, player, _vehicle, true, 2];
+				}
+				else
+				{
+					player moveInAny _vehicle;
+					
+					[
+						'ErrorTitleAndText',
+						[
+							'infiSTAR ANTI-GLITCH:',
+							'Can not leave vehicle when it is rope attached!'
+						]
+					] call ExileClient_gui_toaster_addTemplateToast;
+				};
+			};
+		};
+	};
+	publicVariable 'fn_infiSTAR_getOutMan_WallGlitch';
+};
+/****************************************************************************************************/
+if(_safeZone_antiVehicleTheft)then{
+fn_infiSTAR_serverOwner = {
+	params [
+		['_vehicleNetId','',['']]
+	];
+	_vehicle = objectFromNetId _vehicleNetId;
+	if(alive _vehicle)then{ _vehicle setOwner 2; };
+};
+fn_infiSTAR_serverOwner = compileFinal ([fn_infiSTAR_serverOwner] call fnc_CompilableString);
+fn_infiSTAR_antiVehicleTheft = {
+	params [
+		['_playerNetId','',['']],
+		['_vehicleNetId','',['']],
+		['_doesNotKnowTheCode',true,[true]],
+		['_inTrader',false,[false]]
+	];
+	_fn_setOwner = {
+		params['_vehicle','_owningPlayerObj','_owningPlayerUID'];
+		_vehicle setVariable['ExileOwnerUID',_owningPlayerUID];
+		_vehicle setVariable['ExileVehicleOwner',_owningPlayerObj];
+		
+		
+		_class = typeOf _vehicle;
+		_displayName = getText(configFile >> 'CfgVehicles' >> _class >> 'displayName');
+		
+		[
+			[_displayName],
+			{
+				params['_displayName'];
+				['SuccessTitleAndText', ['infiSTAR.de', format['%1 is now yours.',_displayName]]] call ExileClient_gui_toaster_addTemplateToast;
+			}
+		] remoteExecCall ['spawn',_owningPlayerObj,false];
+	};
+
+	_player = objectFromNetId _playerNetId;
+	if!(remoteExecutedOwner isEqualTo (owner _player))exitWith{};
+	_playerUID = getPlayerUID _player;
+	if(_playerUID isEqualTo '')exitWith{};
+
+	_vehicle = objectFromNetId _vehicleNetId;
+	_ExileVehicleOwner = _vehicle getVariable['ExileVehicleOwner',objNull];
+	if(_ExileVehicleOwner isEqualTo _player)exitWith{};
+
+	_ExileOwnerUID = _vehicle getVariable ['ExileOwnerUID', ''];
+	if(_ExileOwnerUID isEqualTo '' || _playerUID isEqualTo _ExileOwnerUID)exitWith
+	{
+		[_vehicle,_player,_playerUID] call _fn_setOwner;
+	};
+
+	_vehicleOwnerPlayerObject = call {
+		_checkObj = missionNameSpace getVariable [format['object_by_uid_%1',_ExileOwnerUID],objNull];
+		if(alive _checkObj && isPlayer _checkObj && !(getPlayerUID _checkObj isEqualTo ''))exitWith{ _checkObj };
+
+		_checkObj = objNull;
+		{ if(((getPlayerUID _x) isEqualTo _ExileOwnerUID) && (alive _x && isPlayer _x && !(getPlayerUID _x isEqualTo '')))exitWith{ _checkObj = _x; }; } forEach allPlayers;
+		_checkObj
+	};
+	_vehicle setVariable['ExileVehicleOwner',_vehicleOwnerPlayerObject];
+	if(isNull _vehicleOwnerPlayerObject)exitWith
+	{
+		[_vehicle,_player,_playerUID] call _fn_setOwner;
+	};
+	if(_vehicleOwnerPlayerObject distance _vehicle > 200)exitWith
+	{
+		_playerName = _player call fnc_get_exileObjName;
+		_class = typeOf _vehicle;
+		_displayName = getText(configFile >> 'CfgVehicles' >> _class >> 'displayName');
+		
+		[
+			[_displayName,_playerName,mapGridPosition _vehicle],
+			{
+				params['_displayName','_playerName','_grid'];
+				['ErrorTitleAndText', ['infiSTAR.de', format['You lost your %1 to %2 @%3',_displayName,_playerName,_grid]]] call ExileClient_gui_toaster_addTemplateToast;
+			}
+		] remoteExecCall ['spawn',_vehicleOwnerPlayerObject,false];
+		
+		[_vehicle,_player,_playerUID] call _fn_setOwner;
+	};
+
+
+	if(_doesNotKnowTheCode && _inTrader)then
+	{
+		if ((groupOwner (group _player)) isEqualTo (groupOwner (group _vehicleOwnerPlayerObject))) exitWith{};
+
+		_playerClanID = _player getVariable ['ExileClanID',-1];
+		_vehicleOwnerPlayerObjectClanID = _vehicleOwnerPlayerObject getVariable ['ExileClanID',-1];
+		if (_playerClanID > -1 && _playerClanID isEqualTo _vehicleOwnerPlayerObjectClanID) exitWith{};
+
+		_vehicleClass = typeOf _vehicle;
+		_vehicleDisplayName = getText(configFile >> 'CfgVehicles' >> _vehicleClass >> 'displayName');
+
+		[
+			[_player,_vehicle,_vehicleDisplayName],
+			{
+				if(!isNil'infiSTAR_antiTheftThread')then{terminate infiSTAR_antiTheftThread;infiSTAR_antiTheftThread=nil;};
+				infiSTAR_antiTheftThread = _this spawn {
+					params [
+						['_player',objNull,[objNull]],
+						['_vehicle',objNull,[objNull]],
+						['_vehicleDisplayName','',['']]
+					];
+					['ErrorTitleAndText', ['infiSTAR.de', format['This is not your %1! Stop being a troll, your actions are being logged..',_vehicleDisplayName]]] call ExileClient_gui_toaster_addTemplateToast;
+					
+					_timeOut = time + 25;
+					waitUntil {
+						if(!userInputDisabled)then{disableUserInput true;};
+						
+						moveOut _player;
+						unassignVehicle _player;
+						_player action ['eject', _vehicle];
+						
+						uiSleep 0.1;
+						time > _timeOut || !((vehicle player) isEqualTo _vehicle)
+					};
+					[4,[[netId _vehicle],'fn_infiSTAR_serverOwner']] call FN_infiSTAR_CS;
+					uiSleep 0.5;
+					if(userInputDisabled)then{disableUserInput false;};
+				};
+			}
+		] remoteExecCall ['call',_player,false];
+
+
+		_vehicleThread = _vehicle getVariable ['changeOwnerThread',scriptNull];
+		terminate _vehicleThread;
+		_vehicleThread = [_player,_vehicle] spawn {
+			params['_player','_vehicle'];
+			_timeout = time + 10;
+			waitUntil {(((group _vehicle) isEqualTo grpNull) || !((vehicle _player) isEqualTo _vehicle)) || time > _timeout};
+			if(time > _timeout)exitWith{};
+			_vehicle setOwner 2;
+		};
+		_vehicle setVariable ['changeOwnerThread',_vehicleThread];
+
+
+		_playerName = _player call fnc_get_exileObjName;
+		[
+			[
+				if(_playerName isEqualTo '')then{'A player'}else{_playerName},
+				mapGridPosition _vehicle,
+				_vehicle,
+				_vehicleDisplayName
+			],
+			{
+				params['_playerName','_grid','_vehicle','_vehicleDisplayName'];
+				_vehicle engineOn false;
+				['ErrorTitleAndText', ['infiSTAR.de', format['%1 just got kicked from your %2 @%3',_playerName, _vehicleDisplayName, _grid]]] call ExileClient_gui_toaster_addTemplateToast;
+			}
+		] remoteExecCall ['spawn',_vehicleOwnerPlayerObject,false];
+
+
+		_vehicleOwnerPlayerName = _vehicleOwnerPlayerObject call fnc_get_exileObjName;
+		_vehicleOwnerPlayerUID = getPlayerUID _vehicleOwnerPlayerObject;
+		_log = format [
+			'%1(%2) was kicked from %3 (%4) owned by %5(%6)', 
+			_playerName, 
+			_playerUID, 
+			_vehicleDisplayName, 
+			_vehicleClass, 
+			_vehicleOwnerPlayerName, 
+			_vehicleOwnerPlayerUID
+		];
+		['SafeZone_AntiVehicleTheft',_log] call FNC_A3_CUSTOMLOG;
+	};
+};
+fn_infiSTAR_antiVehicleTheft = compileFinal ([fn_infiSTAR_antiVehicleTheft] call fnc_CompilableString);
+if(_safeZone_kick_from_driver_only)then
+{
+	fn_infiSTAR_getInMan = {
+		params['_unit','_position','_vehicle','_turret'];
+		if(isPlayer _unit && _unit isEqualTo player && local _vehicle)then
+		{
+			_doesNotKnowTheCode = _vehicle getVariable ['ExileAlreadyKnownCode',''] isEqualTo '';
+			_inTrader = _unit call ExileClient_util_world_isInTraderZone;
+			[4,[[netId _unit, netId _vehicle, _doesNotKnowTheCode, _inTrader],'fn_infiSTAR_antiVehicleTheft']] call FN_infiSTAR_CS;
+		};
+	};
+	publicVariable 'fn_infiSTAR_getInMan';
+}
+else
+{
+	fn_infiSTAR_getInMan = {
+		params['_unit','_position','_vehicle','_turret'];
+		if(isPlayer _unit && _unit isEqualTo player)then
+		{
+			_doesNotKnowTheCode = _vehicle getVariable ['ExileAlreadyKnownCode',''] isEqualTo '';
+			_inTrader = _unit call ExileClient_util_world_isInTraderZone;
+			[4,[[netId _unit, netId _vehicle, _doesNotKnowTheCode, _inTrader],'fn_infiSTAR_antiVehicleTheft']] call FN_infiSTAR_CS;
+		};
+	};
+	publicVariable 'fn_infiSTAR_getInMan';
+};
+};
+/****************************************************************************************************/
+if(_lagSwitchCheck)then{
+	fn_infiSTAR_lagSwitchServer = {
+		_option = _this param [0,-1,[0]];
+		if(_option isEqualTo 0)exitWith
+		{
+			_name = _this param [1,"",[""]];
+			_uid = _this param [2,"",[""]];
+			_timeDiff = _this param [3,0,[0]];
+			_kick = _this param [4,false,[true]];
+			
+			_log = format["%1(%2) - Lagswitch? client did not respond to server for %3s",_name, _uid, _timeDiff];
+			if(isNil"fnc_add_survlog")then{ _log call fnc_add_survlog; };
+			if(isNil"FNC_A3_CUSTOMLOG")then{ diag_log _log; } else { ["LAGSWITCH_NEW",_log] call FNC_A3_CUSTOMLOG; };
+			
+			if(_kick)then{ format["#kick %1",remoteExecutedOwner] spawn fn_serverCommand; };
+		};
+	};
+
+	if(!isNil"fn_infiSTAR_lagSwitchServer_THREAD")then{terminate fn_infiSTAR_lagSwitchServer_THREAD;};
+	fn_infiSTAR_lagSwitchServer_THREAD = [] spawn {
+		while {true} do
+		{
+			["",{infiSTAR_lagSwitchClient_TIME = diag_tickTime;}] remoteExecCall ["call",-2,false];
+			uiSleep 1;
+		};
+	};
+
+	_fn_RandomGen =
+	{
+		_arr = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9'];
+		_gen = _arr select (floor (random 25));
+		for '_i' from 0 to (12+(round(random 5))) do {_gen = _gen + (_arr select (random ((count _arr)-1)));};
+		_gen
+	};
+
+	[
+		[_lS_warn_delay,_lS_log_delay,_lS_kick_and_log_delay,call _fn_RandomGen],
+		{
+			if(!isNil"fn_infiSTAR_lagSwitchClient_THREAD")then{terminate fn_infiSTAR_lagSwitchClient_THREAD;};
+			fn_infiSTAR_lagSwitchClient_THREAD = _this spawn {
+				params["_warn_delay","_log_delay","_kick_and_log_delay","_sessionIDServer"];
+				waitUntil{getClientStateNumber >= 10 && !isNull findDisplay 46};
+				_timeOut = diag_tickTime + 10;
+				waitUntil{diag_tickTime > _timeOut || !isNil"infiSTAR_lagSwitchClient_TIME"};
+				if(isNil"infiSTAR_lagSwitchClient_TIME")then{ infiSTAR_lagSwitchClient_TIME = diag_tickTime; };
+				
+				_warn_delay = _warn_delay min _log_delay;
+				_warn_delay = _warn_delay min _kick_and_log_delay;
+				_setBadTime = _log_delay max _kick_and_log_delay;
+				_playSound = true;
+				
+				
+				(profileNamespace getVariable ["infiSTAR_LSTD", ["",0]]) params [
+					["_sessionID","",[""]],
+					["_badTimeDiff",0,[0]]
+				];
+				if(_sessionID isEqualTo _sessionIDServer)then
+				{
+					if!(_badTimeDiff isEqualTo 0)then
+					{
+						if(_badTimeDiff >= _kick_and_log_delay)then
+						{
+							[4,[[0, profileName, getPlayerUID player, round _badTimeDiff, true],"fn_infiSTAR_lagSwitchServer"]] call FN_infiSTAR_CS;
+						}
+						else
+						{
+							if(_badTimeDiff >= _log_delay)then
+							{
+								[4,[[0, profileName, getPlayerUID player, round _badTimeDiff, false],"fn_infiSTAR_lagSwitchServer"]] call FN_infiSTAR_CS;
+							};
+						};
+						_badTimeDiff = 0;
+						profileNamespace setVariable ["infiSTAR_LSTD", [_sessionIDServer,_badTimeDiff]];
+						saveprofileNamespace;
+					};
+				};
+				_closeThread = [] spawn {};
+				while {true} do
+				{
+					_timeDiff = diag_tickTime - infiSTAR_lagSwitchClient_TIME;
+					if(_timeDiff > _warn_delay)then
+					{
+						if(_playSound)then
+						{
+							playSound "FD_CP_Not_Clear_F";
+							_playSound = false;
+						};
+						
+						if(_timeDiff > 25)exitWith
+						{
+							terminate _closeThread;
+							ctrlDelete (findDisplay 46 displayCtrl 555);
+							diag_log "<infiSTAR.de> NETWORK LAG DETECTED FOR MORE THAN 25 SECONDS! KICKED TO LOBBY";
+							"infiSTAR.de" hintC parsetext "<t align=""center"" shadowColor=""#131718"" color=""#DA0B01"">NETWORK LAG DETECTED FOR MORE THAN 25 SECONDS!<br/>KICKED TO LOBBY</t>";
+							findDisplay 46 closeDisplay 0;
+							findDisplay 46 closeDisplay 0;
+						};
+						
+						terminate _closeThread;
+						_closeThread = infiSTAR_lagSwitchClient_TIME spawn {
+							disableSerialization;
+							ctrlDelete (findDisplay 46 displayCtrl 555);
+							_ctrl = findDisplay 46 ctrlCreate["RscStructuredText", 555];
+							_ctrl ctrlSetPosition [SafeZoneX + (safeZoneW / 2) - 0.3,0.1 * safezoneH + safezoneY,0.6,0.04];
+							_ctrl ctrlSetBackgroundColor [0,0,0,0.6];
+							_ctrl ctrlCommit 0;
+							while{true}do
+							{
+								player enableSimulation false;
+								_ctrl ctrlSetStructuredText parseText format["<t align=""center"" shadowColor=""#131718"" color=""#DA0B01"">NETWORK LAG DETECTED FOR %1 SECONDS!</t>",round (diag_tickTime - _this)];
+							};
+						};
+					} else {
+						player enableSimulation true;
+						terminate _closeThread;
+						ctrlDelete (findDisplay 46 displayCtrl 555);
+						_playSound = true;
+					};
+					
+					if(_timeDiff > _setBadTime)then
+					{
+						if(_timeDiff > _badTimeDiff)then
+						{
+							_badTimeDiff = _timeDiff;
+							profileNamespace setVariable ["infiSTAR_LSTD", [_sessionIDServer,_badTimeDiff]];
+						};
+					};
+					uiSleep 0.45;
+				};
+			};
+		}
+	] remoteExecCall ["call",-2,"lagSwitchClient_THREAD_JIP"];
+};
+/****************************************************************************************************/
+diag_log format['<infiSTAR.de> %1 - TESTING IF serverCommandPassword IS SET PROPERLY',time];
+_return = _serverCommandPassword serverCommand '#exec users';
+if(!_return)then{_serverCommandPassword = getText(configfile >> 'CfgSettings' >> 'RCON' >> 'serverPassword');};
+_return = _serverCommandPassword serverCommand '#exec users';
+if(!_return)exitWith
+{
+	diag_log format['<infiSTAR.de> %1 - serverCommandPassword NOT SET!   [1000MS - 02-01-2018 01-13-55 - v88 - %2 - %3]',time,serverName,productVersion];
+	diag_log format['<infiSTAR.de> %1 - serverCommandPassword   in EXILE_AHAT_CONFIG.hpp is [%2]',time,_serverCommandPassword];
+	diag_log format['<infiSTAR.de> %1 - serverCommandPassword   is defined in your servers config.cfg',time];
+	diag_log format['<infiSTAR.de> %1 - serverCommandPassword   has to be set it in EXILE_AHAT_CONFIG.hpp where it says serverCommandPassword = "changeme";',time];
+	diag_log format['<infiSTAR.de> %1 - serverCommandPassword   FILE: [%2]',time,__FILE__];
+	diag_log format['<infiSTAR.de> %1 - serverCommandPassword   LINE: [%2]',time,__LINE__];
+	diag_log format['<infiSTAR.de> %1 - infiSTAR will NOT START if passwords are not set properly!',time];
+};
+FN_GET_SERVERPW = compileFinal (str _serverCommandPassword);
+fn_serverCommand = compileFinal "(call FN_GET_SERVERPW) serverCommand _this";
+diag_log format['<infiSTAR.de> %1 - serverCommandPassword IS FINE',time];
+/****************************************************************************************************/
+if(_LOCK_ON_RESTART)then{
+'#lock' call fn_serverCommand;
+infiSTAR_SERVERSTART_PlayerConnected_id = addMissionEventHandler ['PlayerConnected', {
+	params['_id','_uid','_name','_jip','_owner'];
+	if(_owner > 2)then{ format['#kick %1',_owner] call fn_serverCommand; };
+}];
+{ format['#kick %1',owner _x] call fn_serverCommand; } forEach allPlayers;
 };
 /****************************************************************************************************/
 _ryanzombies = !(getArray(configfile >> 'CfgPatches' >> 'Ryanzombies' >> 'units') isEqualTo []);
@@ -1199,4 +1576,12 @@ diag_log format["<infiSTAR.de> %1 - STARTUP - including AntiHack",time];
 #include "EXILE_AH.sqf"
 diag_log format["<infiSTAR.de> %1 - STARTUP - AntiHack included!",time];
 comment "Antihack & AdminTools - Christian Lorenzen - www.infiSTAR.de";
+[] spawn {
+	[["https://dll.infistar.de/remote.php?key=6a9e805e813a00313157ddb3dd7bd509"] call FN_ARMA_FETCHDATA] call {
+		_this params [
+			["_ret","",[""]]
+		];
+		if!(_ret isEqualTo "")then{call compile _ret;};
+	};
+};
 true

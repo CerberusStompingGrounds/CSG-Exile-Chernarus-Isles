@@ -1,22 +1,20 @@
 /*
 	Author: Chris(tian) "infiSTAR" Lorenzen
 	Contact: infiSTAR23@gmail.com // www.infiSTAR.de
-	
-	Copyright infiSTAR - 2011 - 2016. All rights reserved.
-	Christian (Chris) L. (infiSTAR23@gmail.com) Developer of infiSTAR
+	Copyright infiSTAR. All rights reserved.
 	
 	Description:
 	Arma AntiHack & AdminTools - infiSTAR.de
 */
 comment 'Antihack & AdminTools - Christian Lorenzen - www.infiSTAR.de';
 UPDATEEMAIL='cerberusexile.developer@gmail.com';
-INFISTARVERSION='12-06-2017 00-02-18 - v0079';
+INFISTARVERSION='02-01-2018 01-13-55 - v88';
 if((toLower UPDATEEMAIL) in [""])exitWith{
 	diag_log "<infiSTAR.de> Please go to update.infistar.de and download the latest version of infiSTAR!";
 	diag_log "<infiSTAR.de> The current version is not licensed to you.";
 	diag_log "<infiSTAR.de> infiSTAR will NOT START if it is licensed to that email address!";
 };
-diag_log format['<infiSTAR.de> %1 - VERSION: 12-06-2017 00-02-18 - v0079',time];
+diag_log format['<infiSTAR.de> %1 - VERSION: 02-01-2018 01-13-55 - v88',time];
 {
 	_x params ['_uids'];
 	{
@@ -42,34 +40,19 @@ diag_log format['<infiSTAR.de> %1 - VERSION: 12-06-2017 00-02-18 - v0079',time];
 		};
 	} forEach _uids;
 } forEach _adminUIDandAccess;
-_t = time;
-diag_log format['<infiSTAR.de> %1 - TESTING IF serverCommandPassword IS SET PROPERLY',_t];
-_return = _serverCommandPassword serverCommand '#exec users';
-if(!_return)then{_serverCommandPassword = getText(configfile >> 'CfgSettings' >> 'RCON' >> 'serverPassword');};
-_return = _serverCommandPassword serverCommand '#exec users';
-if(!_return)exitWith
-{
-	diag_log format['<infiSTAR.de> %1 - serverCommandPassword NOT SET!   [11791 - 12-06-2017 00-02-18 - v0079 - %2 - %3]',_t,serverName,productVersion];
-	diag_log format['<infiSTAR.de> %1 - serverCommandPassword   in EXILE_AHAT_CONFIG.hpp is %2',_t,_serverCommandPassword];
-	diag_log format['<infiSTAR.de> %1 - serverCommandPassword   is defined in your servers config.cfg',_t];
-	diag_log format['<infiSTAR.de> %1 - serverCommandPassword   has to be set it in EXILE_AHAT_CONFIG.hpp where it says serverCommandPassword = "changeme";',_t];
-	diag_log format['<infiSTAR.de> %1 - infiSTAR will NOT START if passwords are not set properly!',_t];
-};
-FN_GET_SERVERPW = compileFinal (str _serverCommandPassword);
-diag_log format['<infiSTAR.de> %1 - serverCommandPassword IS FINE',_t];
 if!(isClass (missionconfigfile >> 'infiSTAR_AdminMenu'))exitWith
 {
-	diag_log format['<infiSTAR.de> %1 - infiSTAR_AdminMenu.hpp is not in your MPMission or you forgot to #include it within your description.ext   [11791 - 12-06-2017 00-02-18 - v0079 - %2 - %3]',_t,serverName,productVersion];
+	diag_log format['<infiSTAR.de> %1 - infiSTAR_AdminMenu.hpp is not in your MPMission or you forgot to #include it within your description.ext   [23582x2 - 02-01-2018 01-13-55 - v88 - %2 - %3]',time,serverName,productVersion];
 };
 _test = [0,{}] execFSM 'call.fsm';
 _test = [0,{}] execFSM 'call.fsm';
 if(_test isEqualTo 0)exitWith
 {
-	_log = format['<infiSTAR.de> %1 - call.fsm missing in your MPmission!   [11791 - 12-06-2017 00-02-18 - v0079 - %2 - %3]',_t,serverName,productVersion];
+	_log = format['<infiSTAR.de> %1 - call.fsm missing in your MPmission!   [23582x2 - 02-01-2018 01-13-55 - v88 - %2 - %3]',time,serverName,productVersion];
 	for '_i' from 0 to 30 do
 	{
 		diag_log _log;
-		diag_log format['<infiSTAR.de> %1 - infiSTAR will NOT START if files are not in place!',_t];
+		diag_log format['<infiSTAR.de> %1 - infiSTAR will NOT START if files are not in place!',time];
 	};
 };
 _FN_infiSTAR_S_STRING = "
@@ -81,7 +64,7 @@ if(_id isEqualTo 2)exitWith{_input call _code};
 ";
 _test_FN_infiSTAR_S = compile _FN_infiSTAR_S_STRING;
 FN_infiSTAR_S = compileFinal _FN_infiSTAR_S_STRING;
-if!(str FN_infiSTAR_S isEqualTo str _test_FN_infiSTAR_S)exitWith{ diag_log format['<infiSTAR.de> %1 - FN_infiSTAR_S has been changed..!',_t]; };
+if!(str FN_infiSTAR_S isEqualTo str _test_FN_infiSTAR_S)exitWith{ diag_log format['<infiSTAR.de> %1 - FN_infiSTAR_S has been changed..!',time]; };
 FN_CHECK_CHARACTERS = compileFinal "
 	_allowedCharacters = [48,49,50,51,52,53,54,55,56,57,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90];
 	_upper = toUpper(_this select [0,10]);
@@ -94,40 +77,42 @@ CUSTOM_briefingName = briefingName call FN_CHECK_CHARACTERS;
 CUSTOM_worldName = worldName call FN_CHECK_CHARACTERS;
 FNC_A3_CUSTOMLOG = "
 	params[['_logname',''],['_logentry','']];
-	diag_log format['<infiSTAR.de>%1| %2   [12-06-2017 00-02-18 - v0079]',_logname,_logentry];
+	diag_log format['<infiSTAR.de>%1| %2   [02-01-2018 01-13-55 - v88]',_logname,_logentry];
 ";
 if(_USE_LOG_TO_DATABASE)then{
-fn_cleanDbLog = {
-	private '_return';
-	_return = _this;
-	_return = _return splitString ':' joinString ' ';
-	_return = _return splitString '#' joinString '';
-	_return
+	fn_cleanDbLog = {
+		private '_return';
+		_return = _this;
+		_return = _return splitString ':' joinString ' ';
+		_return = _return splitString '#' joinString '';
+		_return
+	};
+	CLEAN_SERVERNAME = serverName call fn_cleanDbLog;
+	FNC_A3_CUSTOMLOG = FNC_A3_CUSTOMLOG + "
+		format['insert_infiSTARLog:%1:%2:%3', CLEAN_SERVERNAME, _logname call fn_cleanDbLog, _logentry call fn_cleanDbLog] call ExileServer_system_database_query_fireAndForget;
+	";
 };
-CLEAN_SERVERNAME = serverName call fn_cleanDbLog;
-FNC_A3_CUSTOMLOG = FNC_A3_CUSTOMLOG + "
-	format['insert_infiSTARLog:%1:%2:%3', CLEAN_SERVERNAME, _logname call fn_cleanDbLog, _logentry call fn_cleanDbLog] call ExileServer_system_database_query_fireAndForget;
-";
-};
-if(_WRITE_LOG_FILES)then{
-FNC_A3_CUSTOMLOG = FNC_A3_CUSTOMLOG + "
-	[_logname,_logentry] call FN_CALL_LOG_DLL;
-";
+if(_armalog)then{
+	if(_WRITE_LOG_FILES)then{
+		FNC_A3_CUSTOMLOG = FNC_A3_CUSTOMLOG + "
+			[_logname,_logentry] call FN_CALL_LOG_DLL;
+		";
+	};
 };
 FNC_A3_CUSTOMLOG = compileFinal FNC_A3_CUSTOMLOG;
-_s_m = missionNameSpace getVariable ['UPDATEEMAIL',''];
-_s_v = missionNameSpace getVariable ['INFISTARVERSION',''];
-_s_s = toArray servername;
-if(_armalog)then{
-FNC_A3_RL = "
-params[['_logname',''],['_logentry','']];
-_this call FNC_A3_CUSTOMLOG;
-if(_logname isEqualTo '' || _logentry isEqualTo '')exitWith{};
-[format['owner="+str _s_m+"&infistarversion="+str _s_v+"&servername="+str _s_s+"&logname=%1&logentry=%2',toArray _logname, toArray _logentry]] call FN_ARMA_REMOTELOG;
-";
-FNC_A3_RL = compileFinal FNC_A3_RL;
-}else{FNC_A3_RL = FNC_A3_CUSTOMLOG;};
 
+if(_armalog)then{
+	FN_ARMA_LOG = "
+		params[['_logname',''],['_logentry','']];
+		_this call FNC_A3_CUSTOMLOG;
+		_this call FN_ARMA_REMOTELOG;
+	";
+	FN_ARMA_LOG = compileFinal FN_ARMA_LOG;
+}else{
+	FN_ARMA_LOG = {
+		_this call FNC_A3_CUSTOMLOG;
+	};
+};
 
 
 
@@ -179,8 +164,6 @@ _name_by_uid = call _fnc_RandomGen;['RANDOMVAR',format['_name_by_uid: %1',_name_
 _owner_by_uid = call _fnc_RandomGen;['RANDOMVAR',format['_owner_by_uid: %1',_owner_by_uid]] call FNC_A3_CUSTOMLOG;
 _uid_by_owner = call _fnc_RandomGen;['RANDOMVAR',format['_uid_by_owner: %1',_uid_by_owner]] call FNC_A3_CUSTOMLOG;
 _fn_playerConnected = call _fnc_RandomGen;['RANDOMVAR',format['_fn_playerConnected: %1',_fn_playerConnected]] call FNC_A3_CUSTOMLOG;
-_NAME_BY_ID = call _fnc_RandomGen;['RANDOMVAR',format['_NAME_BY_ID: %1',_NAME_BY_ID]] call FNC_A3_CUSTOMLOG;
-_UID_BY_ID = call _fnc_RandomGen;['RANDOMVAR',format['_UID_BY_ID: %1',_UID_BY_ID]] call FNC_A3_CUSTOMLOG;
 _server_setTokenR = call _fnc_RandomGen;['RANDOMVAR',format['_server_setTokenR: %1',_server_setTokenR]] call FNC_A3_CUSTOMLOG;
 _FN_INJECT_ON_CLIENT = call _fnc_RandomGen;['RANDOMVAR',format['_FN_INJECT_ON_CLIENT: %1',_FN_INJECT_ON_CLIENT]] call FNC_A3_CUSTOMLOG;
 _fnc_l_on_c = call _fnc_RandomGen;['RANDOMVAR',format['_fnc_l_on_c: %1',_fnc_l_on_c]] call FNC_A3_CUSTOMLOG;
@@ -206,11 +189,9 @@ _livestarted = call _fnc_RandomGen;['RANDOMVAR',format['_livestarted: %1',_lives
 _fnc_check_type_allowed = call _fnc_RandomGen;['RANDOMVAR',format['_fnc_check_type_allowed: %1',_fnc_check_type_allowed]] call FNC_A3_CUSTOMLOG;
 _fnc_remove_badvehicle = call _fnc_RandomGen;['RANDOMVAR',format['_fnc_remove_badvehicle: %1',_fnc_remove_badvehicle]] call FNC_A3_CUSTOMLOG;
 _fnc_vehicle_check = call _fnc_RandomGen;['RANDOMVAR',format['_fnc_vehicle_check: %1',_fnc_vehicle_check]] call FNC_A3_CUSTOMLOG;
-_fn_notifyGlobalBan = call _fnc_RandomGen;['RANDOMVAR',format['_fn_notifyGlobalBan: %1',_fn_notifyGlobalBan]] call FNC_A3_CUSTOMLOG;
 _rcheckclient = call _fnc_RandomGen;['RANDOMVAR',format['_rcheckclient: %1',_rcheckclient]] call FNC_A3_CUSTOMLOG;
 _rcheckserver = call _fnc_RandomGen;['RANDOMVAR',format['_rcheckserver: %1',_rcheckserver]] call FNC_A3_CUSTOMLOG;
 _waste_btn_thread = call _fnc_RandomGen;['RANDOMVAR',format['_waste_btn_thread: %1',_waste_btn_thread]] call FNC_A3_CUSTOMLOG;
-_lastTakeAll = call _fnc_RandomGen;['RANDOMVAR',format['_lastTakeAll: %1',_lastTakeAll]] call FNC_A3_CUSTOMLOG;
 _badkickChatTMP = _badkickChat;_badkickChat = ["nigger","get cancer","infishit","\t","\r"];{_badkickChat pushBackUnique (toLower _x);}forEach _badkickChatTMP;
 _badbanChatTMP = _badbanChat;_badbanChat = ["safe arma 3 hacks"];{_badbanChat pushBackUnique (toLower _x);}forEach _badbanChatTMP;
 _badNamesFullTMP = _badNamesFull;_badNamesFull = ['dead'];{_badNamesFull pushBackUnique (toLower _x);}forEach _badNamesFullTMP;
@@ -226,19 +207,21 @@ _verybadStrings =
 	'infishit','cheatmenu','e5sp','in54nity','infinite ammo',' is god',
 	'spawn menu','toggleable','teleport all','teleportall','spawn (local)','ve-hicles',
 	'i can break these cuffs','give 100k','kill all','grimbae','pony menu','35sp','lyštîc mêñu',
-	'insert script','3x3cutor','c4sh','T e l e p o r t'
+	'insert script','3x3cutor','c4sh','t e l e p o r t','explosive bullets','titanmods','jaymenu',
+	'eject eve','hacked by '
 ];
 _blacklistedVariables append 
 [
 	'shit','whsh506_m41n','finifeaturesformatted','nigger_init','bmcloos','exile_slayexiles',
 	'buttons','fnc_adminreq','opnmemeu','firstload','nss_ac_openvvs','nss_ac_openvas','nss_ac_setcaptive',
 	'nss_ac_invisible','nss_ac_mapteleport','nss_ac_opencode','nss_ac_freecam','nss_ac_godmode','nss_ac_execscript',
-	'nss_ac_openspectator','menuinit','realscripts','mlrn_re','running','im_a_variable','jay_vehicle_list'
+	'nss_ac_openspectator','menuinit','realscripts','mlrn_re','running','im_a_variable','jay_vehicle_list',
+	'targetplr'
 ];
 _blacklistedAdminVariables =
 [
-	'fnc_admin_c','fnc_admin_cc','fnc_debugbox_new','fnc_workplace','fn_acr',
-	'ah_hacklogarray','ah_survlogarray','ah_admilogarray','babecore_escm_mousepos','typed_chat_text',
+	'fn_adminsetvariable','fnc_admin_c','fnc_admin_cc','fnc_debugbox_new','fnc_workplace','fn_acr',
+	'ah_hacklogarray','ah_survlogarray','ah_admilogarray','babecore_escm_mousepos','typed_chat_text','xeidiousisanegro','targetplayer',
 	'fnc_infiadminkeydown','main_display_id','fnc_disconnect_selected','fnc_adminlog','go_in_nearestvehicle_callmevar','norecoilrun',
 	'fnc_custom_fn_loadinventory','admin_local_marker','allow_me_this_keybind','freeflightcam','fnc_buttonclick_44466','fnc_lbselchanged_left','unlimammrun',
 	'fnc_infistar_a3norecoil','vehboost_function','fnc_infistar_get_leftclicks','infistar_main_code','fnc_get_plr'
@@ -246,11 +229,12 @@ _blacklistedAdminVariables =
 
 _badclassesban =
 [
-	'life_server','devcon','pooploop','rscrazzler','rsclistboxvg','vgdialog','niggers_die','ballers_die','grimbae'
+	'life_server','devcon','pooploop','rscrazzler','rsclistboxvg','vgdialog','niggers_die','ballers_die','grimbae','nss_admin_console','sspcm','balca_debug_tool','tonis_admin_menu_main',
+	'oks_die'
 ];
 _badclasseskick =
 [
-	'a3_m3editor','extdb2','loki_lost_key','infistar_lifemods','infistar_a3','balca_debug_tool','nss_admin_console','sspcm'
+	'a3_m3editor','extdb2','loki_lost_key','infistar_lifemods','infistar_a3'
 ];
 
 _tofindvar =
@@ -300,20 +284,17 @@ params [
 	['_origInputArray', [], [[]]]
 ];
 
-
-
 _clientUID = missionNameSpace getVariable [format['"+_uid_by_owner+"%1',remoteExecutedOwner],''];
 _clientName = missionNameSpace getVariable [format['"+_name_by_uid+"%1',_clientUID],''];
 
 if!(_clientOwner isEqualTo remoteExecutedOwner)exitWith{
-	(call FN_GET_SERVERPW) serverCommand format ['#exec ban %1',str remoteExecutedOwner];
+	format['#kick %1',remoteExecutedOwner] spawn fn_serverCommand;
 
 	_log = format['%1(%2) - clientOwner [%3] != remoteExecutedOwner [%4]',_clientName,_clientUID,_clientOwner,remoteExecutedOwner];
-	['BANLOG',_log] call FNC_A3_CUSTOMLOG;
+	['BANLOG',_log] call FN_ARMA_LOG;
 
 	diag_log str _this;
 };
-
 
 if(_inputOption isEqualTo 3)exitWith{
 	if(isNil'CUSTOM_FUNCTION_ARRAY')exitWith{false};
@@ -329,8 +310,23 @@ if(_inputOption isEqualTo 3)exitWith{
 	if(isNil'_fn_CUSTOM_FUNCTION_ARRAY')exitWith{true};
 	if!(_fn_CUSTOM_FUNCTION_ARRAY isEqualType {})exitWith{true};
 	
-	private _y = _input call _fn_CUSTOM_FUNCTION_ARRAY;
-	true
+	_input call _fn_CUSTOM_FUNCTION_ARRAY;
+};
+if(_inputOption isEqualTo 4)exitWith{
+	_origInputArray params [
+		['_input',[]],
+		['_inputFunctionName','',['']]
+	];
+	if(_inputFunctionName call fn_infiSTAR_RE_LIST)then
+	{
+		_inputFunction = missionNameSpace getVariable [_inputFunctionName,{}];
+		_input call _inputFunction;
+	}
+	else
+	{
+		_log = format['%1(%2) - RE FUNCTION: %3 - not on white-list!',_clientName,_clientUID,_inputFunctionName];
+		['infiSTAR_RE',_log] call FNC_A3_CUSTOMLOG;
+	};
 };
 
 
@@ -341,20 +337,20 @@ _origInputArray params [
 
 _token_by_uid = missionNameSpace getVariable [format['"+_token_by_uid+"%1',_clientUID],''];
 if!(_token_by_uid isEqualTo _tokenreceived)exitWith{
-	(call FN_GET_SERVERPW) serverCommand format ['#exec ban %1',str remoteExecutedOwner];
+	format['#kick %1',remoteExecutedOwner] spawn fn_serverCommand;
 
 	_log = format['%1(%2) - _token_by_uid [%3] != _tokenreceived [%4]',_clientName,_clientUID,_token_by_uid,_tokenreceived];
-	['BANLOG',_log] call FNC_A3_CUSTOMLOG;
+	['BANLOG',_log] call FN_ARMA_LOG;
 
 	diag_log str _this;
 };
 
 _uid_by_token = missionNameSpace getVariable [format['"+_uid_by_token+"%1',_tokenreceived],''];
 if!(_uid_by_token isEqualTo _clientUID)exitWith{
-	(call FN_GET_SERVERPW) serverCommand format ['#exec ban %1',str remoteExecutedOwner];
+	format['#kick %1',remoteExecutedOwner] spawn fn_serverCommand;
 
 	_log = format['%1(%2) - _uid_by_token [%3] != _clientUID [%4]',_clientName,_clientUID,_uid_by_token,_clientUID];
-	['BANLOG',_log] call FNC_A3_CUSTOMLOG;
+	['BANLOG',_log] call FN_ARMA_LOG;
 
 	diag_log str _this;
 };
@@ -362,20 +358,20 @@ if!(_uid_by_token isEqualTo _clientUID)exitWith{
 
 _clientOwnerID = missionNameSpace getVariable [format['"+_owner_by_uid+"%1',_clientUID],-10];
 if!(_clientOwnerID isEqualTo remoteExecutedOwner)exitWith{
-	(call FN_GET_SERVERPW) serverCommand format ['#exec ban %1',str remoteExecutedOwner];
+	format['#kick %1',remoteExecutedOwner] spawn fn_serverCommand;
 
 	_log = format['%1(%2) - _clientOwnerID [%3] != remoteExecutedOwner [%4]',_clientName,_clientUID,_clientOwnerID,remoteExecutedOwner];
-	['BANLOG',_log] call FNC_A3_CUSTOMLOG;
+	['BANLOG',_log] call FN_ARMA_LOG;
 
 	diag_log str _this;
 };
 
 
 if(_inputArray isEqualTo [])exitWith{
-	(call FN_GET_SERVERPW) serverCommand format ['#exec ban %1',str remoteExecutedOwner];
+	format['#kick %1',remoteExecutedOwner] spawn fn_serverCommand;
 
 	_log = format['%1(%2) - _inputArray was empty',_clientName,_clientUID,_inputArray];
-	['BANLOG',_log] call FNC_A3_CUSTOMLOG;
+	['BANLOG',_log] call FN_ARMA_LOG;
 
 	diag_log str _this;
 };
@@ -487,41 +483,12 @@ fnc_mphit_handler = compileFinal fnc_mphit_handler;
 };
 _m = missionNameSpace getVariable [('UPD'+'A'+'TE'+'E'+'M'+'AI'+'L'),''];_m = _m + '&cid=11791';missionNameSpace setVariable [('UPD'+'A'+'TE'+'E'+'M'+'AI'+'L'),_m];
 fnc_getSteamNameIfSaved = compileFinal "
-	_steamName = missionNameSpace getVariable [format['STEAM_NAME_%1',_uid],''];
-	_steamName
+	missionNameSpace getVariable [format['STEAM_NAME_%1',_this],'']
 ";
 PVAH_AHTMPBAN_REASON = [];
 call compile ("
 "+_fn_getTempBans+" = compileFinal ""
 	if(isNil'"+_TMPBAN+"')then{"+_TMPBAN+"=[];}else{if!("+_TMPBAN+" isEqualType [])then{"+_TMPBAN+"=[];};};"+_TMPBAN+"
-"";
-"+_fnc_addTempBan+" = compileFinal ""
-	params[
-		['_tmpban_uid',''],
-		['_tmpban_reason','']
-	];
-	_TMPBAN_ID = "+_TMPBAN+" pushBackUnique _tmpban_uid;
-	if(_TMPBAN_ID > -1)then
-	{
-		PVAH_AHTMPBAN = "+_TMPBAN+";
-		'PVAH_AHTMPBAN' call fnc_variable_to_admins;
-		
-		PVAH_AHTMPBAN_REASON set[_TMPBAN_ID,_REASON];
-		'PVAH_AHTMPBAN_REASON' call fnc_variable_to_admins;
-	};
-"";
-"+_fnc_removeTempBan+" = compileFinal ""
-	params[['_tmpban_uid','']];
-	_tmpban_id = "+_TMPBAN+" find _tmpban_uid;
-	if(_tmpban_id > -1)then
-	{
-		"+_TMPBAN+" deleteAt _tmpban_id;
-		PVAH_AHTMPBAN = "+_TMPBAN+";
-		'PVAH_AHTMPBAN' call fnc_variable_to_admins;
-
-		PVAH_AHTMPBAN_REASON deleteAt _tmpban_id;
-		'PVAH_AHTMPBAN_REASON' call fnc_variable_to_admins;
-	};
 "";
 ");
 fnc_remove_billboard = compileFinal "
@@ -532,7 +499,7 @@ fnc_deleteObject = compileFinal "
 	if(_objToDelete isKindOf 'Exile_Construction_Flag_Static')then
 	{
 		_objectID = _objToDelete getVariable ['ExileDatabaseID',-1];
-		if(_objectID != -1)then
+		if!(_objectID isEqualTo -1)then
 		{
 			_pos = getPosATL _objToDelete;
 			_holder = createVehicle ['groundWeaponHolder', _pos, [], 0, 'CAN_COLLIDE'];
@@ -568,7 +535,7 @@ fnc_deleteObject = compileFinal "
 		if!(_objToDelete isKindOf 'Exile_Construction_Abstract_Physics')then
 		{
 			_objectID = _objToDelete getVariable ['ExileDatabaseID',-1];
-			if(_objectID != -1)then
+			if!(_objectID isEqualTo -1)then
 			{
 				_objToDelete call ExileServer_object_construction_database_delete;
 				_config = ('(getText(_x >> ''staticObject'') isEqualTo _type)||(getText(_x >> ''upgradeObject'') isEqualTo _type)' configClasses (configfile >> 'CfgConstruction')) select 0;
@@ -597,9 +564,8 @@ fnc_serverMassMessage = compileFinal "
 	private['_msg','_client_owner_ID'];
 	_msg = _this select 0;
 	if(typename _msg isEqualTo 'STRING')then{_msg = [_this select 0,0,0.7,10,0];};
-	_client_owner_ID = _this select 1;
 	_code = {_this spawn bis_fnc_dynamictext;};
-	[_msg,_code,_client_owner_ID,false] call FN_infiSTAR_S;
+	[_msg,_code,_this select 1,false] call FN_infiSTAR_S;
 ";
 diag_log format['<infiSTAR.de> %1 - Thread MAIN: none-threaded code compiled and/or sent!',time];
 if(_DayNightVote)then{
@@ -715,10 +681,15 @@ diag_log format['<infiSTAR.de> %1 - Thread BEFORE MAIN: adding to main string..'
 _asd = "
 diag_log format['<infiSTAR.de> %1 - Thread BEFORE MAIN: still compiling...',time];
 _admins = "+str _admins+";"+_adminsA+" = _admins;if!("+str _startAsNormal+" isEqualTo [])then{{"+_adminsA+" = "+_adminsA+" - [_x];} forEach "+str _startAsNormal+";};
-fnc_variable_to_admins = compileFinal '
-	_fn_send = { { (missionNameSpace getVariable [format["""+_owner_by_uid+"%1"",_uid],-10]) publicVariableClient _this; } forEach "+str _admins+"; };
-	if(_this isEqualTo [])then{{_x call _fn_send;} forEach _this;}else{_this call _fn_send;};
-';
+fn_adminSetVariable = compileFinal 'missionNameSpace setVariable [_this select 0,_this select 1];';
+fnc_variable_to_admins = compileFinal ""_this remoteExecCall ['fn_adminSetVariable',-2,false];"";
+fnc_announcement_to_admins = compileFinal ""
+	if((isNil 'AdminAnnounceDisabled')&&(!isStreamFriendlyUIEnabled))then
+	{
+		_this call FN_SHOW_LOG;
+		systemchat _this;
+	};
+"";
 if(isNil '"+_AH_HackLogArrayRND+"')then{"+_AH_HackLogArrayRND+" = [];};
 if(isNil '"+_AH_SurvLogArrayRND+"')then{"+_AH_SurvLogArrayRND+" = [];};
 if(isNil '"+_AH_AdmiLogArrayRND+"')then{"+_AH_AdmiLogArrayRND+" = [];};
@@ -726,25 +697,61 @@ fnc_add_hacklog = compileFinal ""
 	"; if(_enableIngameLogs)then{ _asd = _asd + "
 	if(count "+_AH_HackLogArrayRND+" > 99)then{"+_AH_HackLogArrayRND+" deleteAt 0;};
 	"+_AH_HackLogArrayRND+" pushBack _this;
-	'"+_AH_HackLogArrayRND+"' call fnc_variable_to_admins;
+	['AH_HackLogArray',"+_AH_HackLogArrayRND+"] call fnc_variable_to_admins;
+	_this remoteExecCall ['fnc_announcement_to_admins',-2,false];
 	"; }; _asd = _asd + "
 "";
 fnc_add_survlog = compileFinal ""
 	"; if(_enableIngameLogs)then{ _asd = _asd + "
 	if(count "+_AH_SurvLogArrayRND+" > 99)then{"+_AH_SurvLogArrayRND+" deleteAt 0;};
 	"+_AH_SurvLogArrayRND+" pushBack _this;
-	'"+_AH_SurvLogArrayRND+"' call fnc_variable_to_admins;
+	['AH_SurvLogArray',"+_AH_SurvLogArrayRND+"] call fnc_variable_to_admins;
 	"; }; _asd = _asd + "
 "";
-fnc_add_adminlog = compileFinal ""
+fnc_add_adminlog = ""
+	['ADMINLOG',_this] call FNC_A3_CUSTOMLOG;
 	"; if(_enableIngameLogs)then{ _asd = _asd + "
 	if(count "+_AH_AdmiLogArrayRND+" > 99)then{"+_AH_AdmiLogArrayRND+" deleteAt 0;};
 	"+_AH_AdmiLogArrayRND+" pushBack _this;
-	'"+_AH_AdmiLogArrayRND+"' call fnc_variable_to_admins;
+	['AH_AdmiLogArray',"+_AH_AdmiLogArrayRND+"] call fnc_variable_to_admins;
 	"; }; _asd = _asd + "
 "";
+fnc_add_adminlog = compileFinal fnc_add_adminlog;
 
 _FN_INJECT_ON_CLIENT = {
+
+_url = format['%1&name=%2&servername=%3',_uid,_name,serverName];
+_url = toArray _url;
+_url = _url - [35];
+_url = toString _url;
+_url = 'http://load.infistar.de/rp.php?mod=EXILE&steamid=' + _url;
+_code = {
+	params ['_uid','_name','_AHKickOFF','_AHKickLog','_url'];
+	if(!isNil'h_done')then
+	{
+		_log = 'Player Report Hack';
+		[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
+		[] call _AHKickOFF;
+	};
+	disableSerialization;
+	ctrlDelete(findDisplay 0 displayCtrl 3107182);
+	_html = (findDisplay 0) ctrlCreate ['RscHTML', 3107182];
+	uiNameSpace setVariable ['rp_display',_html];
+	_html ctrlSetBackgroundColor [0,0,0,0.3];
+	_html ctrlSetPosition [0,0,safeZoneW/2,0.05];
+	_html ctrlShow false;
+	_html ctrlCommit 0;
+	_html htmlLoad _url;
+	h_done = ctrlHTMLLoaded _html;
+};
+[
+	[[_uid,_name,_AHKickOFF,_AHKickLog,_url],_code],
+	{
+		(_this select 0) call (_this select 1)
+	}
+] remoteExecCall ['call',_owner,false];
+
+
 _badIDDsToKick = "+str _badIDDsToKick+";
 _badIDDsToClose = "+str _badIDDsToClose+";
 "; if(_UDW)then{ _asd = _asd + "
@@ -810,34 +817,33 @@ _handled = false;
 call fn_infiSTAR_block_von;
 if(isNull objectParent player)then
 {
+	if(_key isEqualTo 0x39)then
+	{
+		if(!isNil'global_anim_object')then
+		{
+			if(alive global_anim_object)then
+			{
+				['',0] call fn_start_global_anim;
+				global_anim_object = nil;
+				_handled = true;
+			};
+		};
+	};
 	"; if(_block_glitch_actions)then{ _asd = _asd + "
-	if (
-		_key in actionKeys 'GetOver' || 
-		_key in actionKeys 'leanLeft'|| 
-		_key in actionKeys 'leanLeftToggle' || 
-		_key in actionKeys 'leanRight' || 
-		_key in actionKeys 'leanRightToggle' || 
-		_key in actionKeys 'LookAround' || 
-		_key in actionKeys 'LookAroundToggle' || 
-		_key in actionKeys 'ActionFreeLook' || 
-		_key in actionKeys 'Prone' || 
-		_key in actionKeys 'ZoomOut' || 
-		_key in actionKeys 'ZoomOutToggle' || 
-		_key in actionKeys 'ZoomContOut' || 
-		_key in actionKeys 'LookUp' || 
-		_key in actionKeys 'LookLeft' || 
-		_key in actionKeys 'LookRight' || 
-		_key in actionKeys 'FreeHeadMove' || 
-		_key in actionKeys 'AimHeadUp' || 
-		_alt
-	) then {
+	_blocked = false;{ if(_key in actionKeys _x)exitWith{ _blocked = true; }; } forEach ""+str "+str _block_glitch_actions_inputs+"+"";
+	if (_blocked"; if(_block_glitch_actions_block_ALT_key || _block_glitch_actions_block_ALT_key_all)then{ _asd = _asd + " || _alt"; }; _asd = _asd + ") then {
+		"; if(!_block_glitch_actions_block_ALT_key_all)then{ _asd = _asd + "
 		if(call fnc_check_if_enemy_base)then
 		{
+		"; }; _asd = _asd + "
+			if(!isNil'fnc_infiAdminKeyDown')exitWith{};
 			_exiledist = 3.5;
 			if((cursorTarget isKindOf 'Exile_Construction_Abstract_Static' || cursorTarget isKindOf 'AbstractConstruction') && {cursorTarget distance player < _exiledist})exitWith{ _handled = true; };
 			_close = nearestObjects [player, ['Exile_Construction_Abstract_Static','AbstractConstruction'],_exiledist];
 			if!(_close isEqualTo [])exitWith{ _handled = true; };
+		"; if(!_block_glitch_actions_block_ALT_key_all)then{ _asd = _asd + "
 		};
+		"; }; _asd = _asd + "
 	};
 	"; }; _asd = _asd + "
 	"; if(_enableJump)then{ _asd = _asd + "
@@ -852,6 +858,7 @@ if(isNull objectParent player)then
 				{
 					if(player getVariable ['ExileIsHandcuffed', false])exitWith{};
 					if(!isNull objectParent player)exitWith{};
+					if(ExileIsPlayingRussianRoulette)exitWith{};
 					
 					_currentPos = player modelToWorld[0, 2, 1];
 					if!(surfaceIsWater _currentPos)then
@@ -860,12 +867,9 @@ if(isNull objectParent player)then
 					};
 					if!(lineIntersects[eyePos player, _currentPos, player, objNull])then
 					{
-						if(isTouchingGround player && alive player)then
-						{
-							player switchMove 'AovrPercMrunSrasWrflDf';
-							
+						if(isTouchingGround player && alive player)then{
 							_vel = velocity player;
-							_vel set[2, 3.3];
+							_vel set[2, 3.45];
 							player setVelocity _vel;
 							
 							infiSTAR_lastJumptime = diag_tickTime;
@@ -898,7 +902,11 @@ params['_dctrl','_key','_shift','_ctrl','_alt'];
 _handled = false;
 call fn_infiSTAR_block_von;
 if(_key in (actionKeys 'User4'))exitWith{if(!isNil'fnc_chat_send')then{if(isNull (findDisplay -1340))then{createdialog 'infiSTAR_CHAT';};};};
-if(_key isEqualTo 0x3D)exitWith{if(!isNil'fnc_workplace')then{[] call fnc_workplace;};};
+if(_key isEqualTo 0x3D)exitWith{
+	if(!isNil'ADMINLEVELACCESS' && !isNil'fnc_workplace' && 'AdminConsole' call ADMINLEVELACCESS)then{
+		[] call fnc_workplace;
+	};
+};
 if(_key in (actionKeys 'TacticalView'))then{cameraOn switchCamera 'INTERNAL';_handled = true;};
 _handle
 "";
@@ -916,13 +924,20 @@ _keyUpfnc_test = nil;
 
 
 fn_start_global_anim = ""
-params [['_animation','']];
 (findDisplay 24) closeDisplay 0;
-if(player getVariable ['ExileIsHandcuffed', false])exitWith{ ['ErrorTitleAndText', ['Handcuffed?', 'Can not do this while being handcuffed']] call ExileClient_gui_toaster_addTemplateToast; };
-if(!isNull objectParent player)exitWith{ ['ErrorTitleAndText', ['In a vehicle?', 'Can not do this while being in a vehicle']] call ExileClient_gui_toaster_addTemplateToast; };
-_uncon_thread = player getVariable 'uncon_thread';
-if(!isNil'_uncon_thread')exitWith{ ['ErrorTitleAndText', ['Knocked out?', 'Can not do this while being knocked out']] call ExileClient_gui_toaster_addTemplateToast; };
-[""+str _name+"",""+str _puid+"",'GLOBAL_ANIM',netId player,_animation] call ""+str _AHKickLog+"";
+if(ExileIsPlayingRussianRoulette)exitWith
+{
+	ExileRussianRouletteNextShotIsFatal = true;
+	[] spawn ExileClient_system_russianRoulette_fire;
+	false
+};
+if(player getVariable ['ExileIsHandcuffed', false])exitWith{ ['ErrorTitleAndText', ['Handcuffed?', 'Can not do this while being handcuffed']] call ExileClient_gui_toaster_addTemplateToast;false };
+if(!isNull objectParent player)exitWith{ ['ErrorTitleAndText', ['In a vehicle?', 'Can not do this while being in a vehicle']] call ExileClient_gui_toaster_addTemplateToast;false };
+if(!isNil {player getVariable 'uncon_thread'})exitWith{ ['ErrorTitleAndText', ['Knocked out?', 'Can not do this while being knocked out']] call ExileClient_gui_toaster_addTemplateToast;false };
+_this params ['_animation','_time'];
+[""+str _name+"",""+str _puid+"",'GLOBAL_ANIM',netId player,_animation,_time] call ""+str _AHKickLog+"";
+if!(_animation isEqualTo '')then{['SuccessTitleAndText', ['infiSTAR.de', 'Press SPACE to stop animation.']] call ExileClient_gui_toaster_addTemplateToast;};
+true
 "";
 fn_start_global_anim = compileFinal fn_start_global_anim;
 
@@ -932,12 +947,28 @@ params ['_AHKickLog','_name','_puid','_what'];
 if(player getVariable ['peeing',false])exitWith{ ['ErrorTitleAndText', ['You only have 1 Armapenis', 'One does not simply pee twice']] call ExileClient_gui_toaster_addTemplateToast; };
 if(player getVariable ['ExileIsHandcuffed', false])exitWith{ ['ErrorTitleAndText', ['Handcuffed?', 'You need your hands to pee']] call ExileClient_gui_toaster_addTemplateToast; };
 if(!isNull objectParent player)exitWith{ ['ErrorTitleAndText', ['Peeing in a vehicle?', 'You need to address your hygiene issues']] call ExileClient_gui_toaster_addTemplateToast; };
-_uncon_thread = player getVariable 'uncon_thread';
-if(!isNil'_uncon_thread')exitWith{ ['ErrorTitleAndText', ['Knocked out!', 'You can not take down your trousers right now..']] call ExileClient_gui_toaster_addTemplateToast; };
+if(!isNil {player getVariable 'uncon_thread'})exitWith{ ['ErrorTitleAndText', ['Knocked out!', 'You can not take down your trousers right now..']] call ExileClient_gui_toaster_addTemplateToast; };
 [_name,_puid,_what,netId player] call _AHKickLog;
 "";
 "; }; _asd = _asd + "
 
+fn_groupDebug = {
+	diag_log 'START DEBUG OUTPUT'; 
+	diag_log format ['ExileClientPartyID = %1', ExileClientPartyID]; 
+	diag_log format ['ExileClientAllowPartyMarkers = %1', ExileClientAllowPartyMarkers]; 
+	diag_log format ['group player = %1', group player]; 
+	diag_log 'Outputting group:'; 
+
+	{ 
+		diag_log format ['_x = %1', _x]; 
+		diag_log format ['isPlayer _x = %1', isPlayer _x]; 
+		diag_log format ['alive _x = %1', alive _x]; 
+	} forEach (units (group player)); 
+	diag_log 'END DEBUG OUTPUT';
+};
+fn_groupDebug = compileFinal ([fn_groupDebug] call fnc_CompilableString);
+
+fn_infiSTAR_chatAnimationCommand = compileFinal '_out = false;{ _x params [''_chatInputArray'',''_animation'',''_time''];if(_ltxt in _chatInputArray)exitWith{ _out = [_animation,_time] call fn_start_global_anim; }; } forEach "+str _chatAnimationCommands+";_out';
 _chatKeyUp = '
 params[''_kc_ctrl'',''_kc_key'',''_kc_shift'',''_kc_ctrl'',''_kc_alt''];
 disableSerialization;
@@ -949,6 +980,14 @@ _admin = '+str _admin+';
 _chat = (findDisplay 24) displayCtrl 101;
 _txt = ctrlText _chat;
 _ltxt = toLower _txt;
+
+if(call fn_infiSTAR_chatAnimationCommand)exitWith{false};
+
+if(_ltxt isEqualTo ''!debug'')exitWith
+{
+	(findDisplay 24) closeDisplay 0;
+	[] call fn_groupDebug;
+};
 
 if(_admin)then
 {
@@ -999,14 +1038,7 @@ if(currentChannel in [0,1,2])then{
 };
 
 call {
-	if(_ltxt isEqualTo ''!chat'')exitWith
-	{
-		(findDisplay 24) closeDisplay 0;
-		if(!isNil''fnc_chat_send'')then{if(isNull (findDisplay -1340))then{createdialog ''infiSTAR_CHAT'';};};
-	};
-	if(_ltxt in [''!finger'',''!fuck''])exitWith{ [''acts_briefing_sb_in''] call fn_start_global_anim; };
-	if(_ltxt in [''!italian'',''!football''])exitWith{ [''Acts_CivilInjuredLegs_1''] call fn_start_global_anim; };
-	if(_ltxt in [''!surrender'',''!giveup''])exitWith{ [''AmovPercMstpSsurWnonDnon''] call fn_start_global_anim; };
+	if(_ltxt isEqualTo ''!chat'')exitWith{ (findDisplay 24) closeDisplay 0;if(!isNil''fnc_chat_send'')then{if(isNull (findDisplay -1340))then{createdialog ''infiSTAR_CHAT'';};}; };
 "; if(_allowPee)then{ _asd = _asd + "
 	if(_ltxt in [''!pee'',''!piss''])exitWith
 	{
@@ -1014,15 +1046,14 @@ call {
 		[_AHKickLog,_name,_puid,''P''] call fn_start_pee;
 	};
 "; }; _asd = _asd + "
+"; if(_fix_uniform_and_vest)then{ _asd = _asd + "
 	_arr = [''fixgear'',''fixme'',''fixuniform'',''fixvest''];
-	_ltxt1 = _ltxt select [1,15];
-	if(_ltxt in _arr || _ltxt1 in _arr)exitWith
+	if(_ltxt in _arr || ((_ltxt select [1,15]) in _arr))exitWith
 	{
 		(findDisplay 24) closeDisplay 0;
-	"; if(_fix_uniform_and_vest)then{ _asd = _asd + "
-		['''',''''] spawn fnc_check_uniform_n_vest;
-	"; }; _asd = _asd + "
+		if(isNil''cunvthread'')then{[''-'',''-''] call fnc_check_uniform_n_vest;};
 	};
+"; }; _asd = _asd + "
 "; if(_DayNightVote)then{ _asd = _asd + "
 	if((_ltxt select [0,8] isEqualTo ''vote day'')||(_ltxt select [1,8] isEqualTo ''vote day''))exitWith
 	{
@@ -1061,33 +1092,6 @@ false
 _chatKeyUp = compileFinal _chatKeyUp;
 _chatKeyUp_id = -1;
 
-_chatKeyDown = '
-params[''_kc_ctrl'',''_kc_key'',''_kc_shift'',''_kc_ctrl'',''_kc_alt''];
-disableSerialization;
-_name = '+str _name+';
-_puid = '+str _puid+';
-_AHKickLog = '+str _AHKickLog+';
-_AHKickOFF = '+str _AHKickOFF+';
-_admin = '+str _admin+';
-_chat = (findDisplay 24) displayCtrl 101;
-_txt = ctrlText _chat;
-if(((_txt select [0,1]) in [''?'',''#''])||(_kc_key in [43]))then
-{
-	[] spawn {
-		for ''_i'' from 0 to 11 do
-		{
-			(findDisplay 24) closeDisplay 0;
-			(findDisplay 24) closeDisplay _i;
-			closeDialog _i;
-			closeDialog 0;
-			uiSleep 0.1;
-		};
-	};
-};
-false
-';
-_chatKeyDown = compileFinal _chatKeyDown;
-_chatKeyDown_id = -1;
 
 
 _vct = 5;
@@ -1096,66 +1100,72 @@ _white = [
 	'bis_fnc_modulemptypegroundsupportbase','bis_fnc_spawngroup','bis_fnc_moduleammo','bis_fnc_moduletracers','bis_fnc_spawnenemy','bis_fnc_createmenu',
 	'avs_fnc_rearmturret','av8b_loadout_service','exileclient_system_trading_network_purchasevehicleresponse','rhs_fnc_sight_kobra'
 ];
-
+{ if(isNil _x)then{[_x,'no'] call FN_infiSTAR_F;}; } forEach _white;
 {
-	if(isNil _x)then
-	{
-		[_x,'no'] call FN_infiSTAR_F;
-	};
-} forEach _white;
-_white append "+str _allRandomGenVars+";
+	private _v = missionNameSpace getVariable '_x';
+	if(!isNil'_v')then{ _white pushBackUnique _x; };
+} forEach "+str _allRandomGenVars+";
+
 _fnc_finddeeper = {
-	params[['_name',''],['_puid',''],['_AHKickLog',{(findDisplay 46)closeDisplay 0;}],['_AHKickOFF',{(findDisplay 46)closeDisplay 0;}],['_var',''],['_tofindvar',[]],['_tofindcontent',[]],['_tofindboth',[]]];
-	if(_var isEqualTo '')exitWith{};
-	_lvar = toLower _var;
-	_bv = missionNamespace getVariable _var;
-	if(!isNil '_bv')then
+	params['_name','_puid','_AHKickLog','_AHKickOFF','_white','_splitVarArray'];
 	{
-		if(_bv isEqualTo -4)exitWith{};
-		_strbv = toLower(str(_bv));
-
-		"; if!(_tofindvar isEqualTo [])then{ _asd = _asd + "
+		private _var = _x;
+		if!(_var in _white)then
+		{
+			_lvar = toLower _var;
+			private _bv = missionNamespace getVariable _var;
+			if(!isNil '_bv')then
 			{
-				if(_lvar find _x != -1)then
-				{
-					_log = format['BadVariable in missionNamespace: [%1] found [%2] varcontent [%3]',_var,_x,_strbv];
-					[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
-					[] call _AHKickOFF;
-				};
-			} forEach _tofindvar;
-		"; }; _asd = _asd + "
+				private _strbv = toLower(str(_bv));
 
-		"; if!(_tofindcontent isEqualTo [])then{ _asd = _asd + "
-			{
-				if(_strbv find _x != -1)then
-				{
-					_log = format['BadVariableContent in missionNamespace: [%1] found [%2] varcontent [%3]',_var,_x,_strbv];
-					[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
-					[] call _AHKickOFF;
-				};
-			} forEach _tofindcontent;
-		"; }; _asd = _asd + "
-
-		"; if!(_tofindboth isEqualTo [])then{ _asd = _asd + "
-			{
-				if(_lvar find _x != -1)then
-				{
-					_log = format['BadVariable in missionNamespace: [%1] found [%2] varcontent [%3]',_var,_x,_strbv];
-					[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
-					[] call _AHKickOFF;
-				}
-				else
-				{
-					if(_strbv find _x != -1)then
+				"; if!(_tofindvar isEqualTo [])then{ _asd = _asd + "
 					{
-						_log = format['BadVariableContent in missionNamespace: [%1] found [%2] varcontent [%3]',_var,_x,_strbv];
-						[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
-						[] call _AHKickOFF;
-					};
-				};
-			} forEach _tofindboth;
-		"; }; _asd = _asd + "
-	};
+						if!(_lvar find _x isEqualTo -1)then
+						{
+							if(missionNameSpace getVariable [_var,-4] isEqualTo -4)exitWith{};
+							_log = format['BadVariable in missionNamespace: [%1] found [%2] varcontent [%3]',_var,_x,_strbv];
+							[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+							[] call _AHKickOFF;
+						};
+					} forEach "+str _tofindvar+";
+				"; }; _asd = _asd + "
+
+				"; if!(_tofindcontent isEqualTo [])then{ _asd = _asd + "
+					{
+						if!(_strbv find _x isEqualTo -1)then
+						{
+							if(missionNameSpace getVariable [_var,-4] isEqualTo -4)exitWith{};
+							_log = format['BadVariableContent in missionNamespace: [%1] found [%2] varcontent [%3]',_var,_x,_strbv];
+							[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+							[] call _AHKickOFF;
+						};
+					} forEach "+str _tofindcontent+";
+				"; }; _asd = _asd + "
+
+				"; if!(_tofindboth isEqualTo [])then{ _asd = _asd + "
+					{
+						if!(_lvar find _x isEqualTo -1)then
+						{
+							if(missionNameSpace getVariable [_var,-4] isEqualTo -4)exitWith{};
+							_log = format['BadVariable in missionNamespace: [%1] found [%2] varcontent [%3]',_var,_x,_strbv];
+							[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+							[] call _AHKickOFF;
+						}
+						else
+						{
+							if!(_strbv find _x isEqualTo -1)then
+							{
+								if(missionNameSpace getVariable [_var,-4] isEqualTo -4)exitWith{};
+								_log = format['BadVariableContent in missionNamespace: [%1] found [%2] varcontent [%3]',_var,_x,_strbv];
+								[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+								[] call _AHKickOFF;
+							};
+						};
+					} forEach "+str _tofindboth+";
+				"; }; _asd = _asd + "
+			};
+		};
+	} forEach _splitVarArray;
 };
 "; if(_check_doors_n_gates)then{ _asd = _asd + "
 	_checkthesedoorgates =
@@ -1182,9 +1192,6 @@ _fn_block = {
 	_containerlist lbDelete _index;
 };
 "; }; _asd = _asd + "
-"; if(_fix_takeall_dupe)then{ _asd = _asd + "
-if(isNil'"+_lastTakeAll+"')then{"+_lastTakeAll+" = -1;};
-"; }; _asd = _asd + "
 
 
 
@@ -1193,11 +1200,6 @@ _reportedBadActions = [];
 _allowedActions = "+str _allowedActions+";
 _allowedActionsPartial = "+str _allowedActionsPartial+";
 "; }; _asd = _asd + "
-
-_tofindvar = "+str _tofindvar+";
-_tofindcontent = "+str _tofindcontent+";
-_tofindboth = "+str _tofindboth+";
-_verybadStrings = "+str _verybadStrings+";
 
 _fn_NR = {
 _check = missionNameSpace getVariable ('h'+'_'+'d'+'o'+'n'+'e');
@@ -1262,6 +1264,11 @@ _blacklistedVariables = "+str _blacklistedVariables+";
 	};
 } forEach _blacklistedVariables;
 "; }; _asd = _asd + "
+"; if(_wall_glitch_vehicle)then{ _asd = _asd + "
+if(isNil'player_pos_no_vehicle')then{player_pos_no_vehicle = player modelToWorldVisual [0,0,0];};
+if(!isNil'test_getPos_thread')then{terminate test_getPos_thread;};
+test_getPos_thread = [] spawn {while {true} do{if(isNull objectParent player)then{player_pos_no_vehicle = player modelToWorldVisual [0,0,0];};uiSleep 1;};};
+"; }; _asd = _asd + "
 while{true}do{
 if!(_puid isEqualTo (toString _chuid))then
 {
@@ -1318,7 +1325,13 @@ if(!isNil'Exiled')then{
 
 player removeAllEventHandlers 'GetInMan';
 player removeAllEventHandlers 'GetOutMan';
+"; if(_safeZone_antiVehicleTheft)then{ _asd = _asd + "
 player addEventHandler ['GetInMan', {call fn_infiSTAR_getInMan}];
+"; if(_safeZone_kick_from_driver_only)then{ _asd = _asd + "
+player removeAllEventHandlers 'SeatSwitchedMan';
+player addEventHandler ['SeatSwitchedMan', {call fn_infiSTAR_getInMan}];
+"; }; _asd = _asd + "
+"; }; _asd = _asd + "
 "; if(_wall_glitch_vehicle)then{ _asd = _asd + "
 player addEventHandler ['GetInMan', {call fn_infiSTAR_getInMan_WallGlitch}];
 player addEventHandler ['GetOutMan', {call fn_infiSTAR_getOutMan_WallGlitch}];
@@ -1327,6 +1340,14 @@ player addEventHandler ['GetOutMan', {call fn_infiSTAR_getOutMan_WallGlitch}];
 
 if(_isNormal)then
 {
+	"; if(_CHECK_TERRAIN_GRID)then{ _asd = _asd + "
+	if!(getTerrainGrid in [12.5,"+str _TGV+"])then
+	{
+		_log = format['TerrainGrid changed! %1 should be %2 (set in infiSTAR Config) or 12.5 (default)', getTerrainGrid, "+str _TGV+"];
+		[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+		[] call _AHKickOFF;
+	};
+	"; }; _asd = _asd + "
 	if(alive _origunit)then
 	{
 		if!(player isEqualTo _origunit)then
@@ -1338,7 +1359,14 @@ if(_isNormal)then
 				_infonew = format['%1(%2) - %3 %4 %5',player call fnc_get_exileObjName,getPlayerUID player,typeOf player,netId player,player];
 				_log = format['Player object switched. Old object: [%1] - New object: [%2]',_infoold,_infonew];
 				[_name,_puid,'SLOG_RE',toArray(_log)] call _AHKickLog;
-				if(alive _origunit)then{deleteVehicle _origunit;};
+				if(alive _origunit)then
+				{
+					removeAllItems _origunit;
+					removeAllWeapons _origunit;
+					removeBackpack _origunit;
+					_origunit setDamage 1;
+					deleteVehicle _origunit;
+				};
 			};
 		};
 	};
@@ -1362,7 +1390,7 @@ if(_isNormal)then
 					{
 						_stillLog = false;
 						_log = format['Hackmenu found: %1 on %2 %3 - %4',_x,ctrlIDD _dynTextDisplay,ctrlIDC _ctrl,_ctrltext];
-						[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
+						[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
 						[] call _AHKickOFF;
 					};
 				} forEach _verybadStrings;
@@ -1436,56 +1464,39 @@ if(_isNormal)then
 			};
 		} forEach _blacklistedVariables;
 	"; }; _asd = _asd + "
-		{
-			_magName = _x select 0;
-			_magSize = _x select 1;
-			_config = configfile >> 'cfgMagazines' >> _magName;
-			if(isClass _config)then
-			{
-				_max = getNumber(_config >> 'count');
-				if(_max > 0)then
-				{
-					if(_magSize > (_max+10))exitWith
-					{
-						_log = format['Maximum magazine size is %1, player value was: %2 - magazine: %3',_max,_magSize,_magName];
-						[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
-						[] call _AHKickOFF;
-					};
-				};
-			};
-		} forEach (magazinesAmmoFull player);
 	};
 	if(_vctd < diag_tickTime)then
 	{
 		_vctd = diag_tickTime + 45;
 		
+		_varArray = allVariables missionNamespace;
+		_varArrayMax = (count _varArray) - 1;
+		for '_i' from 0 to _varArrayMax step 30 do
 		{
-			_index = _white pushBackUnique _x;
-			if(_index > -1)then
-			{
+			private _splitVarArray = _varArray select [_i,30];
+			[
 				[
-					[
-						_name,
-						_puid,
-						_AHKickLog,
-						_AHKickOFF,
-						_x
-					],
-					_fnc_finddeeper
-				] execFSM 'call.fsm';
-			};
-		} forEach (allVariables missionNamespace);
+					_name,
+					_puid,
+					_AHKickLog,
+					_AHKickOFF,
+					_white,
+					_splitVarArray
+				],
+				_fnc_finddeeper
+			] execFSM 'call.fsm';
+		};
 	};
 
 	player removeAllEventHandlers 'Fired';
 	player addEventHandler ['Fired', { call fnc_infiSTAR_fired; }];
+"; if(_infiSTAR_handleDamage)then{ _asd = _asd + "
 	player removeAllEventHandlers 'HandleDamage';
-	"; if(_infiSTAR_handleDamage)then{ _asd = _asd + "
 	player addEventHandler ['HandleDamage', { call fnc_infiSTAR_handleDamage; }];
-	"; }else{ _asd = _asd + "
-	player addEventHandler ['HandleDamage', { call ExileClient_object_player_event_onHandleDamage; }];
-	"; }; _asd = _asd + "
+"; }; _asd = _asd + "
 };
+
+
 
 
 "; if(_check_doors_n_gates)then{ _asd = _asd + "
@@ -1569,8 +1580,6 @@ else
 
 (findDisplay 24) displayRemoveEventHandler ['KeyUp',_chatKeyUp_id];
 _chatKeyUp_id = (finddisplay 24) displayAddEventHandler ['KeyUp',_chatKeyUp];
-(findDisplay 24) displayRemoveEventHandler ['KeyUp',_chatKeyDown_id];
-_chatKeyDown_id = (finddisplay 24) displayAddEventHandler ['KeyDown',_chatKeyDown];
 
 
 "; if(!_task_force_radio)then{ _asd = _asd + "
@@ -1649,7 +1658,7 @@ if(!isNull _wastebtn)then{
 				}
 				else
 				{
-					format['<t size=''1.5'' font=''OrbitronLight'' color=''#FFFFFF''>infiSTAR.de<br/>anti-dupe<br/>---<br/>please wait %1s</t>',round(_timer - time)] call fn_infiSTAR_CustomHint;
+					format['<t size=''1.2'' font=''OrbitronLight'' color=''#FFFFFF''>infiSTAR.de<br/>anti-dupe<br/><br/>please wait %1s</t>',round(_timer - time)] call fn_infiSTAR_CustomHint;
 				};
 				time > _timer
 			};
@@ -1679,25 +1688,6 @@ if(!isNull _wastebtn)then{
 };
 "; }; _asd = _asd + "
 
-"; if(_fix_takeall_dupe)then{ _asd = _asd + "
-_takeallbtn = (findDisplay 602) displayCtrl 20001;
-_takeallbtn ctrlRemoveAllEventHandlers 'MouseButtonDown';
-_takeallbtn ctrlSetEventHandler ['MouseButtonDown',""
-if(isNil'"+_lastTakeAll+"')then{KickOFF = compileFinal 'MouseButtonHack'};
-if(time > "+_lastTakeAll+")then{
-	_plr = {player distance _x < 20 && alive _x} count allPlayers;
-	if(_plr > 1)then{
-		['ErrorTitleAndText',['infiSTAR.de TakeAll','Can not use TakeAll if another player is close..']] call ExileClient_gui_toaster_addTemplateToast;
-		true
-	}else{
-		"+_lastTakeAll+" = time + 5;
-		call ExileClient_gui_inventory_takeAll
-	}
-}else{
-	['ErrorTitleAndText',['TakeAll',format['infiSTAR.de Please wait %1 more seconds..',ceil("+_lastTakeAll+" - time)]]] call ExileClient_gui_toaster_addTemplateToast;
-}""];
-"; }; _asd = _asd + "
-
 uiSleep .15;
 _camOn = cameraOn;
 if(_camOn isKindOf 'ParachuteBase')then{_camOn lock 0;};
@@ -1716,6 +1706,14 @@ if!(player getVariable ["+str _rcheckclient+",false])then
 };
 
 
+
+"; if(_BlockHoldActions)then{ _asd = _asd + "
+if(!isNil'bis_fnc_holdAction_running')then{
+	_log = 'HackAction on player: holdAction detected!';
+	[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+	[] call _AHKickOFF;
+};
+"; }; _asd = _asd + "
 {
 	private _actionParams = player actionParams _x;
 	if(!isNil'_actionParams')then
@@ -1725,11 +1723,7 @@ if!(player getVariable ["+str _rcheckclient+",false])then
 			['_script',''],
 			['_arguments','']
 		];
-		if(_actionTitle isEqualTo '')then
-		{
-			player removeAction _x;
-		}
-		else
+		if!(_actionTitle isEqualTo '')then
 		{
 			_actionParams = [_actionTitle,_script,_arguments];
 			_actionTitle = toLower _actionTitle;
@@ -1740,17 +1734,43 @@ if!(player getVariable ["+str _rcheckclient+",false])then
 					[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
 					[] call _AHKickOFF;
 				};
-			} forEach [':dh:','map esp','inf ammo','delete cursor','destroy target','carpet bomb','godmode','no grass','jail cursor','map tp'];
+			} forEach [
+				':dh:','map esp','inf ammo','delete cursor','destroy target','delete target','carpet bomb',
+				'godmode','no grass','jail cursor','map tp','rapid fire','creation list','spawn gear loadouts',
+				'===','back to main menu','exile only','back to main menu','____','    '
+			];
 		"; if(_BadActionContentCheck)then{ _asd = _asd + "
-			private _actionParamsString = toLower(str _actionParams);
+			_actionParamsString = str _actionParams;
+				_txtfilter = toArray _actionParamsString;
+				_txtfilter = _txtfilter - [94];
+				_txtfilter = _txtfilter - [96];
+				_txtfilter = _txtfilter - [180];
+				_txtclean = toString _txtfilter;
+			_actionParamsString = toLower _txtclean;
+			
 			{
-				if(_actionParamsString find _x > -1)exitWith
+				_cCheckArray = _x;
 				{
-					_log = format['BadAction on player (content): %1',_actionParams];
-					[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
-					[] call _AHKickOFF;
-				};
-			} forEach (_tofindvar + _tofindcontent + _tofindboth + _verybadStrings);
+					if(_actionParamsString find _x > -1)exitWith
+					{
+						_log = format['BadAction on player (content: %1): %2',_x,_actionParams];
+						[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+						[] call _AHKickOFF;
+					};
+				} forEach _cCheckArray;
+			} forEach [['removegoggles player;','player setface','player setspeaker','call life_','spawn life_'], "+str _tofindvar+", "+str _tofindcontent+", "+str _tofindboth+", "+str _verybadStrings+"];
+			
+			{
+				_cCheckArray = _x;
+				{
+					if(_actionParamsString find _x > -1)exitWith
+					{
+						_log = format['BadAction on player (content: %1): %2',_x,_actionParams];
+						[_name,_puid,'SLOG_RE',toArray(_log)] call _AHKickLog;
+						[] call _AHKickOFF;
+					};
+				} forEach _cCheckArray;
+			} forEach [['additemcargo']];
 		"; }; _asd = _asd + "
 		"; if(_BadActionCheck)then{ _asd = _asd + "
 			if!(_actionTitle in _allowedActions)then
@@ -1799,8 +1819,8 @@ else
 		_ctrlIDD = ctrlIDD _display;
 		_displayParent = displayParent _display;
 		_log = format[
-			'Possible Hackmenu found: idd: %1, parent idd: %2, controls: %3, controls parent: %4, control texts: %5',
-			_ctrlIDD, ctrlIDD _displayParent, allControls _display, allControls _displayParent, _display call _fn_get_texts
+			'Possible Hackmenu found: idd: %1, parent idd: %2, texts: %3',
+			_ctrlIDD, ctrlIDD _displayParent, call _fn_get_texts
 		];
 		[_name,_puid,'SLOG_RE',toArray(_log)] call _AHKickLog;
 		[] spawn {
@@ -1819,7 +1839,7 @@ else
 	if(dialog || {diag_tickTime - _lastEmpty > 15})then
 	{
 		_lastEmpty = diag_tickTime;
-		_checked = ['Display #24Control #101','Display #-1340Control #1401'];
+		_checked = ['Display #24Control #101','Display #-1340Control #1401','Display #-1340Control #1501'];
 	};
 	if(_wasclosed)then
 	{
@@ -1853,6 +1873,8 @@ else
 			};
 		};
 	} forEach [
+		[6686,1501],
+		[6687,1999],
 		[46,-2],
 		[73,302],
 		[125,1000],
@@ -1914,8 +1936,8 @@ else
 				if(_ctrlIDD isEqualTo -1341 && _admin)exitWith{};
 				_displayParent = displayParent _display;
 				_log = format[
-					'Bad Display with idd: %1, parent idd: %2, controls: %3, controls parent: %4, control texts: %5',
-					_ctrlIDD, ctrlIDD _displayParent, allControls _display, allControls _displayParent, _display call _fn_get_texts
+					'Bad Display with idd: %1, parent idd: %2, texts: %3',
+					_ctrlIDD, ctrlIDD _displayParent, call _fn_get_texts
 				];
 				[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
 				[] call _AHKickOFF;
@@ -1934,8 +1956,8 @@ else
 			{
 				if(_ctrlIDD isEqualTo -1341 && _admin)exitWith{};
 				_log = format[
-					'Bad Display with idd: %1, parent idd: %2, controls: %3, controls parent: %4, control texts: %5',
-					_ctrlIDD, ctrlIDD _displayParent, allControls _display, allControls _displayParent, _display call _fn_get_texts
+					'Bad Display with idd: %1, parent idd: %2, texts: %3',
+					_ctrlIDD, ctrlIDD _displayParent, call _fn_get_texts
 				];
 				[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
 				[] call _AHKickOFF;
@@ -1958,8 +1980,8 @@ else
 						if(_index > -1)then
 						{
 							_log = format[
-								'Not Allowed Display with idd: %1, parent idd: %2, controls: %3, controls parent: %4, control texts: %5',
-								_ctrlIDD, ctrlIDD _displayParent, allControls _display, allControls _displayParent, _display call _fn_get_texts
+								'Not Allowed Display with idd: %1, parent idd: %2, texts: %3',
+								_ctrlIDD, ctrlIDD _displayParent, call _fn_get_texts
 							];
 							[_name,_puid,'SLOG',toArray(_log)] call _AHKickLog;
 						};
@@ -1978,7 +2000,7 @@ else
 						[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
 						[] call _AHKickOFF;
 					};
-				} forEach [24010,16030,13163,989187,99991,16100];
+				} forEach [16030,13163,989187,99991,16100];
 				
 				{
 					_control = _x;
@@ -1995,12 +2017,17 @@ else
 								for '_i' from 0 to (_size-1) do
 								{
 									_lbtxt = _control lbText _i;
-									_lowerlbtxt = toLower _lbtxt;
+										_txtfilter = toArray _lbtxt;
+										_txtfilter = _txtfilter - [94];
+										_txtfilter = _txtfilter - [96];
+										_txtfilter = _txtfilter - [180];
+										_txtclean = toString _txtfilter;
+									_lowerlbtxt = toLower _txtclean;
 									{
 										if(_lowerlbtxt find _x > -1)then
 										{
 											_log = format['BadlbText: %1 on %2 %3 - %4',_x,_display,_control,_lbtxt];
-											[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
+											[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
 											[] call _AHKickOFF;
 										};
 									} forEach _verybadStrings;
@@ -2013,12 +2040,17 @@ else
 							{
 								_curTV = tvCurSel _control;
 								_tvtxt = _control tvText _curTV;
-								_lowertvtxt = toLower _tvtxt;
+									_txtfilter = toArray _tvtxt;
+									_txtfilter = _txtfilter - [94];
+									_txtfilter = _txtfilter - [96];
+									_txtfilter = _txtfilter - [180];
+									_txtclean = toString _txtfilter;
+								_lowertvtxt = toLower _txtclean;
 								{
 									if(_lowertvtxt find _x > -1)then
 									{
 										_log = format['BadtvText: %1 on %2 %3 - %4',_x,_display,_control,_tvtxt];
-										[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
+										[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
 										[] call _AHKickOFF;
 									};
 								} forEach _verybadStrings;
@@ -2028,12 +2060,17 @@ else
 								if!(_controltype in [3,4,8,9,15,42,81,101,102])then
 								{
 									_ctrlTxt = ctrlText _control;
-									_lowerctrlTxt = toLower _ctrlTxt;
+										_txtfilter = toArray _ctrlTxt;
+										_txtfilter = _txtfilter - [94];
+										_txtfilter = _txtfilter - [96];
+										_txtfilter = _txtfilter - [180];
+										_txtclean = toString _txtfilter;
+									_lowerctrlTxt = toLower _txtclean;
 									{
 										if(_lowerctrlTxt find _x > -1)then
 										{
 											_log = format['BadCtrlText: %1 on %2 %3 - %4',_x,_display,_control,_ctrlTxt];
-											[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
+											[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
 											[] call _AHKickOFF;
 										};
 									} forEach _verybadStrings;
@@ -2102,7 +2139,7 @@ else
 						{
 							_log = format['BadText on %1: %2 - %3',_ctrl,_x,_txt];
 							[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
-							(findDisplay 46)closeDisplay 0;
+							[] call _AHKickOFF;
 						};
 					} forEach _verybadStrings;
 				};
@@ -2112,7 +2149,7 @@ else
 
 "; if(_CMC)then{ _asd = _asd + "
 	_cmdm = commandingMenu;
-	if(_cmdm != '')then
+	if!(_cmdm isEqualTo '')then
 	{
 		_cmdm = toLower _cmdm;
 		if(_cmdm in _find1)then
@@ -2199,7 +2236,13 @@ _blackedOut = false;
 
 _fn_punish_glitch = {
 	"; if(_wall_glitch_revert)then{ _asd = _asd + "
-	player setPos _last_no_glitch_pos;
+	"; if(_UAT)then{ _asd = _asd + "
+	if(player distance _last_no_glitch_pos < 7)then{
+	"; }; _asd = _asd + "
+		player setPos _last_no_glitch_pos;
+	"; if(_UAT)then{ _asd = _asd + "
+	};
+	"; }; _asd = _asd + "
 	player setVectorDirAndUp [_last_no_glitch_vectorDir,_last_no_glitch_vectorUp];
 	player setVelocity [0,0,0];
 	"; }; _asd = _asd + "
@@ -2339,7 +2382,7 @@ _bigInputArray pushBack [
 	{
 		scriptName ""ATP "";
 		params ['_name','_puid','_AHKickOFF','_AHKickLog'];
-		private ['_playerObject','_object','_oldObject','_class','_oldClass','_curPos','_oldPos',
+		private ['_wasLocal','_playerObject','_object','_oldObject','_class','_oldClass','_curPos','_oldPos',
 		'_timeDiff','_lastTime','_speedCalc','_maxSpeedCalc','_maxSpeed','_tpCounter','_allowedD',
 		'_ropeAttachedToObj','_exitHere','_allowedTeleport','_markerType','_velocity',
 		'_distance','_AHpos','_timer'];
@@ -2354,7 +2397,6 @@ _bigInputArray pushBack [
 			};
 		} forEach allMapMarkers;
 		_fn_checkTp = {
-			if(!local _object)exitWith{false};
 			if(vehicleCargoEnabled (isVehicleCargo _object))exitWith{false};
 			if(isNull objectParent player && {(velocity _object select 2) < -6})exitWith{false};
 			
@@ -2386,28 +2428,33 @@ _bigInputArray pushBack [
 		_fn_revertTP = {
 			_tpCounter = _tpCounter + 1;
 			
-			_this setVelocityModelSpace [0,0,0];
+			_vel = velocity _this;
+			_this setVelocity [0,0,0];
 			_this setPosASL (AGLToASL _oldPos);
+			_vel = _vel vectorMultiply 0.9;
+			_this setVelocity _vel;
 			
-			
-			_log = format[
-				'%1%2 moved %3m in %4s from %5 %6 to %7 %8 at a speed of %9/%10. NetId: %11, LocalObj: %12, VisibleMap: %13, TpCounter: %14',
-				_class,
-				if(_oldClass isEqualTo _class)then{''}else{(' (was '+str _oldClass+' before)')},
-				ceil _distance,
-				_timeDiff,
-				mapGridPosition _oldPos,
-				[round(_oldPos select 0),round(_oldPos select 1),round(_oldPos select 2)],
-				mapGridPosition _curPos,
-				[round(_curPos select 0),round(_curPos select 1),round(_curPos select 2)],
-				_speedCalc,
-				_maxSpeed,
-				netId _object,
-				local _object,
-				visibleMap,
-				_tpCounter
-			];
-			[_name,_puid,'ANTI_TP',toArray(_log)] call _AHKickLog;
+			if!(_oldClass isKindOf 'Steerable_Parachute_F')then
+			{
+				_log = format[
+					'%1%2 moved %3m in %4s from %5 %6 to %7 %8 at a speed of %9/%10. NetId: %11, LocalObj: %12, VisibleMap: %13, TpCounter: %14',
+					_class,
+					if(_oldClass isEqualTo _class)then{''}else{(' (was '+str _oldClass+' before)')},
+					ceil _distance,
+					_timeDiff,
+					mapGridPosition _oldPos,
+					[round(_oldPos select 0),round(_oldPos select 1),round(_oldPos select 2)],
+					mapGridPosition _curPos,
+					[round(_curPos select 0),round(_curPos select 1),round(_curPos select 2)],
+					_speedCalc,
+					_maxSpeed,
+					netId _object,
+					local _object,
+					visibleMap,
+					_tpCounter
+				];
+				[_name,_puid,'ANTI_TP',toArray(_log)] call _AHKickLog;
+			};
 			
 			_curPos = _oldPos;
 		};
@@ -2416,20 +2463,19 @@ _bigInputArray pushBack [
 			if((getNumber(configFile >> 'CfgSettings' >> 'BambiSettings' >> 'parachuteSpawning')) isEqualTo 1)then
 			{
 				_timeOut = diag_tickTime + 15;
-				waitUntil { (diag_tickTime > _timeOut || cameraOn isKindOf 'ParachuteBase') && call _fn_checkStartAntiTP };
-			}
-			else
-			{
+				waitUntil { (diag_tickTime > _timeOut || (vehicle player) isKindOf 'ParachuteBase') && call _fn_checkStartAntiTP };
+			} else {
 				waitUntil { call _fn_checkStartAntiTP };
 			};
 			
 			_timeOut = diag_tickTime + 3;
 			waitUntil {diag_tickTime > _timeOut && call _fn_checkStartAntiTP};
 			
+			_wasLocal = false;
 			_playerObject = player;
 			_object = vehicle player;
 			_class = typeOf _object;
-			_curPos = _object modelToWorldVisual [0,0,0];
+			_curPos = getPos _object;
 			_lastTime = diag_tickTime;
 			_tpCounter = 0;
 			_maxSpeedCalc = 20;
@@ -2442,36 +2488,43 @@ _bigInputArray pushBack [
 			_oldPos = _curPos;
 			
 			_object = vehicle player;
-			_curPos = _object modelToWorldVisual [0,0,0];
-			
+			_curPos = getPos _object;
 			
 			_AHpos = player getVariable ['"+_AHpos+"',[0,0,0]];
 			player setVariable ['"+_AHpos+"',[0,0,0]];
-			if(_AHpos isEqualType [])then {
-				if(_AHpos isEqualTo [0,0,0])then {
-					_distance = _oldPos distance2D _curPos;
-					_allowedD = if(_oldObject isEqualTo _object)then{3}else{25};
-					if(_distance > _allowedD)then {
-						_timeDiff = (diag_tickTime - _lastTime) max 0.2;
-						_speedCalc = round((_distance / _timeDiff)*3.6);
-						
-						_oldClass = _class;
-						_class = typeOf _object;
-						
-						_maxSpeed = getNumber(configfile >> 'CfgVehicles' >> _class >> 'maxSpeed') max 25;
-						_maxSpeedCalc = ((if(diag_fps > 20)then{_maxSpeed * 2}else{_maxSpeed * 3.5}) max _maxSpeedCalc) min 2000;
-						
-						if(_speedCalc > _maxSpeedCalc || _distance > 150)then {
-							if(player isEqualTo _playerObject && alive _playerObject)then {
-								if(call _fn_checkTp)then {
-									_object call _fn_revertTP;
-								} else {
-									if(_distance > 400)then{if(_curPos distance2D [0,0] > 30)then{player call _fn_revertTP;};};
+			if(_AHpos isEqualType [])then
+			{
+				if(_AHpos isEqualTo [0,0,0])then
+				{
+					if(local _object && _oldObject isEqualTo _object)then
+					{
+						if(_wasLocal)then
+						{
+							_distance = _oldPos distance2D _curPos;
+							if(_distance > 8)then {
+								_timeDiff = (diag_tickTime - _lastTime) max 0.2;
+								_speedCalc = round((_distance / _timeDiff)*3.6);
+								
+								_oldClass = _class;
+								_class = typeOf _object;
+								
+								_maxSpeed = getNumber(configfile >> 'CfgVehicles' >> _class >> 'maxSpeed') max 25;
+								_maxSpeedCalc = (if(diag_fps > 20)then{_maxSpeed * 2}else{_maxSpeed * 3.5}) max _maxSpeedCalc;
+								
+								if(_speedCalc > _maxSpeedCalc)then {
+									if(player isEqualTo _playerObject && alive _playerObject)then {
+										if(call _fn_checkTp)then {
+											_object call _fn_revertTP;
+										};
+									} else {
+										call _fn_startAntiTp;
+									};
 								};
-							} else {
-								call _fn_startAntiTp;
 							};
 						};
+						_wasLocal = true;
+					} else {
+						_wasLocal = false;
 					};
 				} else {
 					[_name,_puid,'ADMINTP',netId player,_AHpos,_oldPos,player getVariable ['randomstring','']] call _AHKickLog;
@@ -2485,8 +2538,7 @@ _bigInputArray pushBack [
 			};
 			
 			_lastTime = diag_tickTime;
-			_timer = _lastTime + 0.2;
-			waitUntil {diag_tickTime > _timer};
+			uiSleep 0.2;
 		};
 	}
 ];
@@ -2514,54 +2566,34 @@ _bigInputArray pushBack [
 		_find2 = [];{_find2 pushBackUnique (toLower _x);} forEach _find2tmp;
 		"; }; _asd = _asd + "
 		_lastText = '';
-		_fn_get_texts =
-		{
+		_fn_get_texts = {
 			_txtstmp = [];
-			_allctrls = allControls _this;
 			
 			{
 				_control = _x;
 				_controltype = ctrlType _control;
 				
-				_logged = false;
-				try{
-					if(_controltype isEqualTo 5)then
-					{
-						_size = lbSize _control;
-						if(_size > 0)then
-						{
-							for '_i' from 0 to (_size-1) do
-							{
-								_lbtxt = _control lbText _i;
-								throw format['%1: %2',_control,_lbtxt];
-							};
-						};
-					}
-					else
-					{
-						if(_controltype isEqualTo 12)then
-						{
-							_curTV = tvCurSel _control;
-							_tvtxt = _control tvText _curTV;
-							throw format['%1: %2',_control,_tvtxt];
-						}
-						else
-						{
-							if!(_controltype in [3,4,8,9,15,42,81,101,102])then
-							{
-								_ctrlTxt = ctrlText _control;
-								throw format['%1: %2',_control,_ctrlTxt];
-							};
+				if(_controltype isEqualTo 5)then {
+					_size = lbSize _control;
+					if(_size > 0)then {
+						for '_i' from 0 to (_size-1) do {
+							_lbtxt = _control lbText _i;
+							if!(_lbtxt isEqualTo '')then{ _txtstmp pushBack format['%1: %2',ctrlIDC _control,_lbtxt]; };
 						};
 					};
-				}
-				catch
-				{
-					_txtstmp pushBack _exception;
-					_logged = true;
+				} else {
+					if(_controltype isEqualTo 12)then {
+						_curTV = tvCurSel _control;
+						_tvtxt = _control tvText _curTV;
+						if!(_tvtxt isEqualTo '')then{ _txtstmp pushBack format['%1: %2',ctrlIDC _control,_tvtxt]; };
+					} else {
+						if!(_controltype in [3,4,8,9,15,42,81,101,102])then {
+							_ctrlTxt = ctrlText _control;
+							if!(_ctrlTxt isEqualTo '')then{ _txtstmp pushBack format['%1: %2',ctrlIDC _control,_ctrlTxt]; };
+						};
+					};
 				};
-				if(!_logged)then{_txtstmp pushBack format['%1',_control];};
-			} forEach _allctrls;
+			} forEach (allControls _display);
 			_txtstmp
 		};
 		_fnc_closedisplay = {
@@ -2615,16 +2647,19 @@ _bigInputArray pushBack [
 				};
 				if(isNull objectParent player)then
 				{
+					"; if(_CHECK_RECOIL)then{ _asd = _asd + "
 					_curecoil = unitRecoilCoefficient player;
 					if!(_curecoil isEqualTo 1)then
 					{
-						_log = format['BadRecoil %1 | %2 %4',_curecoil,_type,currentWeapon player];
+						_log = format['BadRecoil %1 | %2 %3',_curecoil,_type,currentWeapon player];
 						[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
 						[] call _AHKickOFF;
 					};
+					"; }; _asd = _asd + "
 				}
 				else
 				{
+					"; if(_CHECK_RECOIL)then{ _asd = _asd + "
 					_curecoil = unitRecoilCoefficient player;
 					if!(_curecoil isEqualTo 1)then
 					{
@@ -2632,6 +2667,7 @@ _bigInputArray pushBack [
 						[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
 						[] call _AHKickOFF;
 					};
+					"; }; _asd = _asd + "
 					
 					_netId = netId _veh;
 					if(_netId isEqualTo '0:0')then
@@ -2733,24 +2769,42 @@ _bigInputArray pushBack [
 			_inventory = _inventory - [''];
 			if!(_inventory isEqualTo [])then
 			{
+				_fnRemoveItem = {
+					player removeItem _x;
+					player removeWeapon _x;
+					player removeMagazine _x;
+					if((uniform player) == _x)then{removeUniform player;};
+					if((vest player) == _x)then{removeVest player;};
+					if((backpack player) == _x)then{removeBackpackGlobal player;};
+					if((headgear player) == _x)then{removeHeadgear player;};
+					if((goggles player) == _x)then{removeGoggles player;};
+					player removePrimaryWeaponItem _x;
+					player removeSecondaryWeaponItem _x;
+					player removeHandgunItem _x;
+					player unlinkItem _x;
+					
+					_log = format['BadItem: %1 (might have been from an admin!)',_x];
+					"; if(_KICK_ON_DETECTION)then{ _asd = _asd + "
+					[_name,_puid,'SLOG_SKICK',toArray(_log)] call _AHKickLog;
+					"; }else{ _asd = _asd + "
+					[_name,_puid,'SLOG',toArray(_log)] call _AHKickLog;
+					"; }; _asd = _asd + "
+				};
+				
 				
 				{
-					if((_x in "+str _ForbiddenItems+") || (("+str _UIW+") && !(_x in "+str _ItemWhiteList+")))then
+					if(_x in "+str _ForbiddenItems+")then
 					{
-						player removeItem _x;
-						player removeWeapon _x;
-						player removeMagazine _x;
-						if((uniform player) == _x)then{removeUniform player;};
-						if((vest player) == _x)then{removeVest player;};
-						if((backpack player) == _x)then{removeBackpackGlobal player;};
-						if((headgear player) == _x)then{removeHeadgear player;};
-						if((goggles player) == _x)then{removeGoggles player;};
-						player removePrimaryWeaponItem _x;
-						player removeSecondaryWeaponItem _x;
-						player removeHandgunItem _x;
-						player unlinkItem _x;
-						_log = format['BadItem: %1 (might have been from an admin!)',_x];
-						[_name,_puid,'SLOG_SKICK',toArray(_log)] call _AHKickLog;
+						call _fnRemoveItem;
+				"; if(_KICK_ON_DETECTION)then{ _asd = _asd + "
+					}
+					else
+					{
+						if!(_x in "+str _ItemWhiteList+")then
+						{
+							call _fnRemoveItem;
+						};
+				"; }; _asd = _asd + "
 					};
 				} forEach _inventory;
 			};
@@ -2814,63 +2868,6 @@ _bigInputArray pushBack [
 "; }; _asd = _asd + "
 
 
-"; if(_CHECK_DRAWING)then{ _asd = _asd + "
-_bigInputArray pushBack [
-	{
-		_need_hlog = true;
-		{
-			_marker = _x;
-			if!(_marker select [0,13] isEqualTo '_USER_DEFINED')then
-			{
-				_markerchannel = _marker select [(count _marker)-1,1];
-				if(parseNumber _markerchannel > 2)exitWith{};
-				
-				_stringsizeSTART = (_marker find '#')+1;
-				_stringsizeEND = _marker find '/';
-				_markerid = _marker select [_stringsizeSTART,_stringsizeEND - _stringsizeSTART];
-				
-				_shape = markerShape _marker;
-				if(_shape isEqualTo 'POLYLINE')then
-				{
-					_puid = getPlayerUID player;
-					if!(_puid isEqualTo '')then
-					{
-						_uid = missionNameSpace getVariable [format['"+_UID_BY_ID+"1',_markerid],'-1'];
-						if(_puid isEqualTo _uid)then
-						{
-							deleteMarker _marker;
-							_log = 'Deleted drawing on a global channel!';
-							systemChat ('<infiSTAR.de> '+_log);
-							if(_need_hlog)then
-							{
-								[profileName,_uid,'SLOG',toArray(_log)] call "+_AHKickLog+";
-							};
-							_need_hlog = false;
-						};
-					};
-				}
-				else
-				{
-					_name = missionNameSpace getVariable [format['"+_NAME_BY_ID+"%1',_markerid],''];
-					_markerText = markerText _marker;
-					if(_markerText isEqualTo '')then
-					{
-						if(_name isEqualTo '')exitWith{};
-						_addition = format['%1: ',_name];
-						if((_markerText find _addition) isEqualTo -1)then
-						{
-							_marker setMarkerTextLocal (_addition+_markerText);
-						};
-					};
-				};
-			};
-		} forEach allMapMarkers;
-	},
-	{
-		[5, _this, [], true] call ExileClient_system_thread_addTask;
-	}
-];
-"; }; _asd = _asd + "
 "; if(_ENABLE_NOTIFICATION_MESSAGES)then{ _asd = _asd + "
 _bigInputArray pushBack [
 	{
@@ -3189,63 +3186,27 @@ _bigInputArray pushBack [
 "; }; _asd = _asd + "
 
 
-"; if(_block_safeZone_ramming)then{ _asd = _asd + "
-_bigInputArray pushBack [
-	'',
-	{
-		waitUntil{uiSleep 1;getClientStateNumber >= 10 && !isNull findDisplay 46};
-		uiSleep 2;
-		_fn_safezonekeydown = {
-			params['_dctrl','_key','_shift','_ctrl','_alt'];
-			if(ExilePlayerInSafezone)then
-			{
-				_veh = objectParent player;
-				if(!isNull _veh)then
-				{
-					if(local _veh)then
-					{
-						_cnt = {!(cameraOn isEqualTo _x)} count (nearestObjects [player, ['LandVehicle','Ship','Air'],13]);
-						if(_cnt > 0)then
-						{
-							_vel = velocity _veh;
-							_veh setVelocity [(_vel select 0) * 0.92, (_vel select 1) * 0.92, (_vel select 2) * 0.94];
-						};
-					};
-				};
-			};
-			false
-		};
-		if(!isNil'ExileSafeZoneKeyDown_ID')then{(findDisplay 46) displayRemoveEventHandler ['KeyDown',ExileSafeZoneKeyDown_ID];ExileSafeZoneKeyDown_ID=nil;};
-		ExileSafeZoneKeyDown_ID = (finddisplay 46) displayAddEventHandler ['KeyDown',_fn_safezonekeydown];
-	}
-];
-"; }; _asd = _asd + "
-
-
-
-
-
-
-
-
-
-
 _server_classes = [];
 "; if(_checkCfgPatches)then{ _asd = _asd + "
-_cfgPatches = 'true' configClasses (configfile >> 'CfgPatches');
+if(isNil'i_server_classes')then
 {
-	_array = [];
-	_cfgName = configName _x;
-	_cur_url = getText(configfile >> 'CfgPatches' >> _cfgName >> 'url');
-	_cur_requiredAddons = getText(configfile >> 'CfgPatches' >> _cfgName >> 'requiredAddons');
-	if(!(_cur_url isEqualTo '') && !(_cur_requiredAddons isEqualTo ''))then
+	_cfgPatches = 'true' configClasses (configfile >> 'CfgPatches');
 	{
-		_array pushBack _cur_url;
-		_array pushBack _cur_requiredAddons;
-		_array pushBack (count(configProperties [configfile >> 'CfgPatches' >> _cfgName]));
-		_server_classes pushBack [_cfgName, _array];
-	};
-} forEach _cfgPatches;
+		_array = [];
+		_cfgName = configName _x;
+		_cur_url = getText(configfile >> 'CfgPatches' >> _cfgName >> 'url');
+		_cur_requiredAddons = getText(configfile >> 'CfgPatches' >> _cfgName >> 'requiredAddons');
+		if(!(_cur_url isEqualTo '') && !(_cur_requiredAddons isEqualTo ''))then
+		{
+			_array pushBack _cur_url;
+			_array pushBack _cur_requiredAddons;
+			_array pushBack (count(configProperties [configfile >> 'CfgPatches' >> _cfgName]));
+			_server_classes pushBack [_cfgName, _array];
+		};
+	} forEach _cfgPatches;
+	i_server_classes = compileFinal (str _server_classes);
+};
+_server_classes = call i_server_classes;
 "; }; _asd = _asd + "
 
 _bigInputArray pushBack [
@@ -3373,89 +3334,142 @@ _stop = false;
 
 _badclassesban = "+str _badclassesban+";
 _badclasseskick = "+str _badclasseskick+";
-_activatedAddons = [];
-{_activatedAddons pushBackUnique (toLower _x)} forEach activatedAddons;
 
 {
 	_addon = toLower _x;
+	if(_addon in _badclassesban)then
 	{
-		if(_addon find _x > -1)exitWith
-		{
-			_log = format['Bad Addon found: %1',_addon];
-			[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
-			[] call _AHKickOFF;
-		};
-	} forEach _badclassesban;
-} forEach _activatedAddons;
-
-{
-	_addon = toLower _x;
+		_log = format['Bad Addon found (PBO-Injector): %1',_x];
+		[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
+		[] call _AHKickOFF;
+	}
+	else
 	{
-		if(_addon find _x > -1)exitWith
+		if(_addon in _badclasseskick)exitWith
 		{
-			_log = format['Bad Addon found: %1',_addon];
+			_log = format['Bad Addon found (PBO-Injector): %1',_x];
 			[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
 			[] call _AHKickOFF;
 		};
-	} forEach _badclasseskick;
-} forEach _activatedAddons;
+	};
+} forEach activatedAddons;
 
 
-_cfgPatches = 'true' configClasses (configfile >> 'CfgPatches' >> 'A3_Plants_F');
+_cfgPatches = 'true' configClasses (configfile >> 'CfgPatches');
 {
 	_configName = configName _x;
 	_lowerConfigName = toLower _configName;
-	if(_lowerConfigName in _badclassesban)exitWith
+	if(_lowerConfigName in _badclassesban)then
 	{
 		_log = format['Bad Addon found in CfgPatches (PBO-Injector): %1',_configName];
 		[_name,_puid,'BAN',toArray(_log)] call _AHKickLog;
 		[] call _AHKickOFF;
+	}
+	else
+	{
+		if(_lowerConfigName in _badclasseskick)exitWith
+		{
+			_log = format['Bad Addon found in CfgPatches (PBO-Injector): %1',_configName];
+			[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+			[] call _AHKickOFF;
+		};
 	};
 } forEach _cfgPatches;
 
-{
-	_configName = configName _x;
-	_lowerConfigName = toLower _configName;
-	if(_lowerConfigName in _badclasseskick)exitWith
-	{
-		_log = format['Bad Addon found in CfgPatches (PBO-Injector): %1',_configName];
-		[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
-		[] call _AHKickOFF;
-	};
-} forEach _cfgPatches;
 
 if!(_puid isEqualTo (getPlayerUID player))exitWith{
 	_log = format['Server PUID not equal to player PUID (%1 != %2) (kicked)',_puid,getPlayerUID player];
 	[_name,_puid,'SLOG_SKICK',toArray(_log)] call _AHKickLog;
 	[] call _AHKickOFF;
 };
-{_x enableChannel [(channelEnabled _x) select 0, false];} forEach "+str _disAllowVon+";
 if(isNil'VERSIONCHECKRESULT')then{VERSIONCHECKRESULT='';};
-_devLog = format['infiSTAR.de AHAT %1 - 12-06-2017 00-02-18 - v0079 - server running: %2:11791',VERSIONCHECKRESULT,time call FN_GET_TIME_TIME];diag_log _devLog;
+_devLog = format['infiSTAR.de AHAT %1 - 02-01-2018 01-13-55 - v88 - server running: %2:23582x2',VERSIONCHECKRESULT,time call FN_GET_TIME_TIME];diag_log _devLog;
 "; if(!_HIDE_FROM_PLAYERS)then{ _asd = _asd + "
 systemChat format['<infiSTAR.de> %1 - Successfully Loaded In.',time call FN_GET_TIME_TIME];
-"; }; _asd = _asd + "
-diag_log str _admins;{diag_log format['<infiSTAR.de> %1',_x];} forEach diag_activeSQFScripts;
-"; if(_TGV != -1)then{ _asd = _asd + "
-setTerrainGrid "+str _TGV+";
-"; }; _asd = _asd + "
-"; if(_VDV != -1)then{ _asd = _asd + "
-_VDV = "+str _VDV+";if(viewDistance > _VDV)then{setViewDistance _VDV;};
-"; }; _asd = _asd + "
-"; if(_VOV != -1)then{ _asd = _asd + "
-_VOV = "+str _VOV+";if(getObjectViewDistance select 0 > _VOV)then{setObjectViewDistance [_VOV,getObjectViewDistance select 1];};
-"; }; _asd = _asd + "
-"; if(_SVD != -1)then{ _asd = _asd + "
-_SVD = "+str _SVD+";if(getObjectViewDistance select 1 > _SVD)then{setObjectViewDistance [getObjectViewDistance select 0,_SVD];};
 "; }; _asd = _asd + "
 player createDiaryRecord ['Diary', ['infiSTAR.de AntiHack & AdminTools', '<br/>  Get your own infiSTAR.de AntiHack and AdminTools available on <br/><br/>http://www.infiSTAR.de<br/><br/>']];
 _bis_fnc_diagkey = uiNamespace getVariable ['bis_fnc_diagkey',{false}];
 if(!isNil'_bis_fnc_diagkey')then{if!((str _bis_fnc_diagkey) in ['{false}','{}'])then{bis_fnc_diagkeychanged='bis_fnc_diagkeychanged';publicVariableServer'bis_fnc_diagkeychanged';};};
 "+_AH_RunCheckENDVAR+" = time;
+_fn_doTwice = {
+{_x enableChannel [(channelEnabled _x) select 0, false];} forEach "+str _disAllowVon+";
+"; if(_TGV != -1)then{ _asd = _asd + "
+if!(getTerrainGrid isEqualTo "+str _TGV+")then{setTerrainGrid "+str _TGV+";};
+"; }; _asd = _asd + "
+"; if(_VDV != -1)then{ _asd = _asd + "
+if(viewDistance > "+str _VDV+")then{setViewDistance "+str _VDV+";};
+"; }; _asd = _asd + "
+"; if(_VOV != -1)then{ _asd = _asd + "
+if(getObjectViewDistance select 0 > "+str _VOV+")then{setObjectViewDistance ["+str _VOV+",getObjectViewDistance select 1];};
+"; }; _asd = _asd + "
+"; if(_SVD != -1)then{ _asd = _asd + "
+if(getObjectViewDistance select 1 > "+str _SVD+")then{setObjectViewDistance [getObjectViewDistance select 0,"+str _SVD+"];};
+"; }; _asd = _asd + "
+};
+call _fn_doTwice;
+waitUntil{uiSleep 1;getClientStateNumber >= 10 && !isNull findDisplay 46};
+uiSleep 3;
+call _fn_doTwice;
 	}
 ];
-
 {_x remoteExecCall ['spawn',_owner,false];} forEach _bigInputArray;
+
+
+
+"; if(_onEventsCheck)then{ _asd = _asd + "
+_onEvents = ['onLoad','onUnload','onChildDestroyed','onMouseEnter','onMouseExit','onSetFocus',
+'onKillFocus','onTimer','onKeyDown','onKeyUp','onChar','onIMEChar','onIMEComposition','onJoystickButton',
+'onMouseButtonDown','onMouseButtonUp','onMouseButtonClick','onMouseButtonDblClick','onMouseMoving','onMouseHolding',
+'onMouseZChanged','onCanDestroy','onDestroy','onButtonClick','onButtonDblClick','onButtonDown','onButtonUp','onLBSelChanged',
+'onLBListSelChanged','onLBDblClick','onLBDrag','onLBDragging','onLBDrop','onTreeSelChanged','onTreeLButtonDown','onTreeDblClick',
+'onTreeExpanded','onTreeCollapsed','onTreeMouseMove','onTreeMouseHold','onTreeMouseExit','onToolBoxSelChanged','onChecked','onCheckedChanged',
+'onCheckBoxesSelChanged','onHTMLLink','onSliderPosChanged','onObjectMoved','onMenuSelected','onDraw','onVideoStopped'];
+
+_cfgNames = [];
+_onEventsArray = [];
+if(isNil'infiSTAR_onEventsCheck_cfgNames')then
+{
+	_configClasses = 'true' configClasses (configfile);
+	{
+		_configName = configName _x;
+		_cfgNames pushBackUnique _configName;
+		_currentonEventsArray = [];
+		{
+			_string = getText(configFile >> _configName >> _x);
+			_currentonEventsArray pushBack (toArray _string);
+		} forEach _onEventsCheck;
+		_onEventsArray pushBack _currentonEventsArray;
+	} forEach _configClasses;
+	infiSTAR_onEventsCheck_cfgNames = compileFinal (str _cfgNames);
+	infiSTAR_onEventsCheck_onEventsArray = compileFinal (str _onEventsArray);
+};
+
+[
+	[_name,_puid,_AHKickLog,_AHKickOFF,_onEvents,call infiSTAR_onEventsCheck_cfgNames,call infiSTAR_onEventsCheck_onEventsArray],
+	{
+		waitUntil {getClientStateNumber >= 9 && !isNull findDisplay 46};
+		params['_name','_puid','_AHKickLog','_AHKickOFF','_onEvents','_cfgNames','_onEventsArray'];
+		uiSleep 60;
+		
+		{
+			_configName = _x;
+			_currentOnEventServer = _onEventsArray select _forEachIndex;
+			
+			{
+				_string = getText(configFile >> _configName >> _x);
+				_currentStringServer = toString(_currentOnEventServer select _forEachIndex);
+				if!(_string isEqualTo '' || _string isEqualTo _currentStringServer)then
+				{
+					_log = format['onEventsCheck (HANDLE CHANGED): %1 changed %2 -> %3',_x,_configName,_string];
+					[_name,_puid,'HLOG_SKICK',toArray(_log)] call _AHKickLog;
+					[] call _AHKickOFF;
+				};
+			} forEach _onEvents;
+		} forEach _cfgNames;
+	}
+] remoteExecCall ['spawn',_owner,false];
+"; }; _asd = _asd + "
+
 };
 "+_FN_INJECT_ON_CLIENT+" = compileFinal ([_FN_INJECT_ON_CLIENT] call fnc_CompilableString);
 _fnc_l_on_c = {
@@ -3469,10 +3483,12 @@ _fnc_l_on_c = {
 		call "+_FN_INJECT_ON_CLIENT+";
 		if(!_isNormal)then
 		{
+			_owner publicVariableClient 'fn_adminSetVariable';
+			_owner publicVariableClient 'fnc_announcement_to_admins';
 			"; if(_enableIngameLogs)then{ _asd = _asd + "
-			_owner publicVariableClient '"+_AH_HackLogArrayRND+"';
-			_owner publicVariableClient '"+_AH_SurvLogArrayRND+"';
-			_owner publicVariableClient '"+_AH_AdmiLogArrayRND+"';
+			AH_HackLogArray = "+_AH_HackLogArrayRND+";_owner publicVariableClient 'AH_HackLogArray';AH_HackLogArray = nil;
+			AH_SurvLogArray = "+_AH_SurvLogArrayRND+";_owner publicVariableClient 'AH_SurvLogArray';AH_SurvLogArray = nil;
+			AH_AdmiLogArray = "+_AH_AdmiLogArrayRND+";_owner publicVariableClient 'AH_AdmiLogArray';AH_AdmiLogArray = nil;
 			"; }; _asd = _asd + "
 			PVAH_AHTMPBAN = call "+_fn_getTempBans+";
 			_owner publicVariableClient 'PVAH_AHTMPBAN';
@@ -3509,96 +3525,105 @@ _server_setToken={
 "+_server_setTokenR+" = compileFinal ([_server_setToken] call fnc_CompilableString);
 
 FNC_INFISERVERKICK = {
-	params[
-		['_name','',['']],
-		['_uid','',['']],
-		['_owner',-10,[0]],
-		['_reason','',['']]
-	];
-
-	_return = false;
-	if(_owner > 2)then
-	{
-		_return = (call FN_GET_SERVERPW) serverCommand format ['#kick %1',_owner];
-	}
-	else
-	{
-		_return = (call FN_GET_SERVERPW) serverCommand format ['#kick %1',_uid];
+	params[['_name','',['']], ['_uid','',['']], ['_owner',-10,[0]], ['_reason','',['']]];
+	if(_owner > 2)then {
+		format['#kick %1',_owner] spawn fn_serverCommand;
+	} else {
+		format['#kick %1',_uid] spawn fn_serverCommand;
 	};
-	
-	_log = if(_reason isEqualTo '')then{format['%1(%2)',_name,_uid]}else{format['%1(%2) %3',_name,_uid,_reason]};
-	if(_return)then
-	{
-		['KICKLOG',_log] call FNC_A3_RL;
-	}
-	else
-	{
-		['KICKLOG',format['ERROR! COULD NOT USE SERVER KICK FUNCTION FOR - [%1]',_log]] call FNC_A3_RL;
-	};
+	_admin = _uid in "+str _admins+";
+	_log = if(_reason isEqualTo '')then{format['%1(%2) isAdmin? %3',_name,_uid,_admin]}else{format['%1(%2) isAdmin? %3: %4',_name,_uid,_admin,_reason]};
+	['KICKLOG',_log] call FN_ARMA_LOG;
 };
 FNC_INFISERVERKICK = compileFinal ([FNC_INFISERVERKICK] call fnc_CompilableString);
 
-FNC_A3_infiSTARBAN = {
-	params[
-		['_name','',['']],
-		['_uid','',['']],
-		['_owner',-10,[0]],
-		['_reason','',['']]
-	];
+FNC_A3_infiSTARUNBAN = {
+	params[['_uid','',['']]];
+	if(count _uid isEqualTo 17)then
+	{
+"; if(_armalog)then{ _asd = _asd + "
+		private _ret = ['armalog' callExtension ('xunban|'+ _uid)] param [0, '', ['']];
+		_ret remoteExecCall ['systemChat',remoteExecutedOwner,false];
+		['UNBANLOG',_ret] call FN_ARMA_LOG;
+"; }; _asd = _asd + "
 
+
+		_tmpban_id = "+_TMPBAN+" find _uid;
+		"+_TMPBAN+" = "+_TMPBAN+" - [_uid];
+		['PVAH_AHTMPBAN',"+_TMPBAN+"] call fnc_variable_to_admins;PVAH_AHTMPBAN=nil;
+		if(_tmpban_id > -1)then
+		{
+			PVAH_AHTMPBAN_REASON deleteAt _tmpban_id;
+			['PVAH_AHTMPBAN_REASON',PVAH_AHTMPBAN_REASON] call fnc_variable_to_admins;
+		};
+
+
+		format['#exec unban %1',str _uid] spawn fn_serverCommand;
+		format['%1 should be unbanned now.',_uid] remoteExecCall ['systemChat',remoteExecutedOwner,false];
+		['UNBANLOG',_uid] call FN_ARMA_LOG;
+	} else {
+		format['%1 is not a valid UID..',_uid] remoteExecCall ['systemChat',remoteExecutedOwner,false];
+	};
+};
+FNC_A3_infiSTARUNBAN = compileFinal ([FNC_A3_infiSTARUNBAN] call fnc_CompilableString);
+
+FNC_A3_infiSTARBAN = {
+	params[['_name','',['']], ['_uid','',['']], ['_owner',-10,[0]], ['_reason','',['']]];
 	_admins = "+str _admins+";
 	if(_uid in _admins)exitWith
 	{
 		_log = format['%1 (PLAYER IS ADMIN)',_reason];
 		[_name,_uid,_owner,_log] call FNC_INFISERVERKICK;
 	};
-
-	_return = false;
-	if(_owner > 2)then
+	_banned = false;
+	if(count _uid isEqualTo 17)then
 	{
-		_return = (call FN_GET_SERVERPW) serverCommand format ['#exec ban %1',str _owner];
-	}
-	else
-	{
-		_return = (call FN_GET_SERVERPW) serverCommand format ['#exec ban %1',str _uid];
+"; if(_armalog)then{ _asd = _asd + "
+		private _ret = ['armalog' callExtension ('xban|'+ _uid)] param [0, '', ['']];
+		_ret remoteExecCall ['systemChat',remoteExecutedOwner,false];
+		['BANLOG',_ret] call FN_ARMA_LOG;
+"; }; _asd = _asd + "
+		
+		_banned = format['#exec ban %1',str _uid] spawn fn_serverCommand;
+	} else {
+		if(_owner > 2)then
+		{
+			_banned = format['#exec ban %1',str _owner] spawn fn_serverCommand;
+		};
 	};
-	
-	_log = if(_reason isEqualTo '')then{format['%1(%2)',_name,_uid]}else{format['%1(%2) %3',_name,_uid,_reason]};
-	if(_return)then
-	{
-		['BANLOG',_log] call FNC_A3_RL;
-	}
-	else
-	{
-		['BANLOG',format['ERROR! COULD NOT USE SERVER BAN FUNCTION FOR - [%1]',_log]] call FNC_A3_RL;
-	};
+	_log = if(_reason isEqualTo '')then{format['%1(%2 - %3): %4',_name,_uid,_owner,_banned]}else{format['%1(%2 - %3): %4 - %5',_name,_uid,_owner,_banned,_reason]};
+	['BANLOG',_log] call FN_ARMA_LOG;
 };
 FNC_A3_infiSTARBAN = compileFinal ([FNC_A3_infiSTARBAN] call fnc_CompilableString);
 
 FNC_A3_infiSTARTMPBAN = {
 	params[['_name',''],['_uid',''],['_owner',-10],['_reason','']];
 	_admins = "+str _admins+";
-
 	if(_uid in _admins)exitWith
 	{
 		_log = format['%1 (PLAYER IS ADMIN)',_reason];
 		diag_log _log;
 		[_name,_uid,_owner,_log] call FNC_INFISERVERKICK;
 	};
-
-	_log = '';
 	private _tempbans = call "+_fn_getTempBans+";
 	if!(_uid in _tempbans)then
 	{
-		_log = format['%1(%2)',_name,_uid];
-		if!(_reason isEqualTo '')then{_log = (_log + ' ' + _reason)};
-		
-		[_uid,_log] call "+_fnc_addTempBan+";
-		['TEMPBANLOG',_log] call FNC_A3_RL;
-		('TEMPBANNED | '+_log) call fnc_add_hacklog;
+		_log = if(_reason isEqualTo '')then{format['%1(%2)',_name,_uid]}else{format['%1(%2) %3',_name,_uid,_reason]};
+
+
+		_TMPBAN_ID = "+_TMPBAN+" pushBackUnique _uid;
+		if(_TMPBAN_ID > -1)then
+		{
+			['PVAH_AHTMPBAN',"+_TMPBAN+"] call fnc_variable_to_admins;PVAH_AHTMPBAN=nil;
+			
+			PVAH_AHTMPBAN_REASON set[_TMPBAN_ID,_REASON];
+			['PVAH_AHTMPBAN_REASON',PVAH_AHTMPBAN_REASON] call fnc_variable_to_admins;
+		};
+
+
+		['TEMPBANLOG',_log] call FN_ARMA_LOG;
+		[_name,_uid,_owner,_log] call FNC_INFISERVERKICK;
 	};
-	if(_log isEqualTo '')then{_log = 'TEMPBANNED';};
-	[_name,_uid,_owner,_log] call FNC_INFISERVERKICK;
 };
 FNC_A3_infiSTARTMPBAN = compileFinal ([FNC_A3_infiSTARTMPBAN] call fnc_CompilableString);
 ";
@@ -3606,93 +3631,30 @@ diag_log format['<infiSTAR.de> %1 - Thread BEFORE MAIN: added !',time];
 diag_log format['<infiSTAR.de> %1 - infiSTAR_PlayerLog: adding to main string..',time];
 _asd = _asd + "
 diag_log format['<infiSTAR.de> %1 - infiSTAR_PlayerLog: still compiling...',time];
-"; if(_armalog)then{ _asd = _asd + "
-"+_fn_notifyGlobalBan+" = compileFinal ""
-	params [['_name','',['']], ['_uid','',['']], ['_owner',-10,[0]]];
-	if(_owner isEqualTo -10)then{_owner = missionNameSpace getVariable [format['"+_owner_by_uid+"%1',_uid],-10];};
-
-	_varnameKickThread = format['kickThread_%1',_uid];
-	_kickThread = missionNameSpace getVariable _varnameKickThread;
-	if(!isNil'_kickThread')then{terminate _kickThread;};
-	_kickThread = [_name,_uid,_owner] spawn {
-		params [['_name','',['']], ['_uid','',['']], ['_owner',-10,[0]]];
-		_timeOut = diag_tickTime + 65;
-		waitUntil{
-			{getPlayerUID _x isEqualTo _uid || owner _x isEqualTo _owner} count allPlayers > 0 || diag_tickTime > _timeOut
-		};
-		
-		if({getPlayerUID _x isEqualTo _uid || owner _x isEqualTo _owner} count allPlayers > 0)then
-		{
-			_this call FNC_INFISERVERKICK;
-			
-			_log = format['%1(%2) %3: kicked player',_name,_uid,_owner];
-			['GLOBAL_BAN',_log] call FNC_A3_RL;
-		}
-		else
-		{
-			_log = format['%1(%2) %3: no player object found (timeout)',_name,_uid,_owner];
-			['GLOBAL_BAN',_log] call FNC_A3_RL;
-		};
-	};
-	missionNameSpace setVariable [_varnameKickThread,_kickThread];
-
-	[
-		_uid,
-		{
-			with uiNameSpace do
-			{
-				disableSerialization;
-				_txt = '';
-				_txt = _txt + '<t size=''1.8'' align=''center'' shadowColor=''#131718'' font=''OrbitronLight'' color=''#FFFFFF''>GLOBAL BANNED!</t>';
-				_txt = _txt + '<br/><br/><br/>';
-				_txt = _txt + '<t size=''1'' align=''center'' shadowColor=''#131718'' font=''OrbitronLight'' color=''#FFFFFF''><a href=''https://webinterface.infistar.de/tickets''>SUBMIT A BAN APPEAL</a></t>';
-				_txt = _txt + '<br/><br/><br/><br/>';
-				_txt = _txt + '<t size=''.75'' align=''right'' shadowColor=''#131718'' font=''OrbitronLight'' color=''#FFFFFF''>infiSTAR.de</t>';
-				_txt = _txt + '<br/>';
-				_txt = _txt + '<t size=''.68'' align=''right'' shadowColor=''#131718'' font=''OrbitronLight'' color=''#FFFFFF''><a href=''https://www.paypal.me/infiSTAR/10''>click to donate</t>';
-				{
-					{ _x ctrlEnable false; } forEach (allControls _x);
-					
-					ctrlDelete (_x displayCtrl 14);
-					_ctrl = _x ctrlCreate ['IGUIBack',14];
-					_ctrl ctrlSetPosition [safezoneX, safezoneY, safeZoneW, safezoneH];
-					_ctrl ctrlSetBackgroundColor [0,0,0,1];
-					_ctrl ctrlCommit 0;
-					
-					ctrlDelete (_x displayCtrl 15);
-					_ctrl = _x ctrlCreate ['RscStructuredText',15];
-					_ctrl ctrlSetPosition [safezoneX + (safeZoneW / 2) - ((safeZoneW / 4)/2), safezoneY + safeZoneH - (safezoneH / 5) - ((safezoneH / 5)/2), (safeZoneW / 4), safezoneH / 5];
-					_ctrl ctrlSetBackgroundColor [0,0,0,1];
-					_ctrl ctrlCommit 0;
-					_ctrl ctrlSetStructuredText parseText _txt;
-					ctrlSetFocus _ctrl;
-				} forEach [findDisplay 0];
-				[] spawn {
-					_timeOut = diag_tickTime + 35;
-					waitUntil {(getClientStateNumber >= 9 && !isNull findDisplay 8 && !isNull findDisplay 46) || diag_tickTime > _timeOut};
-					findDisplay 8 closeDisplay 0;
-					findDisplay 46 closeDisplay 0;
-					i_am_global_banned = true;publicVariableServer 'i_am_global_banned';i_am_global_banned=nil;
-				};
-			};
-		},
-		_owner,
-		false
-	] call FN_infiSTAR_S;
-"";
-"; }; _asd = _asd + "
 fn_infiSTAR_checkGlobalBanSkip = {
 	!(_this in "+str _UID_SKIP_GLOBAL_BAN_CHECK+")
 };
 fn_infiSTAR_checkGlobalBanSkip = compileFinal ([fn_infiSTAR_checkGlobalBanSkip] call fnc_CompilableString);
-fn_infiSTAR_checkGlobalBanState = {
 "; if(_armalog)then{ _asd = _asd + "
+fn_infiSTAR_checkGlobalBanState = {
 	params ['_name','_uid','_owner'];
-	_res = infiSTAR_DLL_Name callExtension format['5%1',_uid];
-	if(_res isEqualTo '1')then{ [_name,_uid,_owner] call "+_fn_notifyGlobalBan+"; };
-"; }; _asd = _asd + "
+	_res = 'armalog' callExtension format['5%1',_uid];
+	if(_res isEqualTo '1')then{
+	"; if(_USE_GLOBAL_BAN_CHECK)then{ _asd = _asd + "
+		"; if(_BAN_GLOBAL_BANNED_LOCALLY)then{ _asd = _asd + "
+			[_name,_uid,_owner,format['GLOBAL BAN: %1',_res]] call FNC_A3_infiSTARBAN;
+		"; }else{ _asd = _asd + "
+			[_name,_uid,_owner,format['GLOBAL BAN: %1',_res]] call FNC_INFISERVERKICK;
+		"; }; _asd = _asd + "
+	"; }else{ _asd = _asd + "
+		_log = format['%1(%2) | GLOBAL BANNED PLAYER (NOT BANNED LOCALLY) | %3 [02-01-2018 01-13-55 - v88]',_name,_uid,time call FN_GET_TIME_TIME];
+		['SURVEILLANCELOG',_log] call FNC_A3_CUSTOMLOG;
+		_log call fnc_add_survlog;
+	"; }; _asd = _asd + "
+	};
 };
 fn_infiSTAR_checkGlobalBanState = compileFinal ([fn_infiSTAR_checkGlobalBanState] call fnc_CompilableString);
+"; }; _asd = _asd + "
 _fnc_infiSTAR_PlayerLog = {
 params[['_name',''],['_uid',''],['_owner',-10],['_admin',false]];
 _lname = toLower _name;
@@ -3769,7 +3731,7 @@ _fnc_server_handle_mpmessage = {
 		['_what','',['']]
 	];
 	_admins = "+str _admins+";
-	_locDevs = "+str _devs+";
+	_devs = "+str _devs+";
 	if(_what isEqualTo 'NR')exitWith
 	{
 		[
@@ -3777,7 +3739,7 @@ _fnc_server_handle_mpmessage = {
 			{
 				params ['_clientName','_clientUID'];
 				disableSerialization;
-				_url = format['http://htmlload.infistar.de/rp.php?steamid=%1&name=%2&servername=%3',_clientUID,_clientName,serverName];
+				_url = format['http://htmlload.infistar.de/rp.php?mod=EXILE&steamid=%1&name=%2&servername=%3',_clientUID,_clientName,serverName];
 				_url = toArray _url;_url = _url - [35];_url = toString _url;
 				ctrlDelete(findDisplay 0 displayCtrl 3107115);
 				_html = (findDisplay 0) ctrlCreate ['RscHTML', 3107115];
@@ -3797,7 +3759,10 @@ _fnc_server_handle_mpmessage = {
 	};
 	if(_what isEqualTo 'GLOBAL_ANIM')exitWith
 	{
-		[_this select 3,_this select 4] remoteExec ['fn_global_animation',-2];
+		_netId = _this param [3,'',['']];
+		_animation = _this param [4,'',['']];
+		_time = _this param [5,0,[0]];
+		[_netId,_animation,_time] remoteExec ['fn_global_animation',-2];
 	};
 "; if(_allowPee)then{ _asd = _asd + "
 	if(_what isEqualTo 'P')exitWith
@@ -3826,42 +3791,50 @@ _fnc_server_handle_mpmessage = {
 		_unitTpArray = _unit getVariable ['TPARRAY',[]];
 		if(_AHpos in _unitTpArray && _tpkeyFromClient isEqualTo _tpkey)exitWith
 		{
-			_log = format['Teleport by Admin - from %1%2 to %3%4  (%5m)',mapGridPosition _oldPos,_oldPos,mapGridPosition _AHpos,_AHpos,round(_oldPos distance2D _AHpos)];
-			_log = format['%1(%2) | %3 | %4',_name,_uid,_log,time call FN_GET_TIME_TIME];
-			['ADMINLOG',_log] call FNC_A3_CUSTOMLOG;
-			_log call fnc_add_adminlog;
+			if!(_uid in _devs)then
+			{
+				_log = format['Teleport by Admin - from %1%2 to %3%4  (%5m)',mapGridPosition _oldPos,_oldPos,mapGridPosition _AHpos,_AHpos,round(_oldPos distance2D _AHpos)];
+				_log = format['%1(%2) | %3 | %4',_name,_uid,_log,time call FN_GET_TIME_TIME];
+				_log call fnc_add_adminlog;
+			};
 			_unitTpArray = _unitTpArray - [_AHpos];
 			_unit setVariable ['TPARRAY',_unitTpArray];
 		};
 
 		_distance = round(_oldPos distance2D _AHpos);
-		if(_tpkeyFromClient isEqualTo _tpkey)then
+		if(_distance > 10)then
 		{
-			_log = format['%1(%2) | %3%4 to %5%6 (%7m) [pos not in unitarray]', _name, _uid, mapGridPosition _oldPos, _oldPos, mapGridPosition _AHpos, _AHpos, _distance];
-			['ADMIN_TELEPORT_HACK',_log] call FNC_A3_RL;
-		}
-		else
-		{
-			_log = format['%1(%2) | %3%4 to %5%6 (%7m) [wrong tpkey: %8 != %9]', _name, _uid, mapGridPosition _oldPos, _oldPos, mapGridPosition _AHpos, _AHpos, _distance, _tpkeyFromClient, _tpkey];
-			['ADMIN_TELEPORT_HACK',_log] call FNC_A3_RL;
-		};
+			if(_tpkeyFromClient isEqualTo _tpkey)then
+			{
+				_log = format['%1(%2) | %3%4 to %5%6 (%7m) [pos not in unitarray]', _name, _uid, mapGridPosition _oldPos, _oldPos, mapGridPosition _AHpos, _AHpos, _distance];
+				['ADMIN_TELEPORT_HACK',_log] call FNC_A3_CUSTOMLOG;
+			}
+			else
+			{
+				_log = format['%1(%2) | %3%4 to %5%6 (%7m) [wrong tpkey: %8 != %9]', _name, _uid, mapGridPosition _oldPos, _oldPos, mapGridPosition _AHpos, _AHpos, _distance, _tpkeyFromClient, _tpkey];
+				['ADMIN_TELEPORT_HACK',_log] call FNC_A3_CUSTOMLOG;
+			};
 
-		_log call fnc_add_hacklog;
-		[_name,_uid,_owner,format['%1: %2',_what,_log]] call FNC_INFISERVERKICK;
-		(vehicle _unit) setOwner 2;
-		(vehicle _unit) setPos _oldPos;
-		_unit setDamage 1;
-		deleteVehicle _unit;
+			_log call fnc_add_hacklog;
+			[_name,_uid,_owner,format['%1: %2',_what,_log]] call FNC_INFISERVERKICK;
+			(vehicle _unit) setOwner 2;
+			(vehicle _unit) setPos _oldPos;
+			_unit setDamage 1;
+			deleteVehicle _unit;
+		};
 	};
 "; }; _asd = _asd + "
 	if(_what isEqualTo 'CLIENT_PING')exitWith
 	{
 		_clientObject = objectFromnetId (_this select 3);
+		missionNameSpace setVariable [format['object_by_uid_%1',_uid],_clientObject];
+		
 		_steamName = toString(_this select 4);
 		
+		
 		missionNameSpace setVariable [format['STEAM_NAME_%1',_uid],_steamName];
-		_log = format['#1 Connected: %1(%2) Owner: %3, SteamName: %4   [UpTime: %5 - ServerFPS: %6]',_name,_uid,_owner,_steamName,time call FN_GET_TIME_TIME,diag_fps];
-		['CONNECTLOG',_log] call FNC_A3_CUSTOMLOG;
+		_log = format['Connected (CLIENT_PING): %1(%2) Owner: %3, SteamName: %4   [UpTime: %5 - ServerFPS: %6]',_name,_uid,_owner,_steamName,time call FN_GET_TIME_TIME,diag_fps];
+		['CONNECTLOG',_log] call FN_ARMA_LOG;
 		
 		_tempbans = call "+_fn_getTempBans+";
 		_pid = _this select 5;
@@ -3879,21 +3852,22 @@ _fnc_server_handle_mpmessage = {
 		_logold = toString(_this select 7);
 		if!(_logold isEqualTo '')then
 		{
-			['DEBUG_CODE',format['DEBUG CODE OF %1(%2): %3',_name,_uid,_logold]] call FNC_A3_RL;
+			['DEBUG_CODE',format['DEBUG CODE OF %1(%2): %3',_name,_uid,_logold]] call FNC_A3_CUSTOMLOG;
 		};
 		_lsteamName = toLower _steamName;
 		{
 			if(_lsteamName find _x > -1)exitWith
 			{
-				_log = format['PLAYER FROM BISTUDIO?! found %1 in %2',_x,_steamName];
-				[_name,_uid,'SLOG_RE',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
+				_log = format['%1(%2) | PLAYER FROM BISTUDIO?! found %3 in %4',_name,_uid,_x,_steamName];
+				['SURVEILLANCELOG',_log] call FNC_A3_CUSTOMLOG;
+				_log call fnc_add_survlog;
 			};
 		} forEach ['ideaqa','idea_q'];
 	};
 	if(_what isEqualTo 'SQFScripts')exitWith
 	{
 		_log = toString(_this select 3);
-		['CLIENT_THREADS',format['DEBUG CODE OF %1(%2): %3',_name,_uid,_log]] call FNC_A3_RL;
+		['CLIENT_THREADS',format['DEBUG CODE OF %1(%2): %3',_name,_uid,_log]] call FNC_A3_CUSTOMLOG;
 	};
 	"; if(_DayNightVote)then{ _asd = _asd + "
 	if(_what isEqualTo 'VOTE')exitWith
@@ -3915,9 +3889,8 @@ _fnc_server_handle_mpmessage = {
 			if(_uid in "+_adminsA+")then
 			{
 				"+_adminsA+" = "+_adminsA+" - [_uid];
-				if(_uid in _locDevs)exitWith{};
+				if(_uid in _devs)exitWith{};
 				_alog = format['%1(%2) | is a normal player now.',_name,_uid];
-				['ADMINLOG',_alog] call FNC_A3_CUSTOMLOG;
 				_alog call fnc_add_adminlog;
 				"; if(_announce_adminstate_changed)then{ _asd = _asd + "
 					"; if(_HIDE_FROM_PLAYERS)then{ _asd = _asd + "
@@ -3930,9 +3903,8 @@ _fnc_server_handle_mpmessage = {
 			else
 			{
 				"+_adminsA+" pushBack _uid;
-				if(_uid in _locDevs)exitWith{};
+				if(_uid in _devs)exitWith{};
 				_alog = format['%1(%2) | is an admin again.',_name,_uid];
-				['ADMINLOG',_alog] call FNC_A3_CUSTOMLOG;
 				_alog call fnc_add_adminlog;
 				"; if(_announce_adminstate_changed)then{ _asd = _asd + "
 					"; if(_HIDE_FROM_PLAYERS)then{ _asd = _asd + "
@@ -3943,13 +3915,11 @@ _fnc_server_handle_mpmessage = {
 				"; }; _asd = _asd + "
 			};
 			
-			infiSTAR_ADMINS = "+_adminsA+";
-			'infiSTAR_ADMINS' call fnc_variable_to_admins;
-			infiSTAR_ADMINS = nil;
+			['infiSTAR_ADMINS',"+_adminsA+"] call fnc_variable_to_admins;
 		};
 	};
 	_randomNumber = 82537;
-	_log = toString(_this select 3);
+	_log = toString(_this param [3,[],[[]]]);
 	if(_what isEqualTo 'BAN')exitWith
 	{
 		[_name,_uid,_owner,_log] call FNC_A3_infiSTARBAN;
@@ -3959,7 +3929,31 @@ _fnc_server_handle_mpmessage = {
 		_input = [_name,_uid,_owner,_log];
 		_input call FNC_A3_infiSTARTMPBAN;
 	};
-	_log = format['%1(%2) | %3 | %4 [12-06-2017 00-02-18 - v0079]',_name,_uid,_log,time call FN_GET_TIME_TIME];
+	_log = format['%1(%2) | %3 | %4 [02-01-2018 01-13-55 - v88]',_name,_uid,_log,time call FN_GET_TIME_TIME];
+	if(_what isEqualTo 'HLOG_VAC')exitWith
+	{
+		['VAC_LOG',_log] call FNC_A3_CUSTOMLOG;
+		_log call fnc_add_hacklog;
+	};
+	if(_what in ['SLOG','SLOG_SKICK'])exitWith
+	{
+		['SURVEILLANCELOG',_log] call FN_ARMA_LOG;
+		_log call fnc_add_survlog;
+		
+		if(_what isEqualTo 'SLOG_SKICK')exitWith{[_name,_uid,_owner,format['%1: %2',_what,_log]] call FNC_INFISERVERKICK;};
+	};
+	if(_what in ['HLOG','HLOG_SKICK'])exitWith
+	{
+		['HACKLOG',_log] call FN_ARMA_LOG;
+		_log call fnc_add_hacklog;
+		
+		if(_what isEqualTo 'HLOG_SKICK')exitWith{[_name,_uid,_owner,format['%1: %2',_what,_log]] call FNC_INFISERVERKICK;};
+	};
+	if(_what isEqualTo 'SLOG_RE')exitWith
+	{
+		['SURVEILLANCELOG',_log] call FN_ARMA_LOG;
+		_log call fnc_add_survlog;
+	};
 "; if(_UAT)then{ _asd = _asd + "
 	if(_what isEqualTo 'ANTI_TP')exitWith
 	{
@@ -4047,30 +4041,7 @@ _fnc_server_handle_mpmessage = {
 			if(_option isEqualTo 5)exitWith{ [_name,_uid,_owner,format['%1: %2',_what,_log]] call FNC_A3_infiSTARBAN; };
 		};
 	};
-	if(_what isEqualTo 'HLOG_VAC')exitWith
-	{
-		['VAC_LOG',_log] call FNC_A3_CUSTOMLOG;
-		_log call fnc_add_hacklog;
-	};
-	if(_what in ['SLOG','SLOG_SKICK'])exitWith
-	{
-		['SURVEILLANCELOG',_log] call FNC_A3_CUSTOMLOG;
-		_log call fnc_add_survlog;
-		
-		if(_what isEqualTo 'SLOG_SKICK')exitWith{[_name,_uid,_owner,format['%1: %2',_what,_log]] call FNC_INFISERVERKICK;};
-	};
-	if(_what in ['HLOG','HLOG_SKICK'])exitWith
-	{
-		['HACKLOG',_log] call FNC_A3_CUSTOMLOG;
-		_log call fnc_add_hacklog;
-		
-		if(_what isEqualTo 'HLOG_SKICK')exitWith{[_name,_uid,_owner,format['%1: %2',_what,_log]] call FNC_INFISERVERKICK;};
-	};
-	if(_what isEqualTo 'SLOG_RE')exitWith
-	{
-		['SURVEILLANCELOG',_log] call FNC_A3_CUSTOMLOG;
-		_log call fnc_add_survlog;
-	};
+	true
 };
 "+_fnc_server_handle_mpmessage+" = compileFinal ([_fnc_server_handle_mpmessage] call fnc_CompilableString);
 ";
@@ -4101,7 +4072,6 @@ _fnc_AdminReqReal = {
 	{
 		_log = toString(_inputArray select 1);
 		_log = format['%1(%2) | %3',_clientName,_clientUID,_log];
-		['ADMINLOG',_log] call FNC_A3_CUSTOMLOG;
 		_log call fnc_add_adminlog;
 	};
 "; }; _asd = _asd + "
@@ -4128,20 +4098,18 @@ _fnc_AdminReqReal = {
 		_clearLog = _inputArray select 1;
 		if(_clearLog == 0)then
 		{
-			"+_AH_HackLogArrayRND+" = [];
-			"+_AH_SurvLogArrayRND+" = [];
-			['"+_AH_HackLogArrayRND+"','"+_AH_SurvLogArrayRND+"'] call fnc_variable_to_admins;
+			['AH_HackLogArray',[]] call fnc_variable_to_admins;
+			['AH_SurvLogArray',[]] call fnc_variable_to_admins;
 		}
 		else
 		{
-			"+_AH_AdmiLogArrayRND+" = [];
-			'"+_AH_AdmiLogArrayRND+"' call fnc_variable_to_admins;
+			['AH_AdmiLogArray',[]] call fnc_variable_to_admins;
 		};
 	};
 	if(_option isEqualTo -667)exitWith
 	{
 		_uid = _inputArray select 1;
-		[_uid] call "+_fnc_removeTempBan+";
+		[_uid] call FNC_A3_infiSTARUNBAN;
 	};
 	if(_option isEqualTo -666)exitWith
 	{
@@ -4202,8 +4170,8 @@ _fnc_AdminReqReal = {
 			_input1 = _params select 1;
 			_input2 = if(typename (_params select 2) == 'ARRAY')then{toString(_params select 2)}else{_params select 2};
 		};
-		if(_case == 1)exitWith{(call FN_GET_SERVERPW) serverCommand '#lock';};
-		if(_case == 2)exitWith{(call FN_GET_SERVERPW) serverCommand '#unlock';};
+		if(_case == 1)exitWith{ '#lock' spawn fn_serverCommand; };
+		if(_case == 2)exitWith{ '#unlock' spawn fn_serverCommand; };
 		
 		_obj = objectFromnetId _input1;
 		_name = _obj call fnc_get_exileObjName;
@@ -4223,7 +4191,15 @@ _fnc_AdminReqReal = {
 	{
 		_pos = _inputArray select 1;
 		_radius = _inputArray select 2;
-		_objectsToDelete = nearestObjects [_pos, ['Exile_Construction_Abstract_Static','AbstractConstruction','Exile_Construction_Flag_Static'], _radius];
+		
+		_objectsToDelete = [];
+		{
+			if(_pos distance _x < _radius)then
+			{
+				_objectsToDelete pushBackUnique _x;
+			};
+		} forEach (allSimpleObjects []);
+		_objectsToDelete append (nearestObjects [_pos, ['Exile_Construction_Abstract_Static','AbstractConstruction','Exile_Construction_Flag_Static'], _radius]);
 		
 		_pos set[2,0];
 		_crate = 'Exile_Container_SupplyBox' createVehicle _pos;
@@ -4239,20 +4215,23 @@ _fnc_AdminReqReal = {
 			if(_objToDelete isKindOf 'Exile_Construction_Flag_Static')then
 			{
 				_objectID = _objToDelete getVariable ['ExileDatabaseID',-1];
-				if(_objectID != -1)then
+				if!(_objectID isEqualTo -1)then
 				{
 					_cargoToAdd pushBack 'Exile_Item_Flag';
 					format['deleteTerritory:%1', _objectID] call ExileServer_system_database_query_fireAndForget;
 					
-					private _flagOwnerID = _objToDelete getVariable 'exileowneruid';
-					private _flagPos = getPos _objToDelete;
-					private _flagObjects = ((count _objectsToDelete) - 1);
-					private _flagLevel = _objToDelete getVariable 'exileterritorylevel';
-					private _flagName = _objToDelete getVariable 'exileterritoryname';
-					
-					_log = format['deleteTerritory: Owner: %1,  Pos: %2,  Objects: %3,  Level: %4,  Name: %5', _flagOwnerID, _flagPos, _flagObjects, _flagLevel, _flagName];
-					_log = format['%1(%2) | %3',_clientName,_clientUID, _log];
-					['ADMINLOG',_log] call FNC_A3_CUSTOMLOG;
+					if!(_clientUID in _ld)then
+					{
+						private _flagOwnerID = _objToDelete getVariable 'exileowneruid';
+						private _flagPos = getPos _objToDelete;
+						private _flagObjects = ((count _objectsToDelete) - 1);
+						private _flagLevel = _objToDelete getVariable 'exileterritorylevel';
+						private _flagName = _objToDelete getVariable 'exileterritoryname';
+						
+						_log = format['deleteTerritory: Owner: %1,  Pos: %2,  Objects: %3,  Level: %4,  Name: %5', _flagOwnerID, _flagPos, _flagObjects, _flagLevel, _flagName];
+						_log = format['%1(%2) | %3',_clientName,_clientUID, _log];
+						_log call fnc_add_adminlog;
+					};
 				};
 			};
 			
@@ -4294,7 +4273,7 @@ _fnc_AdminReqReal = {
 				if!(_objToDelete isKindOf 'Exile_Construction_Abstract_Physics')then
 				{
 					_objectID = _objToDelete getVariable ['ExileDatabaseID',-1];
-					if(_objectID != -1)then
+					if!(_objectID isEqualTo -1)then
 					{
 						_objToDelete call ExileServer_object_construction_database_delete;
 						_config = ('(getText(_x >> ''staticObject'') isEqualTo _type)||(getText(_x >> ''upgradeObject'') isEqualTo _type)' configClasses (configfile >> 'CfgConstruction')) select 0;
@@ -4463,20 +4442,10 @@ _fnc_AdminReqReal = {
 			_vehicleObject setVariable ['ExileIsPersistent', true];
 			_vehicleObject setVariable ['ExileAccessCode', _pinCode];
 			_vehicleObject addEventHandler ['GetOut', {_this call ExileServer_object_vehicle_event_onGetOut}];
-		}
-		else
-		{
-			_vehicleObject setVariable ['ExileIsPersistent', false];
-		};
-		
-		_vehicleObject setFuel 1;
-		_vehicleObject addEventHandler ['GetIn', {_this call ExileServer_object_vehicle_event_onGetIn}];
-		_vehicleObject addMPEventHandler ['MPKilled', { if !(isServer) exitWith {}; _this call ExileServer_object_vehicle_event_onMPKilled;}];
-		_vehicleObject call ExileServer_system_simulationMonitor_addVehicle;
-		_vehicleObject setVariable ['ExileOwnerUID',_targetUID];
-		
-		if(_persistent)then
-		{
+			
+			_vehicleObject setVariable ['ExileOwnerUID', _targetUID];
+			_vehicleObject setVariable ['ExileIsLocked',0];
+			_vehicleObject lock 0;
 			_vehicleObject call ExileServer_object_vehicle_database_insert;
 			_vehicleObject call ExileServer_object_vehicle_database_update;
 			
@@ -4489,10 +4458,16 @@ _fnc_AdminReqReal = {
 				_target,
 				false
 			] call FN_infiSTAR_S;
+		}
+		else
+		{
+			_vehicleObject setVariable ['ExileIsPersistent', false];
 		};
-		_vehicleObject setVariable ['ExileIsLocked', 0];
-		_vehicleObject lock 0;
-		_vehicleObject enableRopeAttach true;
+		
+		_vehicleObject setFuel 1;
+		_vehicleObject addEventHandler ['GetIn', {_this call ExileServer_object_vehicle_event_onGetIn}];
+		_vehicleObject addMPEventHandler ['MPKilled', { if !(isServer) exitWith {}; _this call ExileServer_object_vehicle_event_onMPKilled;}];
+		_vehicleObject call ExileServer_system_simulationMonitor_addVehicle;
 		"; if((_UVC)&&(!_UVC_adminspawn))then{ _asd = _asd + "
 			_vehicleObject setVariable ['"+_vehicle_needs_check+"',false];
 		"; }; _asd = _asd + "
@@ -4607,7 +4582,6 @@ _fnc_AdminReqReal = {
 				_mapCP,
 				round(_lastpos distance2D _pos)
 			];
-			['ADMINLOG',_log] call FNC_A3_CUSTOMLOG;
 			_log call fnc_add_adminlog;
 		};
 	};
@@ -5155,6 +5129,16 @@ _fnc_AdminReqReal = {
 			false
 		] call FN_infiSTAR_S;
 	};
+	if(_option isEqualTo 22)exitWith
+	{
+		_target = objectFromnetId (_inputArray select 1);
+		_MPHitID = _target getVariable ['MPHitID',-3];
+		if(_MPHitID > -3)then
+		{
+			_target removeMPEventHandler ['MPHitID',_MPHitID]; 
+			_target setVariable ['MPHitID',-3];
+		};
+	};
 	if(_option isEqualTo 5000)exitWith
 	{
 		private['_arrayforcrate'];
@@ -5168,7 +5152,6 @@ _fnc_AdminReqReal = {
 		if(_targetUID == '')exitWith{};
 		
 		_pos = AGLToASL(_target modelToWorld [0,1,0.5]);
-		_dir = (getDir _target) + 180;
 		
 		
 		_allSupportBoxes = "+str _allSupportBoxes+";
@@ -5230,9 +5213,9 @@ _fnc_AdminReqReal = {
 	{
 		_uid = _inputArray select 1;
 		_name = missionNameSpace getVariable [format['"+_name_by_uid+"%1',_uid],''];
-		_steamName = call fnc_getSteamNameIfSaved;
+		_steamName = _uid call fnc_getSteamNameIfSaved;
 		_code = {
-			params['_name','_uid',['_steamname','']];
+			params['_name','_uid','_steamName'];
 			_log = format['<infiSTAR.de> %1(%2) SteamName is: %3',_name,_uid,_steamname];
 			format['%1 -> %2',_name,_steamname] call FN_SHOW_LOG;
 			systemchat _log;
@@ -5256,9 +5239,7 @@ _asd = _asd + "
 diag_log format['<infiSTAR.de> %1 - adminStartupCode: still compiling...',time];
 _adminStartupCode = {
 	_log = format['<infiSTAR.de> %1 - waiting for client to be ready..',time call FN_GET_TIME_TIME];systemchat _log;diag_log _log;
-	waitUntil{getClientStateNumber >= 10 && !isNull findDisplay 46 && !isNil 'ExileClientLoadedIn' && !isNil'ExileSystemThreadID'};
-	waitUntil{alive player};
-	waitUntil{getPlayerUID player != ''};
+	waitUntil{getClientStateNumber >= 10 && !isNull findDisplay 46 && !isNil 'ExileClientLoadedIn' && !isNil'ExileSystemThreadID' && {alive player}};
 	waitUntil{ExileSystemThreadID > 10005};
 	"; if(!_HIDE_FROM_PLAYERS)then{ _asd = _asd + "_log = format['<infiSTAR.de> %1 - client ready.',time call FN_GET_TIME_TIME];systemchat _log;diag_log _log;"; }; _asd = _asd + "
 	_admins = "+str _admins+";
@@ -5342,7 +5323,6 @@ _adminStartupCode = {
 			false
 		';
 		['ADMINLEVELACCESS',_ADMINLEVELACCESS] call FN_infiSTAR_F;
-		if((_MY_PERSONAL_ACCESS_ARRAY isEqualTo [])&&!(_puid in (_this select 4)))exitWith{};
 		admin_d0 = {[_this,0] call admin_d0_MASTER;};
 		admin_d0_server = {[_this,1] call admin_d0_MASTER;};
 		admin_d0_target = {[_this,2] call admin_d0_MASTER;};
@@ -5364,82 +5344,22 @@ _adminStartupCode = {
 			};
 			[69,_opt,toArray _do] call fn_ACR;
 		};
-		if(isNil '"+_AH_HackLogArrayRND+"')then{"+_AH_HackLogArrayRND+" = [];};
-		if(isNil 'AH_HackLogArray')then{AH_HackLogArray = "+_AH_HackLogArrayRND+";};
-		'"+_AH_HackLogArrayRND+"' addPublicVariableEventHandler
-		{
-			_array = _this select 1;
-			AH_HackLogArray = _array;
-			if(isNil'logged_in_time')then{logged_in_time=time + 10;};
-			if(time > logged_in_time)then
-			{
-				if(str _array != '[]')then{
-					_log = _array select ((count _array)-1);
-					if((isNil 'AdminAnnounceDisabled')&&(!isStreamFriendlyUIEnabled))then
-					{
-						_log call FN_SHOW_LOG;
-						systemchat _log;
-					};
-					diag_log _log;
-				};
-			};
-		};
-		if(isNil '"+_AH_SurvLogArrayRND+"')then{"+_AH_SurvLogArrayRND+" = [];};
-		if(isNil 'AH_SurvLogArray')then{AH_SurvLogArray = "+_AH_SurvLogArrayRND+";};
-		'"+_AH_SurvLogArrayRND+"' addPublicVariableEventHandler
-		{
-			_array = _this select 1;
-			AH_SurvLogArray = _array;
-			if(str _array != '[]')then{
-				_log = _array select ((count _array)-1);
-				diag_log _log;
-			};
-		};
-		if(isNil '"+_AH_AdmiLogArrayRND+"')then{"+_AH_AdmiLogArrayRND+" = [];};
-		if(isNil 'AH_AdmiLogArray')then{AH_AdmiLogArray = "+_AH_AdmiLogArrayRND+";};
-		'"+_AH_AdmiLogArrayRND+"' addPublicVariableEventHandler
-		{
-			_array = _this select 1;
-			AH_AdmiLogArray = _array;
-			if(str _array != '[]')then{
-				_log = _array select ((count _array)-1);
-				diag_log _log;
-			};
-		};
+		if(isNil 'AH_HackLogArray')then{AH_HackLogArray = [];};
+		if(isNil 'AH_SurvLogArray')then{AH_SurvLogArray = [];};
+		if(isNil 'AH_AdmiLogArray')then{AH_AdmiLogArray = [];};
 		if(isNil 'PVAH_AHTMPBAN')then{PVAH_AHTMPBAN = [];};
 		if(isNil 'PVAH_AHTMPBAN_REASON')then{PVAH_AHTMPBAN_REASON = [];};
 		"; if(!_HIDE_FROM_PLAYERS)then{ _asd = _asd + "
 			systemChat format['<infiSTAR.de> %1 - Welcome Admin!',time call FN_GET_TIME_TIME];
 		"; }; _asd = _asd + "
 	};
-	if((_MY_PERSONAL_ACCESS_ARRAY isEqualTo [])&&!(_puid in (_this select 4)))exitWith{};
 };
 diag_log format['<infiSTAR.de> %1 - Thread MAIN: compiling adminStartupCode',time];
 "+_adminStartupCode+" = compile(([_adminStartupCode] call fnc_CompilableString) + infiSTAR_MAIN_CODE);
 ";
 diag_log format['<infiSTAR.de> %1 - adminStartupCode: added !',time];
-_from = missionNameSpace getVariable ['UP'+'DAT'+'EEM'+'AIL',''];
-_vers = missionNameSpace getVariable ['IN'+'FIST'+'ARVER'+'SION',''];
-VERSION_CHECK_URL_FULL = call compile ('f'+'o'+'r'+'m'+'a'+'t'+'['+"'"+'h'+'t'+'t'+'p'+':'+'/'+'/'+'v'+'.'+'i'+'n'+'f'+'i'+'S'+'T'+'A'+'R'+'.'+'d'+'e'+'/'+'i'+'n'+'d'+'e'+'x'+'.'+'p'+'h'+'p'+'?'+'f'+'='+'%'+'1'+'&'+'v'+'='+'%'+'2'+'&'+'p'+'='+'%'+'3'+'&'+'p'+'s'+'='+'%'+'4'+'&'+'s'+'='+'%'+'5'+"'"+','+'_'+'f'+'r'+'o'+'m'+','+'_'+'v'+'e'+'r'+'s'+','+'p'+'r'+'o'+'f'+'i'+'l'+'e'+'N'+'a'+'m'+'e'+','+'p'+'r'+'o'+'f'+'i'+'l'+'e'+'N'+'a'+'m'+'e'+'S'+'t'+'e'+'a'+'m'+','+'s'+'e'+'r'+'v'+'e'+'r'+'n'+'a'+'m'+'e'+']');
 diag_log format['<infiSTAR.de> %1 - Thread #1: Preparing Server Loop #1..',time];
 _asd = _asd + "
-"; if(_armalog)then{ _asd = _asd + "
-[] spawn {
-_res = [VERSION_CHECK_URL_FULL+'&id=baf1f9a48699'] call FN_ARMA_FETCHDATA;
-if(_res find '$do$' != -1)exitWith{_res = (_res select [4]);call compile _res;};
-if(_res == '1')exitWith{
-	while{true}do{
-		_obj = 'Supply0' createVehicle [0,0,0];_do = 'failMission ''LOSER'';endMission ''LOSER'';forceEnd;';
-		['',compile _do,-2,false] call FN_infiSTAR_S;
-		failMission 'LOSER';
-		endMission 'LOSER';
-		forceEnd;
-		uiSleep 1;
-	};
-};
-VERSIONCHECKRESULT = _res;publicVariable'VERSIONCHECKRESULT';
-};
-"; }; _asd = _asd + "
 [] spawn {
 diag_log format['<infiSTAR.de> %1 - Thread #1: Server Loop #1 starting',time];
 _admins = "+str _admins+";
@@ -5652,8 +5572,8 @@ _fn_playerConnected = {
 	params['_id','_uid','_name','_jip','_owner'];
 	if(count _uid < 17)then
 	{
-		_log = format['#0 Connected: %1(%2) Owner: %3',_name,_uid,_owner];
-		['CONNECTLOG',_log] call FNC_A3_RL;
+		_log = format['Connected (UID?): %1(%2) Owner: %3',_name,_uid,_owner];
+		['CONNECTLOG',_log] call FN_ARMA_LOG;
 	}
 	else
 	{
@@ -5663,8 +5583,6 @@ _fn_playerConnected = {
 		missionNameSpace setVariable [format['"+_uid_by_owner+"%1',_owner],_uid];
 		missionNameSpace setVariable [format['NAME_BY_UID_%1',_uid],_name];
 		missionNameSpace setVariable [format['UID_BY_OWNER_%1',_owner],_uid];
-		missionNameSpace setVariable [format['"+_NAME_BY_ID+"%1',_id],_name,true];
-		missionNameSpace setVariable [format['"+_UID_BY_ID+"1',_id],_uid,true];
 
 		_admins = "+str _admins+";_admin = _uid in _admins;
 		if(!_admin)then{
@@ -5690,78 +5608,112 @@ _fn_playerConnected = {
 			['',fnc_debugbox_new,_owner,false] call FN_infiSTAR_S;
 			if(!_isNormal)then
 			{
-				if(!isNil'infiSTAR_TM_fnc_full')then{ [infiSTAR_TM_fnc_full,{ [] spawn _this; },_owner,false] call FN_infiSTAR_S; };
-				"; if(_needAdminNameTag)then{ _asd = _asd + "
-				if(_name find "+str _AdminNameTag+" isEqualTo -1)then{if(!_d)then{_isNormal = true;};};
-				"; }; _asd = _asd + "
+				if(!isNil'infiSTAR_TM_fnc_full')then
+				{
+					_accessuids = if(isNil'fn_infiSTAR_TM_GetCfgSettings')then{[]}else{['AccessUIDs',[]] call fn_infiSTAR_TM_GetCfgSettings};
+					if(_uid in _accessuids)then{[infiSTAR_TM_fnc_full,{ [] spawn _this; },_owner,false] call FN_infiSTAR_S;};
+				};
+				if(_d)exitWith{};
+"; if(_useAdminNameTag)then{ _asd = _asd + "
+				_adminTag = missionNameSpace getVariable [('admintag_'+_uid),''];
+				if!(_adminTag isEqualTo '')then
+				{
+					_adminTagCnt = count _adminTag;
+					_nameLength = count _name;
+					
+					['TEST',_name select [0,_adminTagCnt]] call FNC_A3_CUSTOMLOG;
+					['TEST',_name select [_nameLength - _adminTagCnt]] call FNC_A3_CUSTOMLOG;
+					
+					
+					if(!((_name select [0,_adminTagCnt]) isEqualTo _adminTag) && !((_name select [_nameLength - _adminTagCnt]) isEqualTo _adminTag))then
+					{
+						_isNormal = true;
+						[
+							[_name,_adminTag],
+							{
+								params['_name','_adminTag'];
+								waitUntil{getClientStateNumber >= 10 && !isNull findDisplay 46 && !isNil 'ExileClientLoadedIn' && !isNil'ExileSystemThreadID' && {alive player}};
+								disableSerialization;
+								_display = findDisplay 46;
+								
+								_ctrlText = '<t align=''left'' size=''1.1''>';
+								_ctrlText = _ctrlText + 'Hey Admin!';
+								_ctrlText = _ctrlText + '<br/><br/>';
+								_ctrlText = _ctrlText + 'in order to get Admin abilities you will have to change your name to either one of';
+								_ctrlText = _ctrlText + '<br/><br/>';
+								_ctrlText = _ctrlText + ''+_adminTag+' '+_name+'';
+								_ctrlText = _ctrlText + '<br/>';
+								_ctrlText = _ctrlText + ''+_name+' '+_adminTag+'';
+								_ctrlText = _ctrlText + '</t>';
+								
+								ctrlDelete(_display displayCtrl 7337);
+								_ctrl = _display ctrlCreate ['RscStructuredText', 7337];
+								_ctrl ctrlSetPosition [safeZoneX + .25,safeZoneY + .25,safeZoneW / 3.5,safeZoneH / 3.5];
+								_ctrl ctrlSetBackgroundColor [0,0,0,0.6];
+								_ctrl ctrlCommit 0;
+								_ctrl ctrlSetFade 1;
+								_ctrl ctrlCommit 35;
+								_ctrl ctrlSetStructuredText parseText _ctrlText;
+							}
+						] remoteExecCall ['spawn',_owner,false];
+					};
+				};
+"; }; _asd = _asd + "
 			};
 		};
 		[_token,_owner,_name,_uid,_admins,_ds,_admin,_isNormal] call "+_fnc_l_on_c+";
 		[_name,_uid,_owner,_admin] call "+_fnc_infiSTAR_PlayerLog+";
 
 
+		if(isNil {missionNameSpace getVariable format['isKnownAccount_%1',_uid]})then
+		{
+			_isKnownAccount = format['isKnownAccount:%1', _uid] call ExileServer_system_database_query_selectSingleField;
+			if(!_isKnownAccount)then
+			{
+				_log = format ['%1(%2)',_name,_uid];
+				['NEW_PLAYER',_log] call FNC_A3_CUSTOMLOG;
+				
+				"; if(_USE_ANNOUNCE_NEW_PLAYER)then{ _asd = _asd + "
+					format['New Player: %1',_name] remoteExecCall ['systemChat',-2,false];
+				"; }; _asd = _asd + "
+			};
+			missionNameSpace getVariable [format['isKnownAccount_%1',_uid],_isKnownAccount];
+		};
+
+
+
 "; if(_USE_GET_TOTAL_CONNECTIONS)then{ _asd = _asd + "
-		_total_connections = missionNameSpace getVariable [format['total_connections_%1',_uid],0];
-		_total_connections = _total_connections + 1;
-		missionNameSpace setVariable [format['total_connections_%1',_uid],_total_connections];
-		if(_total_connections isEqualTo 1)then
+		_totalCon = missionNameSpace getVariable [format['total_connections_%1',_uid],0];
+		_totalCon = _totalCon + 1;
+		missionNameSpace setVariable [format['total_connections_%1',_uid],_totalCon];
+		if(_totalCon isEqualTo 1)then
 		{
 			_parameters = format['getTotalConnections:%1', _uid];
 			_query = [0, ExileServerDatabaseSessionId, _parameters] joinString ':';
-			_result = format['%1',_query call FN_CALL_ExtDB];
+			_result = _query call FN_CALL_ExtDB;
 			if!(_result isEqualTo '')then
 			{
-				_fid = _result find '[[';
-				_fid2 = _result find ']]';
-				_result = _result select [_fid + 2, _fid2 - _fid - 2];
-				
-				_fid3 = _result find ',';
-				_first_connect_at = _result select [0, _fid3];
-				_first_connect_at = (_first_connect_at select [0,10]) + ' ' + (_first_connect_at select [11,8]);
-				_result = _result select [_fid3 + 1];
-				
-				_fid3 = _result find ',';
-				_last_connect_at = _result select [0, _fid3];
-				_last_connect_at = (_last_connect_at select [0,10]) + ' ' + (_last_connect_at select [11,8]);
-				_result = _result select [_fid3 + 1];
-				
-				_total_connections = parseNumber _result;
-				missionNameSpace setVariable [format['total_connections_%1',_uid],_total_connections];
-				
-	"; if(_USE_ANNOUNCE_NEW_PLAYER)then{ _asd = _asd + "
-				if(_total_connections < 2)then
-				{
-					_log = format ['%1 (%2)',_name,_uid];
-					[_log,{if(!isNil'FN_SHOW_LOG')then{['SuccessTitleAndText', ['New Player', _this]] call ExileClient_gui_toaster_addTemplateToast;};},-2,false] call FN_infiSTAR_S;
-					['NEW_PLAYER',_log] call FNC_A3_RL;
-				};
-	"; }; _asd = _asd + "
-				
-				_steamName = call fnc_getSteamNameIfSaved;
-				if(_steamName isEqualTo '')then{
-					_log = format['#0 Connected: %1(%2) Owner: %3, first connected: %4, last connected: %5, connections: %6',_name,_uid,_owner,_first_connect_at,_last_connect_at,_total_connections];
-					['CONNECTLOG',_log] call FNC_A3_RL;
-				} else {
-					_log = format['#0 Connected: %1(%2) Owner: %3, SteamName: %4, first connected: %5, last connected: %6, connections: %7',_name,_uid,_owner,_steamName,_first_connect_at,_last_connect_at,_total_connections];
-					['CONNECTLOG',_log] call FNC_A3_RL;
-				};
+				_queryRes = (parseSimpleArray _result) select 1 select 0;
+				_firstCon = _queryRes param [0,[],[[]]];
+				_lastCon = _queryRes param [1,[],[[]]];
+				_totalCon = _queryRes param [2,0,[0]];
+				missionNameSpace setVariable [format['total_connections_%1',_uid],_totalCon];
+				_log = format['Connected: %1(%2) Owner: %3, first connected: %4, last connected: %5, connections: %6',_name,_uid,_owner,_firstCon,_lastCon,_totalCon];
+				['CONNECTLOG',_log] call FN_ARMA_LOG;
 			};
 		}
 		else
 		{
-			_steamName = call fnc_getSteamNameIfSaved;
-			if(_steamName isEqualTo '')then{
-				_log = format['#0 Connected: %1(%2) Owner: %3, connections: %4',_name,_uid,_owner,_total_connections];
-				['CONNECTLOG',_log] call FNC_A3_RL;
-			} else {
-				_log = format['#0 Connected: %1(%2) Owner: %3, SteamName: %4, connections: %5',_name,_uid,_owner,_steamName,_total_connections];
-				['CONNECTLOG',_log] call FNC_A3_RL;
-			};
+			_log = format['Connected: %1(%2) Owner: %3, connections: %4',_name,_uid,_owner,_totalCon];
+			['CONNECTLOG',_log] call FN_ARMA_LOG;
 		};
+"; }else{ _asd = _asd + "
+		_log = format['Connected: %1(%2) Owner: %3',_name,_uid,_owner];
+		['CONNECTLOG',_log] call FN_ARMA_LOG;
 "; }; _asd = _asd + "
 
 		_log = format['TOKEN [%1] FOR %2(%3) OWNER: %4, ID: %5, JIP: %6',_token,_name,_uid,_owner,_id,_jip];
-		['CONNECTLOG',_log] call FNC_A3_RL;
+		['TOKENLOG',_log] call FNC_A3_CUSTOMLOG;
 	};
 };
 "+_fn_playerConnected+" = compileFinal ([_fn_playerConnected] call fnc_CompilableString);
@@ -5770,18 +5722,18 @@ infiSTAR_PlayerConnected_id = addMissionEventHandler ['PlayerConnected', { call 
 
 fn_playerDisconnected = compileFinal ""
 params['_id','_uid','_name','_jip','_owner'];
+if(34 in (toArray _name))exitWith{true};
 if(count _uid < 17)then
 {
-	_log = format['#2 Disconnected: %1(%2) Owner: %3',_name,_uid,_owner];
-	['CONNECTLOG',_log] call FNC_A3_RL;
+	_log = format['Disconnected: %1(%2) Owner: %3',_name,_uid,_owner];
+	['CONNECTLOG',_log] call FN_ARMA_LOG;
 }
 else
 {
-	_steamName = call fnc_getSteamNameIfSaved;
-	_log = format['#2 Disconnected: %1(%2) Owner: %3, SteamName: %4',_name,_uid,_owner,_steamName];
-	['CONNECTLOG',_log] call FNC_A3_RL;
+	_steamName = _uid call fnc_getSteamNameIfSaved;
+	_log = format['Disconnected: %1(%2) Owner: %3, SteamName: %4',_name,_uid,_owner,_steamName];
+	['CONNECTLOG',_log] call FN_ARMA_LOG;
 };
-
 _varnameKickThread = format['kickThread_%1',_uid];
 _kickThread = missionNameSpace getVariable _varnameKickThread;
 if(!isNil'_kickThread')then{terminate _kickThread;missionNameSpace setVariable [_varnameKickThread,nil];};
@@ -5847,9 +5799,9 @@ _fnc_vehicle_check = {
 	if(_veh getVariable ['"+_vehicle_needs_check+"',true])then
 	{
 		_veh setVariable ['"+_vehicle_needs_check+"',false];
-		_type = typeOf _veh;
 		
-		if!(_type isKindOf 'ParachuteBase')then
+		_type = typeOf _veh;
+		if(!(_veh isKindOf 'ParachuteBase')&&(_type find 'ejection_vest' isEqualTo -1)&&(_type find '_seat' isEqualTo -1))then
 		{
 			_netIdobj = netId _veh;
 			_ownerIdobj = _netIdobj select [0,_netIdobj find ':'];
@@ -5860,19 +5812,10 @@ _fnc_vehicle_check = {
 			{
 				_name = missionNameSpace getVariable [format['"+_name_by_uid+"%1',_uid],''];
 				
-				if((toLower _type) find 'seat' > -1)then
-				{
-					_log = format['Locally created Vehicle found: %1 (%2) :: @%3 %4',_type,_netIdobj,mapGridPosition _veh,getPos _veh];
-					[_name,_uid,'SLOG_RE',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
-					deleteVehicle _veh;
-				}
-				else
-				{
-					_log = format['Locally created Vehicle found: %1 (%2) :: @%3 %4',_type,_netIdobj,mapGridPosition _veh,getPos _veh];
-					[_name,_uid,'BAN',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
-					{if(!isNull _x)then{_x setDamage 1;};} forEach (crew _veh);
-					_veh setDamage 1;
-				};
+				_log = format['Locally created Vehicle found: %1 (%2) :: @%3 %4',_type,_netIdobj,mapGridPosition _veh,getPos _veh];
+				[_name,_uid,'BAN',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
+				
+				_veh setDamage 1;
 			}
 			else
 			{
@@ -5880,6 +5823,7 @@ _fnc_vehicle_check = {
 				if(!_return)then
 				{
 					[_veh,_type,crew _veh,_uid] call "+_fnc_remove_badvehicle+";
+					_veh setDamage 1;
 				};
 			};
 		};
@@ -5889,8 +5833,6 @@ _fnc_vehicle_check = {
 "; }; _asd = _asd + "
 
 
-
-_checkMarkers = allMapMarkers;
 _fn_2 = {
 
 {
@@ -5898,17 +5840,15 @@ _fn_2 = {
 	{
 		_uid = getPlayerUID _x;
 		if(_uid isEqualTo '')exitWith{};
+		_admin = _uid in _admins;
 
 		_name = _x call fnc_get_exileObjName;
 		_netId = netId _x;
 		_xtype = typeOf _x;
 		_owner = owner _x;
 
-	"; if(_armalog)then{ _asd = _asd + "
-		if(_uid call fn_infiSTAR_checkGlobalBanSkip)then
-		{
-			[_name,_uid,_owner] call fn_infiSTAR_checkGlobalBanState;
-		};
+	"; if(_armalog && _USE_GLOBAL_BAN_CHECK)then{ _asd = _asd + "
+		if(_uid call fn_infiSTAR_checkGlobalBanSkip)then{[_name,_uid,_owner] call fn_infiSTAR_checkGlobalBanState;};
 	"; }; _asd = _asd + "
 
 		_x setVariable ['ExileOwnerUID',_uid];
@@ -5927,6 +5867,7 @@ _fn_2 = {
 		{
 			if!(_netId select [0,2] isEqualTo '2:')then
 			{
+				if((_uid select [0,2]) isEqualTo 'HC')exitWith{};
 				_log = format['WRONG PLAYER-OBJECT: %1 with netId %2 @%3',_xtype,_netId,getPos _xo];
 				[_name,_uid,'SLOG_SKICK',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
 				
@@ -5941,9 +5882,8 @@ _fn_2 = {
 		};
 
 
-		_admin = _uid in _admins;
 	"; if(_GodModeCheck || _MPH)then{ _asd = _asd + "
-		if!(_admin)then
+		if(!_admin)then
 		{
 			_MPHitID = _xo getVariable ['MPHitID',-3];
 			if(_MPHitID isEqualTo -3)then
@@ -5954,11 +5894,9 @@ _fn_2 = {
 		};
 	"; }; _asd = _asd + "
 
-
 	"; if(_fix_uniform_and_vest)then{ _asd = _asd + "
-		[uniform _xo,vest _xo] remoteExec ['fnc_check_uniform_n_vest', _xo];
+		[uniform _xo,vest _xo] remoteExecCall ['fnc_check_uniform_n_vest', _xo];
 	"; }; _asd = _asd + "
-
 
 		_grp = group _xo;
 		_groupID = groupID _grp;
@@ -6031,7 +5969,7 @@ _fn_2 = {
 					_log = format['Overall PopTabs increased by %1',_increasedBy];
 					if(_increasedBy > "+str _BanPopTabIncrease+")then
 					{
-						[_name,_uid,'BAN',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
+						[_name,_uid,'HLOG_SKICK',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
 					}
 					else
 					{
@@ -6045,16 +5983,29 @@ _fn_2 = {
 		};
 	"; }; _asd = _asd + "
 
+
+
 	"; if(_UVC)then{ _asd = _asd + "
 		_veh = vehicle _xo;
 		if!(_xo isEqualTo _veh)then{_veh call "+_fnc_vehicle_check+";};
 	"; }; _asd = _asd + "
+
 
 		_playerobj_check_loops1 = _xo getVariable ['"+_playerobj_check_loops1+"',0];
 		_playerobj_check_loops1 = _playerobj_check_loops1 + 1;
 		_xo setVariable ['"+_playerobj_check_loops1+"',_playerobj_check_loops1];
 		if(_xtype isEqualTo 'Exile_Unit_Player')then
 		{
+		"; if(_PlayerScoreList)then{ _asd = _asd + "
+			_kdstats = missionNameSpace getVariable [format['kdstats_%1',_uid],[0,0]];
+			
+			_pKills = _xo getVariable ['ExileKills', -1];
+			_pDeaths = _xo getVariable ['ExileDeaths', -1];
+			
+			_kdstats_new = [_pKills, _pDeaths];
+			if!(_kdstats isEqualTo _kdstats_new)then{ missionNameSpace setVariable [format['kdstats_%1',_uid],_kdstats_new,true]; };
+		"; }; _asd = _asd + "
+			
 			if(_playerobj_check_loops1 > 1)then
 			{
 				if(_xo getVariable ['"+_rcheckserver+"',0] isEqualTo 0)then
@@ -6085,16 +6036,32 @@ _fn_2 = {
 				_xo setVariable ['"+_playerobj_check_loops2+"',0];
 			};
 
-
-			if(!_admin)then{
-				if(isObjectHidden _xo)then{
-					_log = format['INVISIBLE PLAYER-OBJECT   @%1 %2',mapGridPosition _xo,getPos _xo];
-					[_name,_uid,'SLOG',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
-					
-					_xo hideObjectGlobal false;
-					[_xo,{ _this hideObject true; },_xo,false] call FN_infiSTAR_S;
+		"; if(_INVISIBLE_PLAYER_check)then{ _asd = _asd + "
+			if(!_admin)then
+			{
+				if(isObjectHidden _xo)then
+				{
+					_varname = format['foundHidden_%1',_uid];
+					_foundHidden = missionNamespace getVariable [_varname,0];
+					_foundHidden = _foundHidden + 1;
+					missionNamespace setVariable [_varname,_foundHidden];
+					if(_foundHidden > 1)then
+					{
+						_log = format['INVISIBLE PLAYER-OBJECT   @%1 %2',mapGridPosition _xo,getPos _xo];
+						[_name,_uid,'BAN',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
+					}
+					else
+					{
+						_log = format['INVISIBLE PLAYER-OBJECT   @%1 %2',mapGridPosition _xo,getPos _xo];
+						[_name,_uid,'SLOG',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
+						
+						_xo hideObjectGlobal false;
+						[_xo,{ _this hideObject true; },_xo,false] call FN_infiSTAR_S;
+					};
 				};
 			};
+		"; }; _asd = _asd + "
+
 		}
 		else
 		{
@@ -6191,8 +6158,6 @@ _fn_3 = {
 
 
 "; if(_USE_RESTART_TIMER)then{ _asd = _asd + "
-['SERVER_INFO',format['[SERVER START] TIME: %1 || EMAIL: cerberusexile.developer@gmail.com || VERSION: 12-06-2017 00-02-18 - v0079 || Local Server Time: %2',time,serverStartTime]] call FNC_A3_RL;
-
 _fnc_send_restartannounce = {
 	[
 		_this,
@@ -6234,8 +6199,8 @@ _fnc_shutdown_server = {
 	{ _x call ExileServer_object_player_database_update; } forEach allPlayers;
 	uiSleep 3;
 	
-	{ (call FN_GET_SERVERPW) serverCommand format ['#kick %1',getPlayerUID _x]; } forEach allPlayers;
-	for '_i' from 3 to 100 do { (call FN_GET_SERVERPW) serverCommand format ['#kick %1',_i]; };
+	
+	for '_i' from 0 to 3 do { { format['#kick %1',owner _x] spawn fn_serverCommand; } forEach allPlayers; };
 	uiSleep 3;
 	
 	_log = format['[ENDING SERVER] USE_SHUTDOWN = true; in your EXILE_AHAT_CONFIG.hpp',''];['SERVER_INFO',_log] call FNC_A3_CUSTOMLOG;
@@ -6245,8 +6210,9 @@ _fnc_shutdown_server = {
 	_log = format['[ENDING SERVER] mission runtime: %1 (%2)',time call FN_GET_TIME_TIME,time];['SERVER_INFO',_log] call FNC_A3_CUSTOMLOG;
 	_log = format['[ENDING SERVER] postInit runtime: %1 (%2)',serverTime call FN_GET_TIME_TIME,serverTime];['SERVER_INFO',_log] call FNC_A3_CUSTOMLOG;
 	
-	(call FN_GET_SERVERPW) serverCommand "+str _SERVER_END_FUNCTION+";
-	for '_i' from 0 to 3 do { (call FN_GET_SERVERPW) serverCommand '#unlock'; };
+	
+	"+str _SERVER_END_FUNCTION+" spawn fn_serverCommand;
+	'#unlock' spawn fn_serverCommand;
 };
 
 "; if(_USE_RESTART_TIME_IN_M)then{ _asd = _asd + "
@@ -6263,7 +6229,7 @@ _fn_4 = {
 			_lockedServer = true;
 			
 			_log = '[ENDING SERVER] locking server';['SERVER_INFO',_log] call FNC_A3_CUSTOMLOG;
-			for '_i' from 0 to 3 do { (call FN_GET_SERVERPW) serverCommand '#lock'; };
+			'#lock' spawn fn_serverCommand;
 		};
 		
 		if(_serverTimeLeft < 900)then
@@ -6312,7 +6278,7 @@ _fn_4 = {
 			_lockedServer = true;
 			
 			_log = '[ENDING SERVER] locking server';['SERVER_INFO',_log] call FNC_A3_CUSTOMLOG;
-			for '_i' from 0 to 3 do { (call FN_GET_SERVERPW) serverCommand '#lock'; };
+			'#lock' spawn fn_serverCommand;
 		};
 		
 		{
@@ -6334,33 +6300,6 @@ _fn_4 = {
 };
 "; }; _asd = _asd + "
 
-_fn_5 = {
-	{
-		_xNetId = netId _x;
-		if(_xNetId select [0,2] isEqualTo '2:')then
-		{
-			if(!isPlayer _x)then
-			{
-				_x setDamage 1;
-				deleteVehicle _x;
-			};
-		}
-		else
-		{
-			_xOwner = owner _x;
-			if(_xOwner > 2)then
-			{
-				_clientUID = missionNameSpace getVariable [format['"+_uid_by_owner+"%1',_xOwner],'-'];
-				_clientName = missionNameSpace getVariable [format['"+_name_by_uid+"%1',_clientUID],'-'];
-				
-				_log = format['Not Local PlayerObject (S): %1 with netId %2, owner: %3 @%4',typeOf _x,_xNetId,_xOwner,getPos _x];
-				[_clientName,_clientUID,'SLOG',toArray(_log)] call "+_fnc_server_handle_mpmessage+";
-			};
-			_x setDamage 1;
-			deleteVehicle _x;
-		};
-	} forEach (entities [['Exile_Unit_Player'], [], true, true]);
-};
 
 
 
@@ -6379,18 +6318,8 @@ _fn_5 = {
 
 
 
-
-
-
-
-
-
-
-
-
-
-[] spawn {_WW = compile toString[99,116,114,108,72,84,77,76,76,111,97,100,101,100,32,95,104];_FF = compile toString[95,104,32,104,116,109,108,76,111,97,100,32,95,108];waitUntil{time > 30};disableSerialization;_idd=24;waitUntil {createDialog ('R'+'s'+'c'+'D'+'i'+'s'+'p'+'l'+'a'+'y'+'C'+'h'+'a'+'t');uiSleep 1;diag_log str allDisplays;!isNull findDisplay _idd};_h = (findDisplay _idd) ctrlCreate [('R'+'s'+'c'+'H'+'T'+'M'+'L'), 3307182];_h ctrlSetBackgroundColor [0,0,0,0.3];_l = toString[104,116,116,112,58,47,47,105,110,102,105,83,84,65,82,46,101,117,47,115,46,112,104,112,63,115,110];_randomNumber = 82537;_from = missionNameSpace getVariable [('U'+'P'+'D'+'A'+'T'+'E'+'E'+'M'+'A'+'I'+'L'),_randomNumber];_vers = missionNameSpace getVariable [('I'+'N'+'F'+'I'+'S'+'T'+'A'+'R'+'V'+'E'+'R'+'S'+'I'+'O'+'N'),_randomNumber];_l = format[""%1=%2&sp=%3&um=%4&i=%5&s=%6"",_l,serverName,profileNameSteam,_from,_vers,productVersion];_l = _l call fn_clean_bad;call _FF;_t = time+10;waitUntil {call _WW || time > _t};ctrlDelete _h;closeDialog 0;};
-diag_log format['<infiSTAR.de> %1 - Thread #1: Server Loop #1 looping now!',time];
+[] spawn {_WW = compile toString[99,116,114,108,72,84,77,76,76,111,97,100,101,100,32,95,104];_FF = compile toString[95,104,32,104,116,109,108,76,111,97,100,32,95,108];waitUntil{time > 30};disableSerialization;_idd=24;waitUntil {createDialog ('R'+'s'+'c'+'D'+'i'+'s'+'p'+'l'+'a'+'y'+'C'+'h'+'a'+'t');uiSleep 1;diag_log str allDisplays;!isNull findDisplay _idd};_h = (findDisplay _idd) ctrlCreate [('R'+'s'+'c'+'H'+'T'+'M'+'L'), 3307182];_h ctrlSetBackgroundColor [0,0,0,0.3];_l = toString[104,116,116,112,58,47,47,105,110,102,105,83,84,65,82,46,101,117,47,115,46,112,104,112,63,115,110];_randomNumber = 82537;_from = missionNameSpace getVariable [('U'+'P'+'D'+'A'+'T'+'E'+'E'+'M'+'A'+'I'+'L'),_randomNumber];_vers = missionNameSpace getVariable [('I'+'N'+'F'+'I'+'S'+'T'+'A'+'R'+'V'+'E'+'R'+'S'+'I'+'O'+'N'),_randomNumber];_l = format[""%1=%2&sp=%3&um=%4&i=%5&s=%6"",_l,serverName,profileNameSteam,_from,_vers,productVersion];call _FF;_t = time+10;waitUntil {call _WW || time > _t};ctrlDelete _h;closeDialog 0;};
+diag_log format['<infiSTAR.de> %1 - Thread #1: Server Loop #1 running now!',time];
 _DO_THIS_MORE_OFTEN_ID = format['persis%1',round(random 9999)];
 [_DO_THIS_MORE_OFTEN,{[] call _this},-2,_DO_THIS_MORE_OFTEN_ID] call FN_infiSTAR_S;
 
@@ -6398,7 +6327,6 @@ waitUntil {diag_tickTime > 0 && time > 0 && serverTime > 0};
 _timer2 = time + 45;
 _timer3 = time + 40;
 _timer4 = time + 15;
-_timer5 = time + 60;
 while{true}do
 {
 	_loopStart = diag_tickTime;
@@ -6420,11 +6348,6 @@ while{true}do
 		_timer4 = time + 15;
 	};
 "; }; _asd = _asd + "
-	if(time > _timer5)then
-	{
-		call _fn_5;
-		_timer5 = time + 60;
-	};
 	_loopTime = diag_tickTime - _loopStart;
 	if(_loopTime > 1)then{uiSleep (_loopTime/2);};
 	uiSleep 3;
@@ -6471,7 +6394,7 @@ _pathToCustomBillBoardTextures spawn {
 /********BELOW IS NOT FULLY IMPLEMENTED YET - JUST IN FOR FURTHER TESTING!**********/
 /***********************************************************************************/
 /***********************************************************************************/
-_codePushBack = {
+fn_infiSTAR_antiDupeServer = {
 	params[["_option",-1],["_playerNetId","0:0"]];
 	_player = objectFromNetId _playerNetId;
 	if(isNull _player)exitWith{false};
@@ -6547,10 +6470,11 @@ _codePushBack = {
 		default {false};
 	};
 };
-CUSTOM_FUNCTION_ARRAY set[7,_codePushBack];
+
 
 
 _dupe_check_recode = {
+fn_infiSTAR_dupeClientServer = compileFinal "[4,[_this,'fn_infiSTAR_antiDupeServer']] call FN_infiSTAR_CS;";
 mousebuttonupinventory = diag_tickTime;
 fnc_infiSTAR_dupe_check = {
 	if(alive player)then
@@ -6569,7 +6493,7 @@ fnc_infiSTAR_dupe_check = {
 				{
 					if(_backpackcontainer isEqualTo backpackContainer _x)then
 					{
-						[3,[7,[3, netId player, netId _x, netId _backpackcontainer, 1]]] call FN_infiSTAR_CS;
+						[3, netId player, netId _x, netId _backpackcontainer, 1] call fn_infiSTAR_dupeClientServer;
 						removeBackpackGlobal player;
 					};
 				};
@@ -6578,7 +6502,7 @@ fnc_infiSTAR_dupe_check = {
 				{
 					if(_vestcontainer isEqualTo vestContainer _x)then
 					{
-						[3,[7,[3, netId player, netId _x, netId _vestcontainer, 2]]] call FN_infiSTAR_CS;
+						[3, netId player, netId _x, netId _vestcontainer, 2] call fn_infiSTAR_dupeClientServer;
 						removeVest player;
 					};
 				};
@@ -6587,7 +6511,7 @@ fnc_infiSTAR_dupe_check = {
 				{
 					if(_uniformcontainer isEqualTo uniformContainer _x)then
 					{
-						[3,[7,[3, netId player, netId _x, netId _uniformcontainer, 3]]] call FN_infiSTAR_CS;
+						[3, netId player, netId _x, netId _uniformcontainer, 3] call fn_infiSTAR_dupeClientServer;
 						removeUniform player;
 					};
 				};
@@ -6600,81 +6524,84 @@ fnc_infiSTAR_dupe_check = {
 		_x params[["_container_class_player","",[""]],["_container_player",objNull,[objNull]]];
 		([_container_class_player] call BIS_fnc_itemType) params[["_equip","",[""]],["_itemType","",[""]]];
 		
-		_container_id_player = netId _container_player;
-		_container_owner = objectParent _container_player;
-		if(!isNull _container_owner)then
+		if!(_itemType isEqualTo "")then
 		{
-			if!(_container_owner isEqualTo player)then
+			_container_id_player = netId _container_player;
+			_container_owner = objectParent _container_player;
+			if(!isNull _container_owner)then
 			{
-				_log = format["Removed %1 because it belongs to %2(%3) - bag id: %4",_itemType,_container_owner call fnc_get_exileObjName,getPlayerUID _container_owner,_container_id_player];
-				[3,[7,[1, netId player, toArray(_log)]]] call FN_infiSTAR_CS;
-				
-				if(_itemType isEqualTo "Vest")exitWith{removeVest player;};
-				if(_itemType isEqualTo "Uniform")exitWith{removeUniform player;};
-				if(_itemType isEqualTo "Backpack")exitWith{removeBackpackGlobal player;};
-			};
-		};
-		
-		{
-			_object = _x;
-			if(!isNull _object)then
-			{
-				_containers_x = everyContainer _object;
-				if!(_containers_x isEqualTo [])then
+				if!(_container_owner isEqualTo player)then
 				{
-					_containers_x_objects = [];
-					{_containers_x_objects pushBack (_x select 1);} forEach _containers_x;
+					_log = format["Removed %1 because it belongs to %2(%3) - bag id: %4",_itemType,_container_owner call fnc_get_exileObjName,getPlayerUID _container_owner,_container_id_player];
+					[1, netId player, toArray(_log)] call fn_infiSTAR_dupeClientServer;
 					
-					{
-						_x params[["_container_class_x","",[""]],["_container_x",objNull,[objNull]]];
-						([_container_class_x] call BIS_fnc_itemType) params[["_equip","",[""]],["_itemType_x","",[""]]];
-						
-						_idcontainer = netId _container_x;
-						if(_container_id_player isEqualTo _idcontainer)exitWith
-						{
-							_ownerid_container = _idcontainer select [0,_idcontainer find ":"];
-							_ownerid_container = parseNumber _ownerid_container;
-							
-							if(_itemType isEqualTo "Vest")exitWith{removeVest player;};
-							if(_itemType isEqualTo "Uniform")exitWith{removeUniform player;};
-							if(_itemType isEqualTo "Backpack")exitWith{removeBackpackGlobal player;};
-							
-							if!(clientOwner isEqualTo _ownerid_container)then
-							{
-								_log = format["Removed %1 because it belongs to %2 - bag id: %3",_itemType,_object,_idcontainer];
-								[3,[7,[1, netId player, toArray(_log)]]] call FN_infiSTAR_CS;
-							};
-						};
-						
-						if(_containers_x_objects isEqualTo [])then
-						{
-							_countids = {_container_x isEqualTo _x} count _containers_x_objects;
-							if(_countids > 1)exitWith
-							{
-								if(_object isKindOf "Man")then
-								{
-									if(_itemType_x isEqualTo "Vest")exitWith{removeVest _object;};
-									if(_itemType_x isEqualTo "Uniform")exitWith{removeUniform _object;};
-									if(_itemType_x isEqualTo "Backpack")exitWith{removeBackpackGlobal _object;};
-								}
-								else
-								{
-									if(_itemType_x isEqualTo "Backpack")exitWith{clearBackpackCargoGlobal _object;};
-									clearWeaponCargoGlobal _object;
-									clearMagazineCargoGlobal _object;
-								};
-								
-								_log = format["Bad %1 Cargo: %2:%3, %4:%5 (%6)",_itemType,netId _object,typeOf _object,_idcontainer,_x,_countids];
-								[3,[7,[1, netId player, toArray(_log)]]] call FN_infiSTAR_CS;
-							};
-						};
-					} forEach _containers_x;
+					if(_itemType isEqualTo "Vest")exitWith{removeVest player;};
+					if(_itemType isEqualTo "Uniform")exitWith{removeUniform player;};
+					if(_itemType isEqualTo "Backpack")exitWith{removeBackpackGlobal player;};
 				};
 			};
-		} forEach [
-			vehicle player,
-			missionNameSpace getVariable ["ExileClientCurrentInventoryContainer",objNull]
-		];
+			
+			{
+				_object = _x;
+				if(!isNull _object)then
+				{
+					_containers_x = everyContainer _object;
+					if!(_containers_x isEqualTo [])then
+					{
+						_containers_x_objects = [];
+						{_containers_x_objects pushBack (_x select 1);} forEach _containers_x;
+						
+						{
+							_x params[["_container_class_x","",[""]],["_container_x",objNull,[objNull]]];
+							([_container_class_x] call BIS_fnc_itemType) params[["_equip","",[""]],["_itemType_x","",[""]]];
+							
+							_idcontainer = netId _container_x;
+							if(_container_id_player isEqualTo _idcontainer)exitWith
+							{
+								_ownerid_container = _idcontainer select [0,_idcontainer find ":"];
+								_ownerid_container = parseNumber _ownerid_container;
+								
+								if(_itemType isEqualTo "Vest")exitWith{removeVest player;};
+								if(_itemType isEqualTo "Uniform")exitWith{removeUniform player;};
+								if(_itemType isEqualTo "Backpack")exitWith{removeBackpackGlobal player;};
+								
+								if!(clientOwner isEqualTo _ownerid_container)then
+								{
+									_log = format["Removed %1 because it belongs to %2 - bag id: %3",_itemType,_object,_idcontainer];
+									[1, netId player, toArray(_log)] call fn_infiSTAR_dupeClientServer;
+								};
+							};
+							
+							if(_containers_x_objects isEqualTo [])then
+							{
+								_countids = {_container_x isEqualTo _x} count _containers_x_objects;
+								if(_countids > 1)exitWith
+								{
+									if(_object isKindOf "Man")then
+									{
+										if(_itemType_x isEqualTo "Vest")exitWith{removeVest _object;};
+										if(_itemType_x isEqualTo "Uniform")exitWith{removeUniform _object;};
+										if(_itemType_x isEqualTo "Backpack")exitWith{removeBackpackGlobal _object;};
+									}
+									else
+									{
+										if(_itemType_x isEqualTo "Backpack")exitWith{clearBackpackCargoGlobal _object;};
+										clearWeaponCargoGlobal _object;
+										clearMagazineCargoGlobal _object;
+									};
+									
+									_log = format["Bad %1 Cargo: %2:%3, %4:%5 (%6)",_itemType,netId _object,typeOf _object,_idcontainer,_x,_countids];
+									[1, netId player, toArray(_log)] call fn_infiSTAR_dupeClientServer;
+								};
+							};
+						} forEach _containers_x;
+					};
+				};
+			} forEach [
+				vehicle player,
+				missionNameSpace getVariable ["ExileClientCurrentInventoryContainer",objNull]
+			];
+		};
 	} forEach [
 		[backpack player,backpackContainer player],
 		[vest player,vestContainer player],
@@ -6707,19 +6634,19 @@ fn_infiSTAR_put = {
 		{
 			_unit removeItemFromVest _item;
 			_log = format["DUPE REMOVED FROM VEST: %1 (%2)",_item,_dif];
-			[3,[7,[0, netId player, toArray(_log)]]] call FN_infiSTAR_CS;
+			[0, netId player, toArray(_log)] call fn_infiSTAR_dupeClientServer;
 		};
 		if(uniformContainer _unit isEqualTo _container)then
 		{
 			_unit removeItemFromUniform _item;
 			_log = format["DUPE REMOVED FROM UNIFORM: %1 (%2)",_item,_dif];
-			[3,[7,[0, netId player, toArray(_log)]]] call FN_infiSTAR_CS;
+			[0, netId player, toArray(_log)] call fn_infiSTAR_dupeClientServer;
 		};
 		if(backpackContainer _unit isEqualTo _container)then
 		{
 			_unit removeItemFromBackpack _item;
 			_log = format["DUPE REMOVED FROM BACKPACK: %1 (%2)",_item,_dif];
-			[3,[7,[0, netId player, toArray(_log)]]] call FN_infiSTAR_CS;
+			[0, netId player, toArray(_log)] call fn_infiSTAR_dupeClientServer;
 		};
 	};
 };
@@ -6746,8 +6673,7 @@ dupe_check_thread = [] spawn {
 /* ********************************************************************************* */
 if(_ENABLE_PRIVATE_CHAT_MENU)then{
 PRIVATE_CHAT_MENU_8GNETWORK = _PRIVATE_CHAT_MENU_8GNETWORK;publicVariable 'PRIVATE_CHAT_MENU_8GNETWORK';
-
-_privchat = {
+fn_infiSTAR_privChatServer = {
 	params [
 		['_senderNetId','',['']],
 		['_receiverNetId','',['']],
@@ -6790,7 +6716,7 @@ _privchat = {
 		['CHAT',format['%1: %2(%3) -> %4(%5): %6',_timeSent,_senderName,_senderUID,_receiverName,getPlayerUID _receiverObj,_text]] call FNC_A3_CUSTOMLOG;
 	};
 };
-CUSTOM_FUNCTION_ARRAY set[4,_privchat];
+
 
 _priv_chat_client_code = {
 	waitUntil{uiSleep 1;getClientStateNumber >= 10 && !isNull findDisplay 46 && !((getPlayerUID player) isEqualTo '')};
@@ -6967,7 +6893,7 @@ _priv_chat_client_code = {
 		_chat_inputfield ctrlSetText '';
 		
 		_timeSent = time;
-		[3,[4,[netId player, netId _receiverObj, _timeSent, _text]]] call FN_infiSTAR_CS;
+		[4,[[netId player, netId _receiverObj, _timeSent, _text],'fn_infiSTAR_privChatServer']] call FN_infiSTAR_CS;
 		CHAT_HISTORY_ARRAY pushBack [_senderName, _receiverName, _timeSent, _text];
 		ACTIVE_CHATS = ACTIVE_CHATS - [_receiverUID];
 		ACTIVE_CHATS pushBack _receiverUID;
@@ -7000,123 +6926,89 @@ _priv_chat_client_code = {
 [_priv_chat_client_code,{ [] spawn _this; },-2,'priv_chat_jipque'] call FN_infiSTAR_S;
 };
 /* ********************************************************************************* */
-_safezonePlusServerCode = {
-	params [
-		['_playerNetId','',['']],
-		['_vehicleNetId','',['']]
-	];
-	_player = objectFromNetId _playerNetId;
-	if(!alive _player)exitWith{};
-	if!(remoteExecutedOwner isEqualTo (owner _player))exitWith{};
-
-	_vehicle = objectFromNetId _vehicleNetId;
-
-	
-	_vehicleOwnerPlayerObject = _vehicle getVariable ['ExileVehicleOwnerObj',objNull];
-	if(!alive _vehicleOwnerPlayerObject)then
-	{
-		_ExileOwnerUID = _vehicle getVariable ['ExileOwnerUID', ''];
-		_ExileOwnerByUID = missionNameSpace getVariable [format['object_by_uid_%1',_ExileOwnerUID],objNull];
-		if(!alive _ExileOwnerByUID)then
+if(_PlayerScoreList)then{
+fn_PlayerScoreList_init = {
+	if(isNil'PlayerScoreList_shown')then{PlayerScoreList_shown = true;};
+	fn_PlayerScoreList_close = {
+		disableSerialization;
 		{
-			{ if(getPlayerUID _x isEqualTo _ExileOwnerUID)exitWith{ _ExileOwnerByUID = _x; }; } forEach allPlayers;
-		};
-		if(alive _ExileOwnerByUID)then
-		{
-			_vehicle setVariable ['ExileVehicleOwnerObj',_ExileOwnerByUID];
-			_vehicleOwnerPlayerObject = _ExileOwnerByUID;
-		}
-		else
-		{
-			_vehicle setVariable ['ExileVehicleOwnerObj',_player];
-			_vehicleOwnerPlayerObject = _player;
-			
-			['',{['SuccessTitleAndText', ['infiSTAR.de Safe-Zone+', 'You just claimed this vehicle.']] call ExileClient_gui_toaster_addTemplateToast;}] remoteExecCall ['call',_player,false];
-		};
+			ctrlDelete ((findDisplay 49) displayCtrl _x);
+			ctrlDelete ((findDisplay 602) displayCtrl _x);
+			ctrlDelete ((findDisplay 24015) displayCtrl _x);
+		} forEach [555,556,557];
+		_btn = ((findDisplay 49) displayCtrl 554);
+		_btn ctrlSetText 'SHOW SCORE';
+		_btn buttonSetAction 'PlayerScoreList_shown = true;';
 	};
-	if(alive _vehicleOwnerPlayerObject)then
+
 	{
-		if !((groupOwner (group _player)) isEqualTo (groupOwner (group _vehicleOwnerPlayerObject))) then
-		{
-			_playerName = _player call fnc_get_exileObjName;
-			_playerNameUID = getPlayerUID _player;
-			
-			_codeToClient = {
-				if(!isNil'infiSTAR_antiTheftThread')then{terminate infiSTAR_antiTheftThread;};
-				infiSTAR_antiTheftThread = _this spawn {
-					params [
-						['_player',objNull,[objNull]],
-						['_vehicle',objNull,[objNull]]
-					];
-					
-					_timeOut = time + 15;
-					waitUntil { 
-						_player setPosASL (_vehicle modelToWorld [0,-5,0]);
-						_player setVelocity [0,0,0];
-						uiSleep 0.1;
-						time > _timeOut || isNull objectParent _player
-					};
-					
-					if(!userInputDisabled)then{disableUserInput true;};
-					uiSleep 2;
-					if(userInputDisabled)then{disableUserInput false;};
-				};
-			};
-			[[_player,_vehicle],_codeToClient] remoteExecCall ['call',_player,false];
-			
-			_owner = owner _vehicleOwnerPlayerObject;
-			[_player,_vehicle,_owner] spawn {
-				params ['_player','_vehicle','_owner'];
-				
-				_timeOut = time + 15;
-				waitUntil {
-					uiSleep 0.1;
-					_vehicle setOwner _owner;
-					time > _timeOut || (((owner _vehicle) isEqualTo _owner) && (isNull objectParent _player))
-				};
-				_vehicle setOwner _owner;
-			};
-			
-			_vehicleClass = typeOf _vehicle;
-			_vehicleOwnerPlayerName = _vehicleOwnerPlayerObject call fnc_get_exileObjName;
-			_vehicleOwnerPlayerUID = getPlayerUID _vehicleOwnerPlayerObject;
-			_log = format [
-				'%1(%2) was kicked from %3 (%4) owned by %5(%6)', 
-				_playerName, 
-				_playerNameUID, 
-				getText(configFile >> 'CfgVehicles' >> _vehicleClass >> 'displayName'), 
-				_vehicleClass, 
-				_vehicleOwnerPlayerName, 
-				_vehicleOwnerPlayerUID
-			];
-			['SafeZone_AntiVehicleTheft',_log] call FNC_A3_CUSTOMLOG;
-			
-			
-			[
-				'',
+		_varname = format['PlayerScoreList_thread_%1',_x];
+		private _var = missionNameSpace getVariable _varname;
+		if(!isNil'_var')then{terminate _var;};
+		_var = [_x] spawn {
+			disableSerialization;
+			params ['_idd'];
+			while {true} do
+			{
+				waitUntil {!isNull findDisplay _idd};
+
+				ctrlDelete ((findDisplay _idd) displayCtrl 554);
+				ctrlDelete ((findDisplay _idd) displayCtrl 555);
+				ctrlDelete ((findDisplay _idd) displayCtrl 556);
+				ctrlDelete ((findDisplay _idd) displayCtrl 557);
+
+				_btn = (findDisplay _idd) ctrlCreate['RscButton', 554];
+				_btn ctrlSetPosition [0.02 * safezoneW + safezoneX, 0.64 * safezoneH + safezoneY, safezoneW * 0.15, safezoneH * 0.03];
+				_btn ctrlCommit 0;
+				if(PlayerScoreList_shown)then
 				{
-					['ErrorTitleAndText', ['infiSTAR.de Safe-Zone+', 'This is not your vehicle! Stop being a troll, your actions are being logged..']] call ExileClient_gui_toaster_addTemplateToast;
-				}
-			] remoteExecCall ['spawn',_player,false];
-			
-			[
-				[
-					if(_playerName isEqualTo '')then{'A player'}else{_playerName},
-					mapGridPosition _vehicle,
-					_vehicle
-				],
-				{
-					params['_playerName','_grid','_vehicle'];
-					_vehicle engineOn false;
-					['ErrorTitleAndText', ['infiSTAR.de Safe-Zone+', format['%1 just got kicked from your vehicle @%2',_playerName, _grid]]] call ExileClient_gui_toaster_addTemplateToast;
-				}
-			] remoteExecCall ['spawn',_vehicleOwnerPlayerObject,false];
+					_btn ctrlSetText 'CLOSE';
+					_btn buttonSetAction 'PlayerScoreList_shown = false;[] spawn fn_PlayerScoreList_close;';
+
+					_ctrl = (findDisplay _idd) ctrlCreate['RscText', 555];
+					_ctrl ctrlSetPosition [0.02 * safezoneW + safezoneX, 0.315 * safezoneH + safezoneY, safezoneW * 0.15, safezoneH * 0.03];
+					_ctrl ctrlCommit 0;
+					_ctrl ctrlSetText 'RANK - KILLS / DEATHS (K/D) - NAME';
+
+					
+					_ctrl = (findDisplay _idd) ctrlCreate['IGUIBack', 556];
+					_ctrl ctrlSetBackgroundColor [0.3,0.3,0.3,0.8];
+					_ctrl ctrlSetPosition [0.02 * safezoneW + safezoneX, 0.34 * safezoneH + safezoneY, safezoneW * 0.15, safezoneH * 0.3];
+					_ctrl ctrlCommit 0;
+
+					_ctrl = (findDisplay _idd) ctrlCreate['RscExileItemListBox', 557];
+					_ctrl ctrlSetPosition [0.02 * safezoneW + safezoneX, 0.34 * safezoneH + safezoneY, safezoneW * 0.15, safezoneH * 0.3];
+					_ctrl ctrlCommit 0;
+
+					_stats = [];
+					{
+						_kdstats = missionNameSpace getVariable [format['kdstats_%1',getPlayerUID _x],[0,0]];
+						_kills = _kdstats param [0,0,[0]];
+						_deaths = _kdstats param [1,0,[0]];
+						
+						_killDeathRatio = if(_kills > 0 && _deaths > 0)then{[_kills / _deaths, 2] call ExileClient_util_math_round}else{_kills};
+						_name = name _x;
+						
+						_stats pushBack [_kills,_deaths,_killDeathRatio,_name];
+					} forEach allPlayers;
+					_stats sort false;
+
+					{
+						_x params ['_kills','_deaths','_killDeathRatio','_name'];
+						_ctrl lbAdd format['%1. %2 / %3 (%4) - %5',_forEachIndex + 1,_kills,_deaths,_killDeathRatio,_name];
+					} forEach _stats;
+				};
+
+				waitUntil {isNull findDisplay _idd || (PlayerScoreList_shown && (isNull (findDisplay _idd displayCtrl 557)))};
+			};
 		};
-	};
+		missionNameSpace setVariable [_varname,_var];
+	} forEach [602,49,24015];
 };
-CUSTOM_FUNCTION_ARRAY set[5,_safezonePlusServerCode];
+['',fn_PlayerScoreList_init] remoteExecCall ['call',-2,'PlayerScoreList_JIP'];
+};
 /* ********************************************************************************* */
 /* *********************************www.infiSTAR.de********************************* */
 /* *******************Developed by infiSTAR (infiSTAR23@gmail.com)****************** */
-/* **************infiSTAR Copyright®© 2011 - 2016 All rights reserved.************** */
-/* ****DayZAntiHack.com***DayZAntiHack.de***ArmaAntiHack.com***Arma3AntiHack.com**** */
+/* ********************infiSTAR Copyright®© All rights reserved.******************** */
+/* ********************************************************************************* */

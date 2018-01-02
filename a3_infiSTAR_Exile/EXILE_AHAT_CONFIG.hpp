@@ -1,9 +1,7 @@
 /*
 	Author: Chris(tian) "infiSTAR" Lorenzen
 	Contact: infiSTAR23@gmail.com // www.infiSTAR.de
-	
-	Copyright infiSTAR - 2011 - 2016. All rights reserved.
-	Christian (Chris) L. (infiSTAR23@gmail.com) Developer of infiSTAR
+	Copyright infiSTAR. All rights reserved.
 	
 	Description:
 	Arma AntiHack & AdminTools - infiSTAR.de
@@ -12,7 +10,7 @@
 	'cerberusexile.developer@gmail.com'
 	
 	Last download was on:
-	'12-06-2017 00-02-18';
+	'02-01-2018 01-13-55';
 */
 class Cfg_infiSTAR_settings {
 /*
@@ -49,55 +47,6 @@ enableIngameLogs = "true";
 needAdminNameTag = "false";
 AdminNameTag = "[Admin]";
 
-/*
-	Noficiations shown to all players on the server. Could be used to replace BEC messages.
-	dynamic format:
-		{
-			first occurrence after x min,
-			show again after x min,
-			show message for x seconds / delay until next message is shown,
-			font size (recommended is 0.6),
-			xpos,
-			ypos,
-			text color,
-			font,
-			text (<br/> is a linebreak)
-		}
-	systemchat format:
-		{
-			first occurrence after x min,
-			show again after x min,
-			show message for x seconds / delay until next message is shown,
-			text
-		}
-
-	if you want the client to see a message only once when logging in, you put the first and second entry in the array to -1.
-	Example:	
-		{-1, -1, 4, 0.6, 0, 0, "#ff0000", "OrbitronLight", "Welcome to our server"}
-	
-	xpos and ypos need to be within your monitor. to high numbers and you simply won't see the text..
-		~ x-range is between -0.7 to +1
-		~ y-range is between -0.4 to +1
-	
-	Arma Fonts:
-		PuristaLight
-		PuristaMedium
-		PuristaSemiBold
-		PuristaBold
-		LucidaConsoleB
-		EtelkaMonospacePro
-		EtelkaMonospaceProBold
-		EtelkaNarrowMediumPro
-		TahomaB
-
-	Exile Fonts:
-		OrbitronLight
-		OrbitronMedium
-		PressStart2P
-		RobotoMedium
-		RobotoRegular
-NOTE: do not use " within the text.
-*/
 ENABLE_NOTIFICATION_MESSAGES = "false";
 NOTIFY_MSG_ARRAY[] =
 {
@@ -166,7 +115,7 @@ adminUIDandAccess[] =
 			"Remove Gear","Revive","Heal","Restore","Flip Vehicle","Move In My Vehicle","Move In Target Vehicle","Parachute Target","Eject","Eject Crew",
 			"Player ESP","Player ESP (safezone style)","AI ESP","Dead ESP","Loot ESP",
 			"Vehicle Marker","Flag Marker (with radius)","Box/Safe/Container Marker","DeadPlayer Marker",
-			"God Mode",/*"God Mode (no stats change)",*/"Vehicle God Mode","Lower Terrain","Vehboost","UnlimAmmo","noRecoil","FastFire","Stealth / Invisible",
+			"God Mode","Vehicle God Mode","Lower Terrain","Vehboost","UnlimAmmo","noRecoil","FastFire","Stealth / Invisible",
 			"Disable Announces","Mass Message","Change Time","Spawn Support-Boxes","Create Billboard","Change ViewDistance",
 			"Spawn Ammo","Login as Arma Admin","BIS FreeRoam Cam (works with ESP)","FreeRoam Cam (does not work with ESP)",
 			"Request Steam Name","showinfo",
@@ -174,8 +123,8 @@ adminUIDandAccess[] =
 			
 			"Spawn Vehicles","Spawn Persistent Vehicles","Trader Menu",
 			
-			"Kill",/*"Explode",*/"Force Disconnect",
-			//"Kick (Silent)","Kick (Announce)","Ban (Silent)","Ban (Announce)","TempBan (Silent)","TempBan (Announce)",
+			"Kill","Explode","Force Disconnect",
+			"Kick (Silent)","Kick (Announce)","Ban (Silent)","Ban (Announce)","TempBan (Silent)","TempBan (Announce)",
 			
 			"AdminConsole",
 			"DebugConsole",
@@ -189,11 +138,11 @@ adminUIDandAccess[] =
 			"MapIcons: Player","MapIcons: DeadPlayer","MapIcons: Vehicles",
 			"MapIcons: Vehicle Types","MapIcons: Vehicle lockstate","MapIcons: DeadVehicles",
 			"MapIcons: AI",
-			"Arsenal",	// Adds Arsenal to the mousewheel actions if you press "," on the Numpad!
+			"Arsenal",
 			"Unconscious","Remove Unconscious",
+			//"Light",
 			
-			
-			//"Spawn Zombie on Target Location!",	// This only works when you are using ExilZ / RyanZombies
+			//"Spawn Zombie on Target Location!",
 			
 			""
 		}
@@ -398,6 +347,20 @@ VCT = 900;	/* if "DayNightVote = "true";" - Time (in seconds) to wait until nex 
 allowPee = "true";
 /* Enable jumping instead of GetOver function (infiSTAR jumping is a custom jump animation :P) */
 enableJump = "true";
+/* Show a PlayerScoreList (Kill / Deaths) on GEAR and ESCAPE Menus */
+PlayerScoreList = "true";
+/*
+	How does this work?
+	
+	chatAnimationCommands[] = {
+		{{"command1 for animation1","command2 for animation1"}, "animation1", animation time before it will be forced to be stopped},
+		{{"command3 for animation2","command4 for animation2"}, "animation2", animation time of 0 means it will do the animation "forever" till the end unless it gets stops by the user manually.}
+	};
+*/
+chatAnimationCommands[] = {
+	{{"!finger","!fuck"},"acts_briefing_sb_in",7}, //shows fuck you finger
+	{{"!surrender","!giveup","!hands"},"AmovPercMstpSsurWnonDnon",0} //surrender animation (hands behind the head)
+};
 /*
 	The following 4 options can be disabled by putting the value to -1. For example "TGV = -1;"
 	
@@ -416,6 +379,20 @@ enableJump = "true";
 /****************************************************************************************************/
 /***************************FIXES DUE TO ARMA BEING BROKEN - BELOW***********************************/
 /****************************************************************************************************/
+//*
+	The following 4 options can be disabled by putting the value to -1. For example "TGV = -1;"
+*/
+TGV = 40;	/* Terrain Grid Value - TGV: if set to 50 grass will be very low for better client FPS.. default is 12.5 ~35 is good performance and grass :) */
+VDV = 750;	/* ViewDistance Value   */
+VOV = 750;	/* ObjectViewDistance   */
+SVD = 50;	/* ShadowViewDistance   */
+
+/*
+	checks if the terraingrid is different from default or TGV (12.5 or what you set in TGV). If you are using things that can change the grid, put this to false!
+*/
+CHECK_TERRAIN_GRID = "false";
+
+
 /*
 	*readded new old uniform and vest check since some people asked for it.
 	http://www.exilemod.com/topic/14179-miss-uniform_and_vest_check/
@@ -423,45 +400,72 @@ enableJump = "true";
 	I did not add the old check back in, I made a new one making use of new functions :)
 */
 fix_uniform_and_vest = "true";
+
+
 /*
 	So far only checking for duped backpacks and not taking any actions besides logging. Need to test more before It will start to remove duped items.
 */
 experimental_dupe_check = "true";
-/*
-	re-assigning "InventoryOpened" eventhandler to stop glitch open a locked safe
-*/
-stopSafeGlitchAndCorpseDupe = "true";
+
+
 /*
 	checks if player tries to dupe using the "disconnect trick" -> sends a ping to the server whenever a player opens the escape menu
 */
 disconnect_dupe_check = "true";
+
+
 /*
-	there is a way for players to dupe items if they drive a vehicle close to a trader, open the trader menu and then have a friend sit in the driver of the vehicle.
+	There is a way for players to dupe items if they drive a vehicle close to a trader, open the trader menu and then have a friend sit in the driver of the vehicle.
 	Now they can sell the same item unlimited times and it won't vanish from the vehicle..
 	That issue is fixed with this check!
 */
 fix_trader_dupe = "true";
+
 /*
 	server side check for the famous "wastedump dupe" as well as client side cooldown
 	the timer can not be lower than 120 seconds. if it was lower the check would not be working.
 */
 fix_wastedump_dupe = "true";
-/*
-	several people standing infront of the same corpse and pressing all take-all the same time, would dupe the loot.
-	This fixes it.
-*/
-fix_takeall_dupe = "false";
-/*
-	if a player is near a flag where he has no buildrights, he can't vault/getover/lean close to buildingparts (to prevent glitching!)
-*/
-block_glitch_actions = "true";
+
+
+
+class lagSwitchCheck {
+	/*
+		checks if the client connection to the server is established and not lagged out. Might cause a lot of server / network power
+		after 25 seconds, the client will be kicked to lobby.
+	*/
+	enabled = "true";
+
+	warn_delay = 2.5; 			/* When a lag of 2.5 seconds was registered, the player is warned and won't be able to open any GUI (Gear, Tradermenu [..]) */
+	log_delay = 10; 			/* server side log entry, when a lagswitch was detected that took longer than x seconds */
+	kick_and_log_delay =  15; 	/* KICK and server side log entry, when a lagswitch was detected that took longer than x seconds */
+};
+
+
+class infiSTAR_blocked_glitch_actions {
+	/*
+		if a player is near a flag where he has no buildrights, he can't use the listed inputs close to buildingparts (to prevent glitching!)
+	*/
+	block_glitch_actions_enabled = "true";
+
+	inputs[] = {"GetOver","leanLeft","leanLeftToggle","leanRight","leanRightToggle","LookAround","LookAroundToggle",
+	"ActionFreeLook","Prone","ZoomOut","ZoomOutToggle","ZoomContOut","LookUp","LookLeft","LookRight","FreeHeadMove","AimHeadUp",
+	"Cheat1","Cheat2"};
+
+	/* this should also be enabled to prevent freelook (people simply use it to sneak through walls..) */
+	block_ALT_key = "true";
+	block_ALT_key_all = "false";	// also blocking ALT key for the Territory owner (so they can't peak through walls to defend easier)
+};
+
+
 /*
 	checks if a players tries to glitch through a wall (if player is allowed to build in that territory, it will not be logged.)
 */
-wall_glitch_object = "true";
-wall_glitch_revert = "true";	//	Teleport player back to last safe postion
+wall_glitch_object = "true";	//	This checks if the Player Object is glitching through a wall/base part
+wall_glitch_revert = "true";	//	Teleport player back to last "safe" postion if a glitch was detected. Needs: wall_glitch_object = "true";
 /*
 	If a player model intersects with a wall, the player will be teleport back to where he was before he intersected with it..
+
 extra punishments possible:
 	0 - no punishment
 	1 - knockout for 60 seconds
@@ -473,18 +477,32 @@ extra punishments possible:
 	5 - ban (not recommended)
 */
 wall_glitch_punish = 0;
+
 /*
 	stops players from glitching into bases using "eject" or "getout" of a vehicle..
 */
 wall_glitch_vehicle = "true";
+
 /****************************************************************************************************/
 /***************************FIXES DUE TO ARMA BEING BROKEN - ABOVE***********************************/
 /****************************************************************************************************/
+class infiSTAR_safeZoneOptions {
+	/*
+		In a safeZone, only you or somebody from your group/clan can drive (or sell) your vehicle
+		(after a server restart, the first one who gets into a vehicle becomes the "owner" of it (default Exile settings))
+	*/
+	antiVehicleTheft = "true";
+	kick_from_driver_only = "true";	// if "true", only thieves who get in driver seat will be kicked from vehicle, if false they will be kicked from all seats
+};
+
+
+
 class infiSTAR_handleDamage {
 	/*
 		This whole handleDamage does not effect admins!
 	*/
-	enable = "true";
+	enable = "false";
+
 	/*
 		PvP_ReflectDamage option should reflect damage from player vs player (the player still takes damage)
 	*/
@@ -517,37 +535,56 @@ class infiSTAR_handleDamage {
 	
 	Only logs BadActions (and removes them) but does not kick or ban.
 */
-BadActionCheck = "false";			/* log and remove all actions that are not white-listed */
-allowedActions[] = {"Break free","Use AutoLockPicker","Craft Vehicle","Hack UAV"};
+/*
+	Checks player Actions (mousewheel actions, userinterface actions and inputactions)
+*/
+BlockHoldActions = "true";	/* STRONGLY recommended! */
+BadActionCheck = "false";	/* log and remove all actions that are not white-listed */
+allowedActions[] = {"Break free","Use AutoLockPicker","Craft Vehicle","Hack UAV"};	/* needs the "title" of the action! */
 allowedActionsPartial[] = {"paint"};
 BadActionContentCheck = "true";	/* Check the functions assigned to all actions, regardless any white-list */
+
+
+
 KCM = "true";		/* Just close ALL CommandingMenus */
 CMC = "false";		/* Check for CommandingMenus that are not in the allowedCommandingMenus array */
 allowedCommandingMenus[] = {"#user:example","#user:example2"};
+
+
 task_force_radio = "false";				/* put this to "true" if you allow task force radio on your server! */
 reset_inGameUIEventHandler = "true";	/* reset inGameUIEventHandler */
 checkFilePatchingEnabled = "true";		/* checks if filepatching is enabled on the client (if it is, the client could inject any script based hack easily) */
-checkCfgPatches = "true";				/* checks serve side Cfg Patches vs Client side (logs as "Bad Class found in CfgPatches >> xxx") */
+onEventsCheck = "false";				/* checks server side on Events vs Client side */
+checkCfgPatches = "false";				/* checks server side Cfg Patches vs Client side (logs as "Bad Class found in CfgPatches >> xxx") */
 check_Notifications = "false";			/* checks if BIS_fnc_showNotification was used, as it is used with many hacks - some custom addons however use them too. */
-check_doors_n_gates = "true";			/* Fixes Hatches (so when they are locked, they stay closed..) and closes every door that's locked + keeps closing it in case somebody tries to hack open it! */
+check_doors_n_gates = "false";			/* Fixes Hatches (so when they are locked, they stay closed..) and closes every door that's locked + keeps closing it in case somebody tries to hack open it! */
 attach_to_check = "false";				/* logs and detaches attached vehicles that are close.. basically completely disallow attaching of vehicles! */
 slingload_check = "false";				/* forbid sling loading / rope attaching a vehicle with a crew */
+INVISIBLE_PLAYER_check = "true";		/* checks if a player object is invisible (hidden). None admins only. LOGS LIKE: INVISIBLE PLAYER-OBJECT   @X Y */
+
+
 checkPopTabIncrease = "true";
-LogPopTabIncrease = 100000;			/* Only if checkPopTabIncrease = "true"; logs if PopTabs increased by x within ~50 seconds */
-BanPopTabIncrease = 50000000;			/* Only if checkPopTabIncrease = "true"; bans a player if PopTabs increase by more than x within ~50 seconds */
+LogPopTabIncrease = 15000;			/* Only if checkPopTabIncrease = "true"; logs if PopTabs increased by x within ~50 seconds */
+BanPopTabIncrease = 500000;			/* Only if checkPopTabIncrease = "true"; bans a player if PopTabs increase by more than x within ~50 seconds */
+
 checkRespectIncrease = "true";
-LogRespectIncrease = 100000;			/* Only if checkRespectIncrease = "true"; logs if respect increased by x within ~50 seconds */
-BanRespectIncrease = 50000000;			/* Only if checkRespectIncrease = "true"; bans a player if respect increases by more than x within ~50 seconds */
+LogRespectIncrease = 5000;			/* Only if checkRespectIncrease = "true"; logs if respect increased by x within ~50 seconds */
+BanRespectIncrease = 50000;			/* Only if checkRespectIncrease = "true"; bans a player if respect increases by more than x within ~50 seconds */
+
+
+
 /* Check for Map Menu & Map Sub-Menu */
 CMM = "true";
 maxMapMenuEntries = 6;	/* "Map Menu has been changed x entries found - Texts: y" incase you want to add some briefing to your map menu. Only matters if you have CMM = "true"; */
+
 /* if steam api.steampowered.com is working, this might be a nice feature */
 check_steam_ban = "false";	/* will announce and log steambanned players - using GetPlayerBans v1 */
 ban_for_steam_ban = "false";	/* if "check_steam_ban = "true";" then steambanned players will get banned from your Arma server! */
-/*
-	This set to "true" will create a log of players being hit on your server
-*/
-MPH = "true";
+
+
+MPH = "false";			/* This set to "true" will create a log of players being hit on your server */
+GodModeCheck = "false";	/* This will check from serverside if a playerobject received damage but did not take it */
+
 /*
 	This will check from serverside if a playerobject received damage but did not take it
 */
@@ -627,6 +664,7 @@ badIDDsToKick[] =
 	2727,2928,2929,3030,316000,9899,0110,
 	6900,552266
 };
+
 /* badIDDsToClose: Forbidden Idds that will get closed by the AH */
 badIDDsToClose[] =
 {
@@ -635,12 +673,13 @@ badIDDsToClose[] =
 	314,632,1320,2121,148,163,129,169,157,69,156,165,166,167,312,1321,2727,
 	-1341,1341
 };
+
 /* Use IDD White-List ? */ UDW = "true";
 /* allowedIDDs: Insert IDDs here to prevent them from being closed! */
 allowedIDDs[] =
 {
 	/* default idds */
-	-1,0,4,5,6,8,12,18,24,49,54,55,70,101,160,174,177,999,131,63,602,301,
+	-1,0,4,5,6,8,12,15,18,24,49,54,55,70,72,101,160,174,177,999,131,63,602,301,
 
 	/* exile idds */
 	24001,24002,20023,24005,24004,24010,24025,20021,20017,24012,24027,
@@ -661,6 +700,9 @@ allowedIDDs[] =
 	/* main idd - never delete it */
 	46
 };
+
+
+
 /*
 	important check to make sure certain variables are set and have the correct type!
 */
@@ -677,6 +719,8 @@ variableTypeChecks[] =
 	{'PLAYER_IN_VEHICLE',"false"},
 	{'ExileSystemSpawnThread',[]}
 };
+
+
 /*
 	it is highly recommended to have this check turned on (useBlacklistedVariableCheck = "true";)
 	shows "BadVariable in xxxxxxxx " in the logs.

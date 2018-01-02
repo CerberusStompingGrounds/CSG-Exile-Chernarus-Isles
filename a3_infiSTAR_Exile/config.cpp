@@ -2,7 +2,7 @@
 	Author: Chris(tian) "infiSTAR" Lorenzen
 	Contact: infiSTAR23@gmail.com // www.infiSTAR.de
 	
-	Copyright infiSTAR - 2011 - 2017. All rights reserved.
+	Copyright infiSTAR - 2011 - 2018. All rights reserved.
 	Christian (Chris) L. (infiSTAR23@gmail.com) Developer of infiSTAR
 */
 #include "EXILE_AHAT_CONFIG.hpp"
@@ -19,7 +19,7 @@ class CfgPatches
 		author[]= {"Chris(tian) 'infiSTAR' Lorenzen"};
 		website[]= {"https://infiSTAR.de"};
 		contact[]= {"admin@infiSTAR.de","infiSTAR23@gmail.com"};
-		version = 'v0079';
+		version = 'v88';
 		licensed = "cerberusexile.developer@gmail.com";
 	};
 };
@@ -31,6 +31,7 @@ class CfgFunctions
 		{
 			file = "a3_infiSTAR_Exile";
 			class preInit { preInit = 1; };
+			class postInit { postInit = 1; };
 		};
 	};
 };

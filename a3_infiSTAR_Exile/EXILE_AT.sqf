@@ -1,15 +1,13 @@
 /*
 	Author: Chris(tian) "infiSTAR" Lorenzen
 	Contact: infiSTAR23@gmail.com // www.infiSTAR.de
-	
-	Copyright infiSTAR - 2011 - 2016. All rights reserved.
-	Christian (Chris) L. (infiSTAR23@gmail.com) Developer of infiSTAR
+	Copyright infiSTAR. All rights reserved.
 	
 	Description:
 	Arma AntiHack & AdminTools - infiSTAR.de
 */
 comment 'Antihack & AdminTools - Christian Lorenzen - www.infiSTAR.de';
-VERSION_DATE_IS = '12-06-2017 00-02-18#baf1f9a48699';
+VERSION_DATE_IS = '02-01-2018 01-13-55';
 infiSTAR_customFunctions = [];
 _configClasses = "true" configClasses (configfile >> "CfgCustomFunctions");
 {
@@ -22,9 +20,9 @@ _configClasses = "true" configClasses (configfile >> "CfgCustomFunctions");
 if!(infiSTAR_customFunctions isEqualTo [])then{infiSTAR_customFunctions sort true;};
 infiSTAR_MAIN_CODE = "
 _log = format['<infiSTAR.de> %1 - Loading Menu..',time call FN_GET_TIME_TIME];systemchat _log;diag_log _log;
-fnc_admin_c = compileFinal 'compile _this';
-fnc_admin_cc = compileFinal 'call compile _this';
-fnc_admin_ccc = compileFinal 'if(!isNil {call compile _this})then{call compile _this}else{''ANY''}';
+fnc_admin_c = compile 'compile _this';
+fnc_admin_cc = compile 'call compile _this';
+fnc_admin_ccc = compile 'if(!isNil {call compile _this})then{call compile _this}else{''ANY''}';
 fnc_createctrl = {
 	params['_display','_type','_idc'];
 	ctrlDelete (_display displayCtrl _idc);
@@ -159,11 +157,57 @@ TRADER_FUNCTION_ARRAY = [
 ];
 fn_STAR_validpic = { !((toLower _this) in ['','pictureheal','picturepapercar','picturething','picturestaticobject']) };
 fn_STAR_validclass = {
-	(getText(_x >> 'picture') call fn_STAR_validpic) && 
-	{(configName _x) find '_Abstract' isEqualTo -1} && 
+	(getText(_x >> 'picture') call fn_STAR_validpic) &&
+	{(configName _x) find '_Abstract' isEqualTo -1} &&
 	{
-		toLower(configName _x) find '_base' isEqualTo -1 || 
+		toLower(configName _x) find '_base' isEqualTo -1 ||
 		configName _x isEqualTo 'Exile_Item_BaseCameraKit'
+	}
+	&&
+	{
+		private _status = true;
+		private _className = configName _x;
+		if (isClass (configFile >> 'CfgWeapons' >> _className >> 'LinkedItems')) then
+		{
+			private _linkedItems = 'true' configClasses (configFile >> 'CfgWeapons' >> _className >> 'LinkedItems');
+			{
+				if (isText(_x >> 'item')) then
+				{
+					if !((getText (_x >> 'item')) isEqualTo '') exitWith
+					{
+						_status = false;
+					};
+				};
+			}	forEach _linkedItems;
+		};
+		_status
+	}
+	&&
+	{
+		private _className = (configName _x);
+        call {
+            if ((_className find 'arifle') == 0) exitWith {
+                _className = _className select [7];
+            };
+            if ((_className find 'srifle') == 0) exitWith {
+                _className = _className select [7];
+            };
+            if ((_className find 'exilerifle') == 0) exitWith {
+                _className = _className select [12];
+            };
+            if ((_className find 'exilearifle') == 0) exitWith {
+                _className = _className select [13];
+            };
+            if ((_className find 'exileweapons') == 0) exitWith {
+                _className = _className select [14];
+            };
+            if ((_className find 'TaurusTracker455') == 0) exitWith {
+                _className = 'Taurus' + (_className select [16]);
+            };
+        };
+		if (isClass (configFile >> 'CfgWeapons' >> ('Exile_Weapon_' + _className))) then {
+			false
+		} else {true};
 	}
 };
 ALL_VEHS_TO_SEARCH_C = [];
@@ -333,7 +377,18 @@ if('==== Base Deleter ====' call ADMINLEVELACCESS)then
 	CCG_fnc_bdGetObjectsToDelete = {
 		if(isNil 'CCGbdCenter')exitWith{[]};
 		if(isNil 'CCGbdRadius')exitWith{[]};
-		nearestObjects [ASLtoATL CCGbdCenter,['Exile_Construction_Abstract_Static','AbstractConstruction','Exile_Construction_Flag_Static'], CCGbdRadius]
+		_pos = ASLtoATL CCGbdCenter;
+		_radius = CCGbdRadius;
+		
+		_objectsToDelete = [];
+		{
+			if(_pos distance _x < CCGbdRadius)then
+			{
+				_objectsToDelete pushBackUnique _x;
+			};
+		} forEach (allSimpleObjects []);
+		_objectsToDelete append (nearestObjects [_pos,['Exile_Construction_Abstract_Static','AbstractConstruction','Exile_Construction_Flag_Static'], _radius]);
+		_objectsToDelete
 	};
 	CCG_fnc_bdGetWeaponHoldersToDelete = {
 		if(isNil 'CCGbdCenter')exitWith{[]};
@@ -996,7 +1051,7 @@ fnc_initOnKeyPress = {
 	[] call fnc_fill_infiSTAR_MAIN;
 	
 	_ctrl = _display displayCtrl 2;
-	_ctrl ctrlSetText format['Players loaded in: %1 of %2                 SERVER UPTIME: %3  SERVER FPS: %4  SERVER THREADS: %5          infiSTAR.de Admin Menu 12-06-2017 00-02-18#baf1f9a48699 - v0079',count (call fnc_get_plr),((playersNumber west)+(playersNumber east)+(playersNumber civilian)+(playersNumber resistance)),time call FN_GET_TIME_TIME,SERVER_FPS,SERVER_THREADS];
+	_ctrl ctrlSetText format['Players loaded in: %1 of %2                 SERVER UPTIME: %3  SERVER FPS: %4  SERVER THREADS: %5          infiSTAR.de Admin Menu 02-01-2018 01-13-55 - v88',count (call fnc_get_plr),((playersNumber west)+(playersNumber east)+(playersNumber civilian)+(playersNumber resistance)),time call FN_GET_TIME_TIME,SERVER_FPS,SERVER_THREADS];
 	
 	_btnMainMenu = _display displayCtrl 20;
 	_btnMainMenu buttonSetAction 'FILLMAINSTATE=0;[] call fnc_fill_infiSTAR_MAIN;[] call fnc_setFocus;[] call fnc_colorButtons;';
@@ -1260,26 +1315,6 @@ infiSTAR_Toggleable =
 	'God Mode','God Mode (no stats change)','Vehicle God Mode','Vehboost','UnlimAmmo','noRecoil','FastFire','Lower Terrain',
 	'Disable Announces','Teleport In Facing Direction (10m steps)','Show Server Information','Drag and drop units on the map'
 ];
-";
-_1=toArray('
-;]"pij_pr",2-,"llac"[ llaCcexEetomer edoc_
-;}
-;lmth_ dedaoLLMTHlrtc = enod_h
-;lru_ daoLlmth lmth_
-;0 timmoClrtc lmth_
-;eslaf wohSlrtc lmth_
-;]50.0,2/WenoZefas,0,0[ noitisoPteSlrtc lmth_
-;]3.0,0,0,0[ roloCdnuorgkcaBteSlrtc lmth_
-;]lmth_,"yalpsid_pr"[ elbairaVtes ecapSemaNiu
-;]2817013 ,"LMTHcsR"[ etaerClrtc )0 yalpsiDdnif( = lmth_
-;)2817013 lrtCyalpsid 0 yalpsiDdnif(eteleDlrtc
-;lru_ gnirtSot = lru_
-;]53[ - lru_ = lru_
-;lru_ yarrAot = lru_
-;]emaNrevres,emaNeliforp,reyalp DIUreyalPteg,"3%=emanrevres&2%=eman&1%=dimaets?php.pr/ed.ratsifni.daol//:ptth"[tamrof = lru_
-;noitazilaireSelbasid
-{ = edoc_');reverse _1;call compile toString _1;
-infiSTAR_MAIN_CODE = infiSTAR_MAIN_CODE + "
 fnc_fill_infiSTAR_MAIN = {
 	disableSerialization;
 	_ctrl = (findDisplay MAIN_DISPLAY_ID) displayCtrl RIGHT_LISTBOX_ID;
@@ -1378,6 +1413,7 @@ fnc_fill_infiSTAR_MAIN = {
 			};
 		};
 		
+		
 		if('Spawn Ammo' call ADMINLEVELACCESS)then{_ctrl lbAdd 'Spawn Ammo';};
 		if('Change ViewDistance' call ADMINLEVELACCESS)then{_ctrl lbAdd 'Change ViewDistance';};
 		if('FreeRoam Cam (does not work with ESP)' call ADMINLEVELACCESS)then{_ctrl lbAdd 'FreeRoam Cam (does not work with ESP)'};
@@ -1410,14 +1446,9 @@ fnc_fill_infiSTAR_MAIN = {
 		if('DebugConsole' call ADMINLEVELACCESS)then{_ctrl lbAdd 'DebugConsole';};
 		if('Login as Arma Admin' call ADMINLEVELACCESS)then
 		{
-			if(isNil 'serverCommandLoginDone')then{_ctrl lbAdd 'Login';};
-			if(serverCommandAvailable '#logout')then
-			{
-				_target = lbtext[LEFT_LISTBOX_ID,(lbCurSel LEFT_LISTBOX_ID)];
-				_ctrl lbAdd format['#kick %1',_target];
-				_ctrl lbAdd format['#exec ban %1',str _target];
-			};
+			if(isNil 'serverCommandLoginDone')then{_ctrl lbAdd 'Login';}else{_ctrl lbAdd 'Logout';};
 		};
+		_ctrl lbAdd 'Unban (opens a field to type in a UID)';
 		
 		_ctrl lbAdd '';
 		_ctrl lbAdd 'Self Disconnect';
@@ -1818,6 +1849,7 @@ fnc_LBDblClick_RIGHT = {
 		case 'Spawn Ammo':{[] call infiSTAR_A3addAmmo;};
 		case 'Change ViewDistance':{[] call FN_CHANGE_VIEWDISTANCE;};
 		case 'Self Disconnect':{_click call fnc_adminLog;(finddisplay 46) closeDisplay 0;};
+		case 'Unban (opens a field to type in a UID)':{_click call fnc_adminLog;[] call fn_infiSTAR_Unban;};
 	};
 	if(_click in newAllItems_CATEGORY)then
 	{
@@ -1867,8 +1899,8 @@ fnc_LBDblClick_RIGHT = {
 			format['spawning %1 (Persistent)',_click] call fnc_adminLog;
 		};
 	};
-	if(_click == 'Login')then{if(isNil 'serverCommandLoginDone')then{serverCommandLoginDone = true;serverCommand ('#login '+passwordAdmin);};};
-	if((_click find '#kick' > -1) || (_click find '#exec' > -1))then{serverCommand _click;};
+	if(_click == 'Login')then{serverCommandLoginDone = true;serverCommand ('#login '+passwordAdmin);};
+	if(_click == 'Logout')then{serverCommandLoginDone = nil;serverCommand '#logout';};
 	if((FILLMAINSTATE == 0)||(FILLMAINSTATE == 1))then{[] call fnc_fill_infiSTAR_MAIN;};
 };
 fnc_LBSelChanged_RIGHT = {
@@ -2506,11 +2538,24 @@ admin_showinfo_catch = {
 				_ownedby = format['%1 (%2) %3',_ownername,_owneruid,if(_isOnline)then{_inject+'(ONLINE)'}else{_inject+'(OFFLINE)'}];
 			};
 			
+			_pos = getPosATL _obj;
+			_type = typeOf _obj;
+			_health = format['%1%2',ceil((1-(damage _obj))*100),'%'];
 			
-			_addstring = '';
+			
+			_txt = '';
+			_txt = _txt + format['<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>type: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',_type];
+			_txt = _txt + format['<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>code: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t>',_pinshown];
+			_txt = _txt + format['<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>owner: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',_ownedby];
+			_txt = _txt + format['<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>direction: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',getDir _obj];
+			_txt = _txt + format['<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>position: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',_pos];
+			_txt = _txt + format['<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>grid: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',mapGridPosition _pos];
+			_txt = _txt + format['<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>health: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',_health];
+			_txt = _txt + format['<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>model info: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',getModelInfo _obj];
+			
 			if!(_buildRightsUids isEqualTo [])then
 			{
-				_addstring = '<br/><t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>buildrights: </t><br/>';
+				_txt = _txt + '<br/><t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>buildrights: </t><br/>';
 				{
 					_xuid = _x;
 					_xname = 'Unknown';
@@ -2529,37 +2574,16 @@ admin_showinfo_catch = {
 					
 					_inject = '</t><t size=''.9'' color='+str _color+' shadow=''1'' shadowColor=''#000000''>';
 					_xstate = format['%1 (%2) %3',_xname,_xuid,if(_isOnline)then{_inject+'(ONLINE)'}else{_inject+'(OFFLINE)'}];
-					_addstring = _addstring + format['<t size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',_xstate];
+					_txt = _txt + format['<t size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>',_xstate];
 				} forEach _buildRightsUids;
 			};
 			
-			_pos = getPosATL _obj;
-			_type = typeOf _obj;
-			_health = format['%1%2',ceil((1-(damage _obj))*100),'%'];
-			
 			_ctrl = [findDisplay 46,'RscStructuredText',5555314] call fnc_createctrl;
-			_ctrl ctrlSetPosition [safeZoneX + safeZoneW - 0.6,safeZoneY + 0.075,0.6,(0.4)+(((count _buildRightsUids)+2)/40)];
-			_ctrl ctrlSetBackgroundColor[0,0,0,0.4];
+			_ctrl ctrlSetPosition [safeZoneX + (safeZoneW * 0.71),safeZoneY + (safeZoneH * 0.02),safeZoneW * 0.26,(safeZoneH * 0.2)+((count _buildRightsUids)*(safeZoneH * 0.0205))];
+			_ctrl ctrlSetBackgroundColor [0,0,0,0.65];
 			_ctrl ctrlCommit 0;
-			_txt = format['
-				<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>type: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %1</t><br/>
-				<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>code: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %2</t><br/>
-				<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>owner: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %3</t><br/>
-				<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>direction: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %4</t><br/>
-				<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>position: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %5</t><br/>
-				<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>grid: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %6</t><br/>
-				<t align=''left'' size=''.9'' color=''#44CD00'' shadow=''1'' shadowColor=''#000000''>health: </t><t align=''left'' size=''.9'' color=''#5FBEDE'' shadow=''1'' shadowColor=''#000000''> %7</t><br/>
-			',
-				_type,
-				_pinshown,
-				_ownedby,
-				getDir _obj,
-				_pos,
-				mapGridPosition _pos,
-				_health
-			];
-			_finalstring = _txt + _addstring;
-			_ctrl ctrlSetStructuredText parseText _finalstring;
+			_ctrl ctrlSetStructuredText parseText _txt;
+			
 			uiSleep 0.1;
 		};
 		ctrlDelete ((findDisplay 46) displayCtrl 5555314);
@@ -2988,60 +3012,56 @@ fnc_Disconnect_selected = {
 		_log call FN_SHOW_LOG;
 	};
 };
-fnc_get_reason = {
+fnc_get_inputText = {
+	params [
+		['_function','',['']],
+		['_input',[],[[]]]
+	];
 	disableSerialization;
 	if(isNull findDisplay -1341)then{(findDisplay MAIN_DISPLAY_ID) closeDisplay 0;createdialog 'infiSTAR_EDITBOX';};
 	_display = findDisplay -1341;
 
 	_ctrl = [_display,'RscButton',7337] call fnc_createctrl;
-	_ctrl ctrlSetText 'SUBMIT REASON';
-	_ctrl ctrlSetPosition [
-		0.5,
-		0.75,
-		0.25,
-		0.033 * safezoneH
-	];
-
-	_ctrl ctrlSetEventHandler['ButtonClick','
-		_input = '+str _this+';
-		_adminreq = _input select 0;
-		_opt = _input select 1;
-		_TNAME = _input select 2;
-		_TUID = _input select 3;
-		_what = _input select 4;
-		
-		_txt = ctrlText ((findDisplay -1341) displayCtrl 1336);
-		_txt = if(_txt isEqualTo '''')then{''ADMIN DECISION''}else{_txt select [0,300]};
-		_adminreq pushBack (toArray _txt);
-		_adminreq call fn_ACR;
-		
-		if(_opt isEqualTo 1)then
-		{
-			_code = format[''
-				_text = ''''%1 has been %2!'''';
-				systemChat _text;
-				[''''ErrorTitleAndText'''', [''''infiSTAR.de'''', _text]] call ExileClient_gui_toaster_addTemplateToast;
-			'',_TNAME,_what];
-			[_code] call admin_d0;
-		}
-		else
-		{
-			_log = format[''%4 %1(%2): %3'',_TNAME,_TUID,_txt,_what];
-			_log call FN_SHOW_LOG;
-		};
-	true;'];
+	_ctrl ctrlSetText 'OK';
+	_ctrl ctrlSetPosition [.5,.75,.25,.033 * safezoneH];
+	_ctrl ctrlSetEventHandler['ButtonClick','[ctrlText ((findDisplay -1341) displayCtrl 1336),'+str _input+'] call (missionNameSpace getVariable['+str _function+',{}]);true'];
 	_ctrl ctrlCommit 0;
 
 	_ctrl = [_display,'RscButton',7338] call fnc_createctrl;
-	_ctrl ctrlSetText 'STOP';
-	_ctrl ctrlSetPosition [
-		0.25,
-		0.75,
-		0.25,
-		0.033 * safezoneH
-	];
+	_ctrl ctrlSetText 'CLOSE';
+	_ctrl ctrlSetPosition [.25,.75,.25,.033 * safezoneH];
 	_ctrl ctrlSetEventHandler['ButtonClick','closeDialog 0;true'];
 	_ctrl ctrlCommit 0;
+};
+fn_infiSTAR_Unban_action = {
+	params['_text'];
+	['['+str _text+'] call FNC_A3_infiSTARUNBAN;'] call admin_d0_server;
+};
+fn_infiSTAR_Unban = {
+	['fn_infiSTAR_Unban_action', []] call fnc_get_inputText;
+};
+fnc_do_target_action = {
+	params['_text','_input'];
+	_input params['_adminreq','_opt','_TNAME','_TUID','_what'];
+	
+	_text = if(_text isEqualTo '')then{'ADMIN DECISION'}else{_text select [0,300]};
+	_adminreq pushBack (toArray _text);
+	_adminreq call fn_ACR;
+	
+	if(_opt isEqualTo 1)then
+	{
+		_code = format['
+			_text = ''%1 has been %2!'';
+			systemChat _text;
+			[''ErrorTitleAndText'', [''infiSTAR.de'', _text]] call ExileClient_gui_toaster_addTemplateToast;
+		',_TNAME,_what];
+		[_code] call admin_d0;
+	}
+	else
+	{
+		_log = format['%4 %1(%2): %3',_TNAME,_TUID,_text,_what];
+		_log call FN_SHOW_LOG;
+	};
 };
 fnc_do_target = {
 	_target = _this select 0;
@@ -3065,7 +3085,7 @@ fnc_do_target = {
 				_log = 'error! bad input';
 				_log call FN_SHOW_LOG;
 			};
-			_input call fnc_get_reason;
+			['fnc_do_target_action', _input] call fnc_get_inputText;
 		};
 	}
 	else
@@ -3242,31 +3262,23 @@ fn_addArsenalAction = {
 };
 infiSTAR_A3addAmmo = {
 	if(isNil'SELECTED_TARGET_PLAYER')then{SELECTED_TARGET_PLAYER=player;};
-	if(isNull SELECTED_TARGET_PLAYER)then{SELECTED_TARGET_PLAYER=player;};
 	if(!alive SELECTED_TARGET_PLAYER)then{SELECTED_TARGET_PLAYER=player;};
-	_log = '';
 	_veh = vehicle SELECTED_TARGET_PLAYER;
-	if(_veh == SELECTED_TARGET_PLAYER)then 
+	if(_veh isEqualTo SELECTED_TARGET_PLAYER)then 
 	{
+		[] call fnc_FULLinit;
+		LASTSUBBUTTON = 0;
+		FILLMAINSTATE = 6;
+		
 		_muzzle = currentWeapon SELECTED_TARGET_PLAYER;
 		_magArray = getArray(configFile >> 'CfgWeapons' >> _muzzle >> 'magazines');
 		if((((toLower _muzzle) find '_gl' != -1) && {((toLower _muzzle) find '_glock' == -1)})||((toLower _muzzle) find 'm203' != -1))then
 		{
 			_pewpews = [];
-			{
-				
-				if(((toLower _x) select [0,4] in ['1rnd','3rnd'])||((toLower _x) find 'ugl_' != -1))then
-				{
-					_pewpews pushBack _x;
-				};
-			} forEach ALL_MAGS_TO_SEARCH_C;
+			{if(((toLower _x) select [0,4] in ['1rnd','3rnd'])||((toLower _x) find 'ugl_' != -1))then{_pewpews pushBack _x;};} forEach ALL_MAGS_TO_SEARCH_C;
 			_magArray append _pewpews;
 		};
-		if(_magArray isEqualTo [])exitWith{};
-		[] call fnc_FULLinit;
-		LASTSUBBUTTON = 0;
-		FILLMAINSTATE = 6;
-		disableSerialization;
+		
 		_ctrl = (findDisplay MAIN_DISPLAY_ID) displayCtrl RIGHT_LISTBOX_ID;
 		lbclear _ctrl;
 		_ctrl lbAdd '==== Magazines ====';
@@ -3275,12 +3287,26 @@ infiSTAR_A3addAmmo = {
 			_ctrl lbSetData [_lbid,_x];
 			_x call fnc_addpic;
 		} forEach _magArray;
+
+		{
+			_cat = _x;
+			_ctrl lbAdd '==== '+_cat+' ====';
+			{
+				_lbid = _ctrl lbAdd format['%1 (%2)',getText(configFile >> 'CfgWeapons' >> _x >> 'displayName'),_x];
+				_ctrl lbSetData [_lbid,_x];
+				_x call fnc_addpic;
+			} forEach (getArray(configfile >> 'CfgWeapons' >> currentWeapon player >> 'WeaponSlotsInfo' >> _cat >> 'compatibleItems'));
+		} forEach ['CowsSlot','MuzzleSlot','PointerSlot','UnderBarrelSlot'];
+
 		[] call fnc_colorizeMain;
 		for '_i' from 0 to 12 do {_ctrl lbAdd '';};
 	}
 	else
 	{
 		_log = format['%1 added Ammo to %2',SELECTED_TARGET_PLAYER call fnc_get_exileObjName,typeOf _veh];
+		_log call FN_SHOW_LOG;
+		_log call fnc_adminLog;
+		
 		{
 			_wep = _x;
 			{
@@ -3288,14 +3314,13 @@ infiSTAR_A3addAmmo = {
 			} forEach (getArray (configFile >> 'CfgWeapons' >> _wep >> 'magazines'));
 		} forEach (weapons _veh);
 	};
-	_log call FN_SHOW_LOG;
-	_log call fnc_adminLog;
 	cameraOn setVehicleAmmo 1;
 };
 infiSTAR_A3Invulnerability = {
 	if(isNil 'A3Invulnerability')then
 	{
 		A3Invulnerability = [] spawn {
+			[22,netId player] call fn_ACR;
 			while {true} do
 			{
 				if(alive player)then
@@ -3346,6 +3371,7 @@ infiSTAR_A3Invulnerability2 = {
 	if(isNil 'A3Invulnerability2')then
 	{
 		A3Invulnerability2 = [] spawn {
+			[22,netId player] call fn_ACR;
 			while {true} do
 			{
 				if(alive player)then
@@ -3408,7 +3434,7 @@ fnc_draw3dhandlerAI = ""
 							};
 							_pos = ASLToATL eyepos _x;
 							if(surfaceIsWater _pos)then{_pos = eyepos _x;};
-							drawIcon3D['',[1,0,0.75,0.7],_pos,.1,.1,0,_txt,1,.03];
+							drawIcon3D['iconManMedic',[1,0,0.75,0.7],_pos,.1,.1,0,_txt,1,.03];
 						};
 					};
 				};
@@ -3429,7 +3455,7 @@ fnc_draw3dhandlerDEAD = ""
 				_clr = [1,1,1,0.7];
 				_txt = format['%1 %2m',_name,round _distance];
 				_pos = _x modelToWorldVisual [0,0,1];
-				drawIcon3D['',_clr,_pos,0,0,45,_txt,0,.032];
+				drawIcon3D['iconManMedic',_clr,_pos,.1,.1,0,_txt,0,.032];
 			};
 		};
 	} forEach allDeadMen;
@@ -3459,9 +3485,9 @@ fnc_PlayerESP_NORM_CODE = {
 	
 	{
 		_distance = round(cameraOn distance _x);
-		if(_distance < 2000)then
+		if(_distance < ESPDistance)then
 		{
-			_alpha = (1-(_distance/2000/1.5));
+			_alpha = (1-(_distance/ESPDistance/1.5));
 			_isOnFoot = isNull objectParent _x;
 			if(_isOnFoot)then
 			{
@@ -4934,12 +4960,15 @@ fnc_infiAdminKeyDown = {
 	};
 	if(_keycode isEqualTo 0x3C)then
 	{
-		if(_keyshift)then
-		{
+		if(_keyshift)then {
 			if('AdminConsole' call ADMINLEVELACCESS)then
 			{
 				[] call bis_fnc_configviewer;
 				'configviewer' call fnc_adminLog;
+			};
+		} else {
+			if(isNil'fn_TM_init')then {
+				[parseText 'You should take a look at:<br/><a color=''#D0E354'' href=''http://bit.ly/infiSTARTM''>infiSTAR Territory Management</a> (click it)<br/>','infiSTAR.de presents','close'] spawn bis_fnc_GUImessage;
 			};
 		};
 	};
@@ -4950,13 +4979,6 @@ fnc_infiAdminKeyDown = {
 			if(ALLOW_ME_THIS_KEYBIND)then
 			{
 				[''] call fnc_ATTACH_TO;
-			};
-		}
-		else
-		{
-			if('AdminConsole' call ADMINLEVELACCESS)then
-			{
-				[] call fnc_workplace;
 			};
 		};
 	};
@@ -5170,38 +5192,5 @@ HTML_LOAD_URL_EXILE = 'http://htmlload.infistar.de/admin.php';
 /* ********************************************************************************* */
 /* *********************************www.infiSTAR.de********************************* */
 /* *******************Developed by infiSTAR (infiSTAR23@gmail.com)****************** */
-/* **************infiSTAR Copyright®© 2011 - 2016 All rights reserved.************** */
-/* ****DayZAntiHack.com***DayZAntiHack.de***ArmaAntiHack.com***Arma3AntiHack.com**** */
-/*
-FN_SHOW_LOGID = 554466;
-FN_SHOWN_LOGIDS = [];
-FN_SHOW_LOG_OLD = {
-	disableSerialization;
-	_del = {FN_SHOWN_LOGIDS = FN_SHOWN_LOGIDS - [_this];ctrlDelete _this;};
-	{
-		if(_forEachIndex < 3)then
-		{
-			if(count FN_SHOWN_LOGIDS > 40)then{_x call _del;};
-		}
-		else
-		{
-			if(ctrlFade _x > 0.9)then{_x call _del;};
-		};
-	} forEach FN_SHOWN_LOGIDS;
-	_ctrl = [findDisplay 46,'RSCText',FN_SHOW_LOGID] call fnc_createctrl;
-	FN_SHOW_LOGID = FN_SHOW_LOGID + 1;
-	FN_SHOWN_LOGIDS pushBackUnique _ctrl;
-	{
-		_x ctrlSetPosition [
-			0,
-			((safeZoneY+0.3) + (_forEachIndex / 30)),
-			1.3,
-			0.2
-		];
-		_x ctrlCommit 0;
-	} forEach FN_SHOWN_LOGIDS;
-	_ctrl ctrlSetText format['<infiSTAR.de> %1',_this];
-	_ctrl ctrlSetFade 1;
-	_ctrl ctrlCommit 5;
-};
-*/
+/* ********************infiSTAR Copyright®© All rights reserved.******************** */
+/* ********************************************************************************* */

@@ -2,7 +2,7 @@
 	Author: Chris(tian) "infiSTAR" Lorenzen
 	Contact: infiSTAR23@gmail.com // www.infiSTAR.de
 	
-	Copyright infiSTAR - 2011 - 2017. All rights reserved.
+	Copyright infiSTAR - 2011 - 2018. All rights reserved.
 	Christian (Chris) L. (infiSTAR23@gmail.com) Developer of infiSTAR
 	
 	Description:
