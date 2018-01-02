@@ -2,7 +2,7 @@
 	Author: Chris(tian) "infiSTAR" Lorenzen
 	Contact: infiSTAR23@gmail.com // www.infiSTAR.de
 	
-	Copyright infiSTAR - 2011 - 2016. All rights reserved.
+	Copyright infiSTAR - 2011 - 2018. All rights reserved.
 	Christian (Chris) L. (infiSTAR23@gmail.com) Developer of infiSTAR
 	
 	What is this?
@@ -12,17 +12,17 @@ class CfgPatches
 {
 	class a3_infiSTAR_Exile_customApps
 	{
-		requiredVersion = 0.1;
+		requiredVersion = 0.12431;
 		requiredAddons[] = {"exile_client"};
 		units[] = {};
 		weapons[] = {};
 		magazines[] = {};
 		ammo[] = {};
-		a3_infiSTAR_Exile_customApps_version = 0.1;
+		a3_infiSTAR_Exile_customApps_version = 0.12431;
 		author[]= {"Chris(tian) 'infiSTAR' Lorenzen"};
 		website[]= {"https://infiSTAR.de"};
 		contact[]= {"admin@infiSTAR.de","infiSTAR23@gmail.com"};
-		license[]= {contact = "ericmcfli.ja@gmail.com", version = "v0001", date = "04-06-2017 17-30-08"};
+		license[]= {contact = "ericmcfli.ja@gmail.com", version = "v2", date = "02-01-2018 01-14-37"};
 	};
 };
 class CfgFunctions
@@ -51,7 +51,6 @@ class CfgFunctions
 			class initremotecctv {};
 			class scan {};
 			class cookbook {};
-			class restarttimer {};
 		};
 		class main
 		{

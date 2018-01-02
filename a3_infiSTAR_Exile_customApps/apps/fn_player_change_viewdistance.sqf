@@ -8,7 +8,7 @@ _ctrl ctrlSetPosition [0.2,0.2,1,.1];
 _ctrl ctrlSetText format['ViewDistance: %1',viewDistance];
 _ctrl ctrlCommit 0;
 _ctrl = [_display,'RscXSliderH',44668] call apps_fnc_createctrl;
-_ctrl sliderSetRange [150, 2000];
+_ctrl sliderSetRange [150, 3000];
 _ctrl sliderSetPosition viewDistance;
 _ctrl ctrlSetPosition [0.2,0.275];
 _ctrl ctrlSetBackgroundColor [0.15,0.15,0.15,1];

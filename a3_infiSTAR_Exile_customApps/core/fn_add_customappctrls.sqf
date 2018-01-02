@@ -32,7 +32,7 @@ if(!isNull _display)then{
 
 _ctrl = [_display,'RscStructuredText',9999123] call apps_fnc_createctrl;
 _ctrl ctrlSetPosition [0.25,0.81,.5,0.04];
-_ctrl ctrlSetStructuredText parseText '<t size=".5" align="center" color="#DE5021" font="RobotoMedium"><a href="https://infiSTAR.de/#xm8apps">custom apps by infiSTAR.de</a></t>';
+_ctrl ctrlSetStructuredText parseText '<t size=".5" align="center" color="#00BBFA" font="RobotoMedium"><a href="https://infiSTAR.de/#xm8apps">custom apps by infiSTAR.de</a></t>';
 _ctrl ctrlSetFade 1;
 _ctrl ctrlCommit 0;
 _ctrl ctrlSetFade 0.2;
