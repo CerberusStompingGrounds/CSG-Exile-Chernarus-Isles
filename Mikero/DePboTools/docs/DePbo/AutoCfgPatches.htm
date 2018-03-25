@@ -1,0 +1,128 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-au">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>well here we are</title>
+</head>
+
+<body>
+
+<p><font face="Arial" size="4">The cfgPatches class</font></p>
+
+<p>&nbsp;</p>
+
+<p><font face="Arial">This document is in two parts.</font></p>
+
+<p><font face="Arial">cfgpatches as it relates to building a units[]= and 
+weapons[]= list</font></p>
+
+<p>cfgpatches for auto building </p>
+
+<p>&nbsp;</p>
+
+<p><u><b>units[]= lists</b></u></p>
+
+<p>&nbsp;</p>
+<p><font face="Arial"><span style="background-color: #00FF00">Irrespective of 
+all the wonderful things that might be within a </span>
+<span style="background-color: #00FF00">config.cpp</span><span style="background-color: #00FF00">, 
+the absolute bottom line is that <b>all</b> config.cpp's <b>must</b> contain a cfgPatches</span><span style="background-color: #00FF00"> 
+class to identify the name of this addon to the engine.</span></font></p>
+<ul>
+  <li><font face="Arial"><b>all</b> means <b>all.</b> Even multiple config.cpps' 
+  in the same pbo. Each one identifies that part of the pbo as an addon in it's 
+  own right.</font></li>
+  <li><font face="Arial">It is quite normal that <b>only</b> a cfgPatches class 
+  is present in a config.cpp and nothing else. This is frequently encountered in 
+  island data pbo's as an eg.</font></li>
+</ul>
+
+<p><font face="Arial">pboProject (actually, the dll) will always attempt to 
+auto-correct the mandatory cfgPatches class in a config.cpp by filling in the 
+units[]= and etc.</font></p>
+
+<ul>
+  <li><font face="Arial">if a cfgPatches class does not exist with at least one 
+  child class identifying this pbo, the pbo will not be made.</font></li>
+  <li><font face="Arial">if extern classes are declared but no required addons 
+  are specified. the pbo will not be made.</font></li>
+  <li><font face="Arial">(if no extern classes are stated, any requiredAddons 
+  are removed)</font></li>
+</ul>
+<p><font face="Arial">The generic definition is:</font></p>
+<p><font face="Arial">class cfgPatches<br>
+{<br>
+&nbsp;&nbsp;&nbsp; class nameOfThisAddon //only you would know<br>
+&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RequiredAddons[]={}; // other addons 
+which only you would know<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RequiredVersion=0.1;// only you know<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; units[]={};&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+// contents of cfgVehicles<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; weapons[]={};&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+// contents of cfgWeapons<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  magazines[]={};&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+// contents of cfgMagazines // only built if a&nbsp; cfgMagazines class exists<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ammo[]={};&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+// contents of cfgAmmo// only built if a cfgAmmo class exists<br>
+&nbsp;&nbsp;&nbsp; };<br>
+};</font></p>
+<ul>
+  <li><b><font face="Arial">'Arrays'[]=&nbsp; (units,weapons,mags,ammo)</font></b></li>
+</ul>
+<font face="Arial">If there is no <b>'array'</b>[]= in the class, the dll will 
+  create one. Otherwise the dll will <i>potentially</i> retain any names stated in that array and 
+ 
+add more as and if discovered.</font><p><font face="Arial">names (eg classes)&nbsp; 
+that no longer exist in the relevant array are always removed. similarly, 
+duplicated names are always removed.</font></p>
+<p><font face="Arial">the mechanism is 
+intended to fix 'stale' arrays where units have either been taken out of the 
+config, or, added to the config.</font></p>
+<p><font face="Arial">.</font><b><font face="Arial">Filling rules:</font></b></p>
+<p><font face="Arial">The intent is to assist you in the often neglected 
+addition of public classes to these arrays and the removal of names that either 
+simply no longer exist, or worse, moved to another addon</font></p>
+<p><font face="Arial">The class name is added to the array if scope= 2 is 
+can be determined anywhere in the inheritance chain.</font></p>
+<ul>
+  <li><font face="Arial">ALL names in cfgAmmo are public</font></li>
+  <li><font face="Arial">scope cannot be determined from extern classes. you 
+  must explicitly set scope=public in the relevant child class for this 
+  mechanism to operate, or, alternatively, state it in the array.</font></li>
+</ul>
+
+<hr>
+<p><font face="Arial">RequiredAddons[]= list</font></p>
+<p>&nbsp;</p>
+<p><font face="Arial">required addons are used in two ways.</font></p>
+<p>&nbsp;</p>
+<p><font face="Arial">1) config inheritence: to establish the addon that has the 
+config that contains the extern reference class.</font></p>
+<p><font face="Arial">2) File References: to establish the addons that have the 
+paa, rvmat , or p3ds that this addon is using.</font></p>
+<p><font face="Arial">this is necessary to prevent crash to desktops if the pbo 
+containing the p3d reqeusted doesn't exist at game time, or, white textures 
+because a pbo isn't loaded.</font></p>
+<p><font face="Arial">The dll will add addon names to the requiredaddons array 
+based on where these file references come from.</font></p>
+<p>To do this, it walks back to the nearest config.cpp to the file reference and 
+checks it for an addon name (eg cfgPatches.className)</p>
+<p>if that cpp has to cfgpatches (bis often forget) it walks back to the next, 
+and so on.</p>
+<p>if no config can be found, an error results. (again, bis, often, and 
+mistkenly, don't provide a cfgpatches class for some of their pbos)</p>
+<p>----</p>
+<p>After generating the required addons. In game, it is possible to get a 
+'circular dependency'. this is because your A.pbo requires something out of your 
+B.pbo and vice versa. You need to change your architecture so that each pbo is 
+not waiting on the other</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

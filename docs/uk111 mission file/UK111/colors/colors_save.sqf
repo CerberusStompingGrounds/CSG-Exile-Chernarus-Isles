@@ -1,0 +1,13 @@
+profileNamespace setVariable ["UK111_ColorCorrections_1", UK111_ColorCorrections_1]; 
+profileNamespace setVariable ["UK111_ColorCorrections_2", UK111_ColorCorrections_2]; 
+profileNamespace setVariable ["UK111_ColorCorrections_3", UK111_ColorCorrections_3]; 
+profileNamespace setVariable ["UK111_ColorCorrections_4", UK111_ColorCorrections_4]; 
+profileNamespace setVariable ["UK111_ColorCorrections_5", UK111_ColorCorrections_5]; 
+profileNamespace setVariable ["UK111_ColorCorrections_6", UK111_ColorCorrections_6]; 
+profileNamespace setVariable ["UK111_ColorCorrections_7", UK111_ColorCorrections_7]; 
+profileNamespace setVariable ["UK111_ColorCorrections_8", UK111_ColorCorrections_8]; 
+profileNamespace setVariable ["UK111_ColorCorrections_9", UK111_ColorCorrections_9]; 
+profileNamespace setVariable ["UK111_ColorCorrections_10",UK111_ColorCorrections_10];
+profileNamespace setVariable ["UK111_ColorCorrections_11",UK111_ColorCorrections_11];
+saveProfileNamespace;
+[] call UK111_fnc_colors_save_array;

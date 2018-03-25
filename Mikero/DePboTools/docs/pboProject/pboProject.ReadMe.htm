@@ -1,0 +1,896 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-au">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>well here we are</title>
+</head>
+
+<body>
+
+<p><font face="Arial">PboProject Version 1.xx by Mikero<br>
+see&nbsp; ReadMeGeneral&nbsp; and fixes </font></p>
+
+<hr>
+<p><font face="Arial"><span style="background-color: #00FF00">For dos mode, see the accompanying document. (pboProject.DosMode.htm)</span></font></p>
+<p><span style="background-color: #00FF00"><font face="Arial">For model.cfg 
+error messages read makepbo documentation</font></span></p>
+<p><span style="background-color: #00FF00"><font face="Arial">For requiredAddons 
+and cfgPatches class errors,  read thecfgPatches documentation in the dll</font></span></p>
+<p><font face="Arial"><span style="background-color: #00FF00">All mention of 
+'binpbo' <b>also</b> means 'addon builder' for a3</span></font></p>
+<p><b><font face="Arial">Installation:</font></b></p>
+<p><font face="Arial">The self installer ensures that this tool is integrated 
+with other Mikero Tools. It is not designed for manual installation.</font></p>
+<p><font face="Arial">This tool <b>also</b> requires:</font></p>
+<p><font face="Arial">1) <b>Mikero's tools</b></font></p>
+<ul>
+  <li><font face="Arial">depbo.dll</font></li>
+  <li><font face="Arial">deogg.dll</font></li>
+  <li><font face="Arial">makepbo.exe</font></li>
+  <li><font face="Arial">rapify.exe</font></li>
+</ul>
+<p><font face="Arial">Grab the self installers for these from 
+<a href="https://www.dev-heaven.net/projects/mikero-pbodll/files">dev-heaven</a>.</font></p>
+<p><font face="Arial">2) <b>Bis tools</b></font></p>
+<p><b><font face="Arial">Either:</font></b></p>
+<ul>
+  <li><font face="Arial">Personal Tools 2.5.1 for 
+  <span style="background-color: #00FF00">Arrowhead</span>&nbsp; <b>AND/OR</b></font></li>
+  <li><font face="Arial">Steam Tools for <span style="background-color: #00FF00">Arma3</span> <b>
+  AND/OR</b></font></li>
+  <li><font face="Arial">OfpTools package from <a href="http://www.ofpec.com">
+  ofpec</a> for <span style="background-color: #00FF00">Ofp/Resistance</span> <b>
+  AND/OR</b></font></li>
+  <li><font face="Arial">XboxTools package from <a href="http://www.ofpec.com">
+  ofpec</a> for <span style="background-color: #00FF00">Elite</span> <b>AND/OR</b></font></li>
+  <li><font face="Arial">All of above.</font></li>
+</ul>
+<hr>
+
+<p><font face="Arial" size="4"><b>What is pboProject?</b></font></p>
+
+<p><font face="Arial"><b>pboProject </b>is binPbo/Addont Builder on steroids. It has been in 
+existence for some years as the tool behind cwr2. A <b>mod</b> that packs dozens of pbos 
+for distribution in a single operation.</font></p>
+
+<p><font face="Arial">pboProject is not just a 'makepbo'. it creates MODS. 
+(which include addons, missions, and campaigns). </font></p>
+
+<p><font face="Arial">pboProject is designed for multi engine packing from ofp 
+thru to vbs and the Arma series.</font></p>
+
+<p><font face="Arial">pboProject allows you to build one, or dozens of pbos in 
+one go. (A 'pbo' is an .xbo, .ebo, .ifa, or .pbo, dependent on 
+engine type selected)</font></p>
+
+<p><font face="Arial">The basic philosophy is:</font></p>
+
+<p><font face="Arial">P:/MyProject<br>
+P:/MyProject/MyObjects<br>
+P:/MyProject/MyObjects/MyPlants<br>
+P:/MyProject/MyObjects/MyBuildings<br>
+P:/MyProject/MyObjects/MyRoads<br>
+P:/MyProject/MyObjects/MyIsland<br>
+P:/MyProject/MyMissions<br>
+P:/MyProject/MyMissions/MissionOne<br>
+P:/MyProject/MyMissions/MissionTwo<br>
+P:/MyProject/MyMissions/MyCampaign</font></p>
+
+<ul>
+  <li><font face="Arial">For your interest, this <b>is</b> the topology used by BIS 
+with their chained model.cfgs. Advanced model makers will already be using this 
+architecture and they <b>now</b> have a packer they can use.</font></li>
+  <li><font face="Arial">For your interest, this <b>is</b> the method of providing 
+patch pbos. So called hotpatch. One huge pbo later followed by smaller ones only containing a child 
+folder or three.</font></li>
+</ul>
+
+<p><font face="Arial">Selecting any one of the above 'Source Folders' will 
+generate one, or, multiple pbos determined by the content of that source folder 
+and it's children (if any)</font></p>
+
+<p><font face="Arial">Selecting:</font></p>
+
+<ul>
+  <li><font face="Arial">P:/MyProject -&gt; (re)builds everything</font></li>
+  <li><font face="Arial">P:/MyProject/MyMissions-&gt; (re)builds all the missions 
+  only</font></li>
+  <li><font face="Arial">P:/MyProject/MyObjects/MyPlants-&gt;(re) builds a single 
+  'plants' pbo</font></li>
+</ul>
+<ul>
+  <li><font face="Arial">There is no restriction in depth. MyPlants, could be 
+  separated into (at least) two other pbos MyPlants,/MyBushes, and MyPlants/MyTrees</font></li>
+  <li><font face="Arial">For simple use, clearly, if there are no child folders 
+  <u>of consequence</u> in MyProject, then only MyProject.pbo is built.</font></li>
+</ul>
+
+<p><font face="Arial"><u>Folders of consequence</u>: The presence of a config.cpp/bin, 
+mission.sqm. or desc.ext (for campaign) marks the beginning of a pbo for <b>that</b> 
+folder and all it's children (if any). </font></p>
+
+<p><font face="Arial">Note that any subsequent configs in child folders are NOT 
+pbo's in their own right. They become part of the classic, 'multiple addons 
+within a single pbo'. This is the method by which you initially release one big 
+pbo, and for subsequent patches to plants (eg) you merely repack plants!!!</font></p>
+
+<p><font face="Arial">The other major features of pboProject are:</font></p>
+<ul>
+  <li><font face="Arial">Exhaustive file reference checking in any file 
+  containing them. (configs, bisurfs, rvmats, 
+  wrps and p3d's etc)</font></li>
+  <li><font face="Arial">Ability to have any mix of pre-binarised/pre-rapped AND 
+  plain Jane files in the source folder.</font></li>
+  <li><font face="Arial">Binary animations other than ofp2_manskeleton</font></li>
+  <li><font face="Arial">No requirement to have a copy of ca\ (or any other 'addon') in
+  <b>your_projects</b> folder</font></li>
+  <li><font face="Arial">No requirement to have p3d helper p3d's to pack 
+  textures that are only 
+  referenced by configs (icons eg)</font></li>
+  <li><font face="Arial">Absolute certainty that a mixture of all texture types 
+  (tga,png, pac, pax) produce the very latest paa file.</font></li>
+  <li><font face="Arial">strips the log file of irrelevant messages making it 
+  readable again for locating problems with your p3d</font></li>
+  <li><font face="Arial">The full power of dePbo.dll including compression, and all the other good 
+  stuff hidden away and transparent to the user.</font></li>
+  <li><font face="Arial">Automatic delivery of the target pbo(s) into the 
+  correct location of an @mod folder</font></li>
+  <li><font face="Arial">Automatic detection of the typeof pbos required. Any 
+  mix of addon, mission, and campaign pbos.</font></li>
+  <li><font face="Arial">Automatic signing of pbo's and distribution of the 
+  public key</font></li>
+</ul>
+
+<p><b><font face="Arial">The most 
+forbidding of all errors is your addon works, but unknown to you at the time, destroys others. The dll wont let you. Expect to be frustrated and thank me later.</font></b></p>
+
+<p><font face="Arial">The dll is quite likely to give you a specific reason for 
+the bad result, and it expects you to fix it. 'Errors' range from simple typos 
+to known, under-the-covers issues with different engines that break if you 
+create a p3d with no geolod (exaggerated&nbsp; licence used). or an ofp config 
+intended for arma.</font></p>
+<hr>
+<p><b><font face="Arial" size="4">Operation:</font></b></p>
+<p><u><b><font face="Arial">Bis tool sets:</font></b></u></p>
+<ul>
+  <li><font face="Arial"><b>pboProject </b>autodetects the location of bi's, and 
+other, mikero tools. It utilises pal2pace, dssSignFile, and binarize.exe 
+and (dsCreateKey if discovered).</font></li>
+  <li><font face="Arial">pboProject distinguishes the difference in tools between 
+Arrowhead 2.5.1 and Steam. Both are accommodated.</font></li>
+  <li><font face="Arial">Only modest support is currently provided for ofp, 
+  vbslite and ifa. Your mileage will vary for these engines.</font></li>
+</ul>
+<p><font face="Arial"><span style="background-color: #FFFF00">pboProject only uses bis binarise.exe for <b>UN</b>binarised p3'ds, wrps and rtm. All other file 
+types 
+are handled by the dll.</span></font></p>
+<p><u><b><font face="Arial">Pbo Types:</font></b></u></p>
+<blockquote>
+  <p><font face="Arial">pboProject distinguishes between:</font></p>
+  <ul>
+    <li><font face="Arial">Addons (any folder containing a config.cpp/bin)</font></li>
+    <li><font face="Arial">Missions (any folder containing a mission.sqm <b>and 
+    no config)</b></font></li>
+    <li><font face="Arial">Campaigns (any folder containing a desc.ext <b>and no 
+    mission or config</b>)</font></li>
+  </ul>
+  <p><font face="Arial">The differences result in:</font></p>
+  <ul>
+    <li><font face="Arial">pbos with/without prefixes</font></li>
+    <li><font face="Arial">pbos sent to different parts of the mod folder</font></li>
+  </ul>
+</blockquote>
+
+<p><u><b><font face="Arial">Internal packing characteristics</font></b></u></p>
+<ul>
+  <li><font face="Arial"><b>All</b> relevant bi files are transparently checked 
+  and packed.&nbsp; All non relevant files are not packed. There is no need to specify 
+  exclude, or include lists.</font></li>
+  <li><b><font face="Arial">All</font></b><font face="Arial"> relevant files are 
+  binarised (or rapified if they can be rapified). Examples are config.cpp, rvmats, bisurfs, texheander.bin, wrp, p3d.</font></li>
+  <li><font face="Arial">The packer analyses specific file types for errors. 
+  Typo's in mission.sqms, bad references in p3ds, missing classes in configs.....</font></li>
+  <li><font face="Arial">tga pax and png files are checked for staleness. Unlike 
+  binPbo it is an almost-certainty that the correct filedate is worked with. 
+  Picture files intended only for configs or missions are fully accounted for.</font></li>
+</ul>
+
+<p><u><b><font face="Arial" size="6">The Gui Dialogs</font></b></u></p>
+<p><u><b><font face="Arial" size="5">Main Panel</font></b></u></p>
+
+<p><u><b><font face="Arial">Mod Folder&nbsp; : AnyDrive:\any\where</font></b></u></p>
+
+<blockquote>
+
+<p><font face="Arial">This is the <b>mod</b> folder. It is
+<span style="background-color: #FF0000">NOT</span> <font size="4">the</font> 
+destination of the pbo, it is the root of the destination(s).</font></p>
+
+<p><font face="Arial">The mod folder can be <b>anywhere. </b>It is intended to 
+be the same specification as you supply to the arma -mod= command line</font></p>
+
+<p><font face="Arial">The packer will create pbo's in</font></p>
+
+  <blockquote>
+
+<p><font face="Arial">@myMod\Addons<br>
+@myMod\Campaigns<br>
+@myMod\Missions\@MyMod<br>
+@myMod\mpMissions</font></p>
+
+  </blockquote>
+
+<p><font face="Arial">as appropriate.</font></p>
+
+<p><i><font face="Arial">Also see the setup panel for creating a mod.cpp for 
+your entire mod.</font></i></p>
+
+</blockquote>
+
+<p><u><b><font face="Arial" size="4">Source folder:&nbsp; workspace\your_tag\some\where</font></b></u></p>
+<p><font face="Arial">Is always specified from the root drive. </font><font face="Arial" size="4"><b>
+workspace </b>must match the workspace in setup.</font></p>
+<p><font face="Arial" size="4">the 'workspace' can be as simple as p:\&nbsp; The 
+workspace defines the start of the engine's virtual address space.</font></p>
+<blockquote>
+  <p><font face="Arial">PboProject successively scans the Source Folder looking 
+  for pbo's to make.</font></p>
+</blockquote>
+<p><font face="Arial">examples are shown in the foreword above</font></p>
+
+<p><font face="Arial">There are variations on this simple folder topology based mostly on 
+your own creativity and imagination.</font></p>
+
+<p><font face="Arial">Note that configs within configs are not deemed to be 
+pbo's in their own right. It is a reasonably common practice to have multiple 
+addons (configs) in the same pbo.</font></p>
+
+<p><font face="Arial"><span style="background-color: #00FF00">The practice of BI to sometimes NOT provide a cfgPatches class in a pbo is 
+unacceptable. 
+It prevents crash to desktops and assists in</span></font><span style="background-color: #00FF00"><font face="Arial"> 
+correct loading order.</font></span></p>
+
+<p><font face="Arial">The detection of a config establishes the prefix of the pbo 
+(but see comments re $pboprefx$.txt at end of document)</font></p>
+
+<p><u><b><font face="Arial">Crunch: </font></b></u></p>
+
+<blockquote>
+
+<p><font face="Arial">&nbsp;Should be obvious.</font></p>
+
+</blockquote>
+
+<p><u><b><font face="Arial">View Output </font></b></u></p>
+
+<p><font face="Arial">You can view the output with mild interest to see whether specific files are 
+being compressed eg, or rapified eg, or simply being excluded. At the end of the 
+day, EITHER, you get no errors, OR, you will get an error listed as 
+the last message on the console and an accompanying messageBox to warn you of 
+the failure.</font></p>
+
+<p><font face="Arial">bis binarize.exe has never been fixed by 
+Bis to return anything except good status.&nbsp; As a result, the packer can only assume everything is ok. 
+Fortunately, binarize does show a halt gui to warn you. (but is of no use for a 
+calling program or dos batch file)</font></p>
+
+<p><u><b><font face="Arial">View BinLog(s): </font></b></u></p>
+
+<blockquote>
+
+<p><font face="Arial"><span style="background-color: #FFFF00">&nbsp;This only applies 
+to p3ds wrps and rtms.</span></font></p>
+
+<p><font face="Arial">Similar to binPbo, a .log is .generated for each pbo it 
+binarises.</font></p>
+
+<p><font face="Arial" color="#00FF00">The location of these logs are in  </font><font face="Arial">
+<b>workspace</b></font><font face="Arial" color="#00FF00">\temp</font></p>
+
+<p><font face="Arial">As a convenience, individually processed pbo's can be 
+viewed here. The button cannot (obviously) view multiple pack logs and will 
+display the folder of logs instead</font></p>
+
+</blockquote>
+
+<p><u><font face="Arial">Options</font></u></p>
+
+<p><b><font face="Arial">Noisy Output: </font></b></p>
+
+<blockquote>
+
+<p><font face="Arial">Should only be used when you strike trouble to 
+locate <b>the</b>, offending error via <b>View Output. </b>It should not be used 
+for normal packing. The output content is enormous and consequently ties up a 
+lot of processing time.</font></p>
+
+</blockquote>
+
+<p><b><font face="Arial">Strip log: </font></b></p>
+
+  <blockquote>
+
+<p><font face="Arial">Since arrowhead, bi broke a great deal of binarize.exe and 
+it produces erroneous class conflicts and missing stringtables. This because 
+binarize no longer respects the cfgpatches class for load order. Perhaps a 
+necessary evil to speed processing up since it's only scanning for land classes, 
+each one of which is unique.</font></p>
+
+<p><font face="Arial">In additon, bis binarize produces a great deal of 
+(unimportant) st warnings.</font></p>
+
+<p><font face="Arial">The end result is that the .log is too noisy to find REAL 
+errors.</font></p>
+
+<p><font face="Arial">striplog removes this noise.</font></p>
+
+<p><b><font face="Arial">Striplog.bat: </font></b></p>
+
+    <blockquote>
+
+<p><font face="Arial">StripLog.bat is installed in mikero's pbotools folder.</font></p>
+
+<p><font face="Arial">You can tailor it to suit your needs by adding / removing 
+phrases that you don't/ do want appearing in the log. As suppled, it removes 99% 
+of noise.</font></p>
+
+    </blockquote>
+  </blockquote>
+
+<p><b><font face="Arial">Sign Pbos:</font></b></p>
+
+<blockquote>
+
+<p><font face="Arial">the pbo is signed after transfer to the mod folder.</font></p>
+
+<p><font face="Arial">in addition, the public key is placed in mod\keys for your 
+convenience in distribution</font></p>
+
+</blockquote>
+
+<p><b><font face="Arial">Full Build</font></b></p>
+
+<blockquote>
+
+<p><font face="Arial">Identical in intent to binPbo's clean temp. Essentially an 'all bets 
+are off, rebuild everything' check box. </font></p>
+
+<p><font face="Arial">Unlike binpbo some files are <b>always </b>rebuilt<b>.&nbsp;
+</b>You can safely do a full build, once, using this packer. And, faster-rebuild 
+steps for subsequent alterations. The packer is very aware of all nuances of tga 
+/ png files and the need to include them even when they aren't used by a p3d or 
+wrp. It is very sensitive to changes of source files that binpbo ignores.</font></p>
+
+</blockquote>
+
+<p><b>Compress:</b><font face="Arial"><b>see the MakePbo readme</b></font></p>
+
+<p>will compress specific file types in a pbo depending on context of the pbo (mission,addon,engine 
+type). Up to 50% reduction for map addons, 80% for missions and 10...30% for&nbsp; 
+standard p3d addons. </p>
+
+<p><font face="Arial"><b>Obfuscation: see the MakePbo readme.</b></font></p>
+
+<p><font color="#FF0000" face="Arial">be aware an obfuscated pbo cannot be extracted.</font></p>
+
+<p>&nbsp;</p>
+
+<p><b><font face="Arial">Mission Folder is?</font></b></p>
+
+<blockquote>
+
+<p><font face="Arial">pboProject cannot distinguish between SP and MP missions. 
+You need to tell it where to place the resulting pbo (if any) in the mod folder.</font></p>
+
+<p>&nbsp;</p>
+
+</blockquote>
+
+<p><u><b><font face="Arial">do not compress mission.sqm's</font></b></u></p>
+
+<p><font face="Arial">under some circumstances the bis engine cannot accept 
+binarised mission.sqms in <b>addons</b></font></p>
+
+<p><font face="Arial">binarised missions in mission.pbos have no problems. 
+binarised mission <b>addons </b>(one's with config.cpp) sometimes do.</font></p>
+
+<p><font face="Arial">use this option when you strike trouble.</font></p>
+
+<p>&nbsp;</p>
+
+<hr color="#000000" size="4">
+
+<p>&nbsp;</p>
+
+<p><u><b><font face="Arial" size="6">Setup...</font></b></u></p>
+
+<blockquote>
+
+<p><font face="Arial">sets less used parameters that aren't normally changed 
+between sessions such as location of your private bikey and which engine you're 
+compiling for.</font></p>
+
+</blockquote>
+
+<p><b><font face="Arial"><font size="4">Engine</font>:</font></b></p>
+<p><font face="Arial">Establishes the correct 'pbo' as required:</font></p>
+<ul>
+  <li><font face="Arial"><b>Arrowhead</b>: Produces arma files as generated by 
+  Personal Tools 2.5.1</font></li>
+  <li><font face="Arial"><b>Arma3</b>: produces arma 3 files as per steam tools.</font></li>
+  <li><font face="Arial"><b>Operation Flashpoint</b>: a different Rapifier and different file 
+referencing (almost as brain dead as the current method, but they had an excuse 
+  back then).</font></li>
+  <li><font face="Arial"><b>Xbox</b>:, a different checksum (and unicode output)</font></li>
+  <li><font face="Arial"><b>Ifa</b>: produces arma pbo's with ifa extensions.</font></li>
+  <li><font face="Arial"><b>vsblite: </b>produces xbo, pbo files with 
+  appropriate encryption</font></li>
+</ul>
+<p><font face="Arial"><b>Appid: </b>provided for dlc product entries. Unless you 
+are creating paid for dlc content, you should leave this field empty.</font></p>
+
+<p><b><font size="4" face="Arial">Workspace:</font></b></p>
+
+<p><font face="Arial">Normally set to P:\&nbsp; You can however set it to 
+\any\where.</font></p>
+
+<p><font face="Arial">Any\where becomes the start of 'what the engine sees'.</font></p>
+
+<p>&nbsp;</p>
+<p><font face="Arial"><u>Delete all temp files</u> <font color="#FF0000">drastic</font></font></p>
+<p>A last chance warning message is provided.</p>
+<p><font face="Arial">Bis heavily rely on the temp folder to contain all objects 
+and other assets that you use in your <i>current</i> project. They are not 
+necessarily built or related to the <i>current</i> project, but must be there.</font></p>
+<p><font face="Arial">Over time, this temp folder fills with either stale, 
+no-longer-used, data, or stuff that should have been rebuilt but hasn't been. 
+(by you)</font></p>
+<p><font face="Arial">This is an all-bets-are-off approach to ensure that you 
+are starting off with pristine objects and is an excellent way of pboProject 
+notifying you that some other pbo's have yet to be built, let alone, preventing 
+bis binarise getting oh-so-confused.</font></p>
+<p><font face="Arial">Note that unlike bis tools, pboProject does not allow you 
+to arbitrarily decide where this folder is. It is hard-wired, and the reason for 
+being so is that <b>ALL</b> projects, even the ones you made last year <b>MUST</b> 
+point to the one common temp. In the bis dev world (not your world) the temp 
+folder<b> is</b> the game engine.</font></p>
+<p><font face="Arial">The gui warns you that deleting everything out of here, 
+while beneficial, is a drastic step. No harm will come to your pc in doing so, 
+but caveat emptor.</font></p>
+<p><font face="Arial"><u>Delete all mod files</u> <font color="#FF0000">drastic</font></font></p>
+<p>A last chance warning message is provided.</p>
+<p><font face="Arial">There is no way of automatically deleting 'stale' pbo's. 
+One's that you know longer build or called them a different name. These stale 
+pbo's stick like glue in the mod folder (along with their bisign's) and mostly 
+cause un-explained grief when running the game because you forgot about them.</font></p>
+<p><font face="Arial">This is an all-bets-are-off approach, for you to start 
+again. No harm will come to your pc. But, caveat emptor.</font></p>
+<p>&nbsp;</p>
+<p><b><font face="Arial">use datestamps:</font></b></p>
+<p dir="ltr"><font face="Arial">set by default. This correctly records the date 
+stamp of every file packed into the pbo. There might be occasions where this 
+behaviour is undesirable. Such as two people building the same pbo with 
+identical files but different date stamps on their pc, or, an innocent edit of a 
+text file that, in fact, didn't change anything of substance (but being saved 
+again, it's date stamp changed). Use with caution, because you are violating the 
+standard extraction mechanisms. The files extracted will have been created on 
+1st January 1970. Caveat emptor.</font></p>
+<p dir="ltr"><b><font face="Arial">Rebuild cfgPatches:</font></b></p>
+<p><b><font face="Arial">cfgPatches </font></b>is used for two purposes.</p>
+
+<p>1) to declare which addon extern classes come from</p>
+
+<p>2) to ensure external file references actually have that addon loaded.</p>
+
+<p>The dll will rebuild required addons, based on foreign references it 
+discovers in your configs. eg files, that are not within this pbo.</p>
+
+<p>Unfortunately, badly constructed addons, can have circular references.</p>
+
+<p>addon A wants a texture from addon B<br>
+addon B wants an rvmat from addon A</p>
+
+<p>both, in theory, need to be loaded at same time to operate correctly.</p>
+
+<p>This feature is optional, where re-construction of your addons are too 
+difficult to fix the mess. But, you should pay attention to it.</p>
+
+<p>&nbsp;</p>
+
+<p><b><font face="Arial">Private Key :  AnyDrive:\any\where\YourTag</font></b><font face="Arial">.<b>biprivatekey</b></font></p>
+
+<blockquote>
+
+<p><font face="Arial">specify your biprivatekey if signing pbo's</font></p>
+
+<p><font face="Arial">you can create a personal key using the <b>createkey</b> button. 
+pboProject comes with it's own copy of dssignfile if none can be found.</font></p>
+
+<p><u><b><font face="Arial" size="4">Excluded files</font></b></u></p>
+
+<p><font face="Arial">To future proof pboproject (and indeed makepbo and the dll) 
+a default list of file exclusions is provided in setup.</font></p>
+
+<p><font face="Arial">In brief this option came about because of the increasing 
+use by Bis of hpp files to be included in a config.cpp, and, the need to account 
+for new file types (such as roadlibs.cfg and any more newly introduced files as 
+bis improve the product)</font></p>
+
+<p><font face="Arial">Normally hpp files have no meaning outside of a config.bin. 
+An unfortunate exception to this has occurred with community use of hpp to 
+contain sqX statements. (In hindsight the&nbsp; file(s) should have been called 
+sqH).</font></p>
+
+<p><font face="Arial">At time of writing, the default exclude is</font></p>
+
+<p><font FACE="Arial" SIZE="2">&nbsp;&nbsp;&nbsp; </font>
+<font FACE="Arial" SIZE="2" COLOR="#a31515">&quot;thumbs.db,*.txt,*.h,*.dep,*.cpp,*.bak,*.png,*.log,*.pew, 
+*.hpp&quot;</font></p>
+<p><font face="Arial" size="2" color="#A31515">and, ~source\ is never inspected</font></p>
+
+<p><font face="Arial">All other files will be passed thru and packed.</font></p>
+
+<p><font face="Arial">For community users that insist on using hpp for sqX, 
+simply remove hpp in the setup panel.</font></p>
+
+<p><i><font face="Arial">Note that the exclude list applies to ALL pbo's packed 
+during that session. Not just a single pbo</font></i></p>
+
+<p><font face="Arial">Some file types that are included in a pbo irrespective of 
+a default list:</font></p>
+
+<p><font face="Arial">roadlibs.cfg</font></p>
+
+<p><font face="Arial">config.cpp-&gt;config.bin</font></p>
+
+<p>&nbsp;</p>
+
+<p><u><b><font face="Arial">Excluded Compression</font></b></u></p>
+
+<p><font face="Arial">similar to exclude files in a pbo, excluded compression 
+provides the opportunity to over-ride the defaults that the dll will use when 
+compressing files in a pbo.</font></p>
+
+<p><font face="Arial">Ordinarily you should let the dll determine what is 
+appropriate (it has far greater knowledge than you of the various engine and pbo 
+types)</font></p>
+
+<p><font face="Arial">The default list is more a case of not bothering to try 
+and compress, already compressed, file types such as paa, jpg and sounds. This 
+speeds the process of building a pbo.</font></p>
+
+<p><font face="Arial">Special circumstances currently exist for paX files, they 
+should not be compressed for addons, while use in missions is 'ok'.</font></p>
+
+<p><font face="Arial">Similarly, sqX files might encounter issues if compressed 
+in missions. The dll will never compress init.sqs and init.sqf, no matter what.</font></p>
+
+<p><font face="Arial">This facility is provided solely for your experimentation.</font></p>
+
+<p>&nbsp;</p>
+
+<hr>
+
+<p>&nbsp;</p>
+
+</blockquote>
+
+<p><b><font face="Arial" size="4"><span style="background-color: #00FF00">Addon folders:&nbsp; Island builds only</span></font></b></p>
+
+<p><b><font face="Arial" size="4"><span style="background-color: #00FF00">Addon folders:&nbsp; 
+Manual Build Only</span></font></b></p>
+
+<p><font face="Arial"><b>Read this again.  </b>
+<span style="background-color: #FF0000">This section ONLY applies to <b>Manual</b> Island 
+builds</span>.&nbsp;</font></p>
+
+<p><font face="Arial">By default, PboProject will automatically discover the needed path settings. 
+<span style="background-color: #FFFF00">The following section applies if you prefer to hand-tweak and over-ride pboProject's scanner.</span></font></p>
+
+<p><b><font face="Arial">&lt;workspace&gt;\any\where\paths-to-configs;more\configs;more\configs;</font></b></p>
+
+<ul>
+  <li><font face="Arial"><span style="background-color: #FFFF00">The packer <b>only</b> 
+use this for wrp creation. Ignoring it for all other pack types which dramatically 
+increases throughput.</span></font></li>
+  <li><font face="Arial">The packer ignores Source\*.*</font></li>
+  <li><span style="background-color: #FFFF00"><font face="Arial">There is no 
+requirement to copy configs into your project area (which was, frankly, 
+ridiculous).</font></span></li>
+</ul>
+
+<p><font face="Arial"><b>When creating island wrps,</b> bis binarize needs to locate 
+the land_p3d class for each p3d encountered in the wrp (if any). This to enable 
+animations (such as doors) to happen IN an island. (identical editor placed 
+objects ON and island behave differently).</font></p>
+
+<p><font face="Arial">Binarize locates the land_p3d class by scanning configs. It is your responsibility to provide (a series of) 
+extracted addons that contain configs that contain p3d references for objects 
+<b>you</b> use on <b>your</b> island.&nbsp; Hardly a difficult task, since in 
+order to add objects to islands you've already extracted those folders!</font></p>
+
+<p><font face="Arial">pboProject simply synchronises the &quot;workspace&quot; you're already 
+using in an understandable manner.</font></p>
+
+<p><font face="Arial">The config can be a config.bin or a config.cpp</font></p>
+
+<p><font face="Arial">The default addon is <b>workspace</b>\ca which, by inference contains <b>
+all</b> addons in the official bis pbos. Much the same could be said for <b>
+workspace</b>\a3 
+if you are building islands for Arma3. Neither are relevant to <b>your</b> island if none of 
+your island objects derive from ca (or a3) p3d's !!!</font></p>
+
+<p><font face="Arial">What <b>will</b> be relevant is a comma separated list of paths to 
+all addon(s) used on <b>your</b> island.</font></p>
+
+<p><font face="Arial">EG: If you're using some 
+<span style="background-color: #00FF00">custom buildings </span>on your terrain, 
+and they, <b>and their config,</b> are located in <b>workspace\MyTag\CustomStuff</b>, 
+then you'd ADD that folder to the &quot;Addon Folder(s)&quot; list simply by clicking the 
+Addon Folder(s) button and navigating to the required location.</font></p>
+
+<p><font face="Arial">This will ensure your 
+<span style="background-color: #00FF00">custom building classes</span> are located 
+and any animations, etc your buildings may have will be properly implemented.</font></p>
+
+<p><font face="Arial">You can add as many 'addons' as required. Note that the 
+more precise the list, the less time is spent by binarize.exe in scanning.</font></p>
+
+<p><b><font face="Arial">Arma3 Island Builds.</font></b></p>
+
+<p><font face="Arial">To build Arma3 island builds successfully, and to get 
+round the infamous no-icon error, bis binarise.exe requires that <b>ALL</b> 
+p3'ds used on your island are:</font></p>
+
+<ol>
+  <li><font face="Arial">binarised</font></li>
+  <li><font face="Arial">located in the temp folder</font></li>
+</ol>
+
+<p><font face="Arial">This has nothing to do with the base requirement that <b>
+ALL</b> p3d's are&nbsp; in their correct locations in <b>workspace</b>. 
+Duplicates of those files must also, be in the temp folder.<b> Do not blame me!</b></font></p>
+
+<p><font face="Arial">pboProject scans the temp folder to ensure that this is 
+the case and tries to avoid having severe bloat in the temp folder of duplicated 
+and un-necessary copies of the same p3d if you aren't using them.</font></p>
+
+<ol>
+  <li><font face="Arial">whether binarised or not, the p3d must exist in the 
+  &lt;engine space&gt;. If not, do something about it.</font></li>
+  <li><font face="Arial"><b>un</b>binarised models used on your islands are 
+  inspected for staleness. If they are later file dates than the binarised 
+  equivalents found in temp,&nbsp; (or they aren't found in temp!) pboProject 
+  insists that you (re) build them first.</font></li>
+  <li><font face="Arial">any binarised objects, such as those derived from arma3 
+  itself, or any other extracted addon, and even those you have pre-binarised in 
+  your project folder,&nbsp; are silently copied to temp in the correct 
+  location. A file date check is used to ensure you are using the latest copy.</font></li>
+</ol>
+
+<hr>
+
+<p><b><font face="Arial">Clear</font></b></p>
+
+  <blockquote>
+
+<p><font face="Arial">Allows you to rebuild the comma separate list of paths&nbsp; to 
+scan. </font></p>
+
+  </blockquote>
+
+<p><b><font face="Arial">MOD.CPP</font></b></p>
+
+<p><font face="Arial">mod.cpp is a file placed directly in the root of your 
+@mods folder. It provides various displayable elements about you and your mod in 
+the game engine.</font></p>
+
+<p><font face="Arial">the panel should be fairly self explanatory.</font></p>
+
+<p>&nbsp;</p>
+
+<p><b><font size="5" face="Arial">When things go bang.</font></b></p>
+
+<p><font face="Arial">Use the View Output button.</font></p>
+
+<p><font face="Arial">Simply select the noisy option and reprocess. The exact 
+cause of the problem and it's location in a file is pretty verbose.</font></p>
+
+<p><font face="Arial"><b>technical notes</b></font></p>
+
+<p><font face="Arial">the packer is hard-wired to use <b>workspace</b>\temp to store files for 
+bis binarise</font></p>
+
+<p><font face="Arial">The 'temp' folder behaves in identical manner to binPbo. 
+It is a place to store intermediate files for packing.</font></p>
+
+<p><font face="Arial"><span style="background-color: #FFFF00">The temp folder is 
+only used if bis binarize.exe is invoked and pboProject tries to avoid doing so.</span></font></p>
+
+<p><u><b>Source Folders:</b></u></p>
+
+<p>pboProject will force bis binarise to ignore a source folder in the current 
+pbo being built.</p>
+
+<p>It does so by temporarily moving that folder to p:/(dot)source</p>
+
+<p>For this mechanism to work, only one source folder can exist per pbo. Note 
+this distinction, only one source folder, regardless of the amount of addons in 
+that pbo.</p>
+
+<p>When building multiple pbo's you can of course have source folders in each 
+one of them.</p>
+
+<p>As a protection mechanism, if a p:/(dot)source folder already exists 
+pboProject will not continue until you do something about it.</p>
+
+<p>This 'protection' is there in the unlikely event that pboProject was unable 
+to move the folder back to it's original location.</p>
+
+<p>&nbsp;</p>
+
+<p><font face="Arial" size="5"><b>Using $PBOPREFIX$.txt : Optional</b></font></p>
+
+<p><font face="Arial">Bis have made increasing use of var=something in the 
+header of pbo's to expand the meaning of that pbo. These strings are called 
+token pairs. (bis binarize calls them -properties)</font></p>
+
+<p><font face="Arial">Such examples are</font></p>
+
+<blockquote>
+
+<p><font face="Arial">prefix=my\folder\some\where</font></p>
+
+<p><font face="Arial">product=ifa&nbsp; // a pbo intended only for ifa engines</font></p>
+
+<p><font face="Arial">product=a3 // ditto</font></p>
+
+<p><font face="Arial">svn= 1567 //&nbsp; a vbs2lite encryption key</font></p>
+
+<p><font face="Arial">version=21;</font></p>
+
+<p><font face="Arial">author=somebody</font></p>
+
+</blockquote>
+
+<p><font face="Arial">These token pairs are as numerous (and as long) as a piece 
+of string. There is no limit to their quantity. Anything not understood / not 
+looked for, in the header is ignored by the various engines. Most token pairs 
+even if understood are optional (even prefix=)</font></p>
+
+<p><font face="Arial">$PBOPREFIX$.txt<b> if present</b> in the same folder as 
+the root config.cpp (eg the root folder of the intended pbo) is examined for 
+token pairs</font></p>
+
+<p><font face="Arial">such pairs are inserted into the header of the pbo.</font></p>
+
+<p><font face="Arial">This mechanism works via the dll and is unconditional. It 
+is not dependent on bis binarize or any other tool.</font></p>
+
+<p><font face="Arial">&nbsp;If you place (or leave after extraction) a 
+prefix.txt in the folder, it's contents will be reflected into the new pbo.</font></p>
+
+<p><font face="Arial">Thus, if you were making a pbo intended solely for arma3, 
+you would state</font></p>
+
+<ul>
+  <li><font face="Arial">product=a3</font></li>
+</ul>
+
+<p><font face="Arial">you could just as easily state</font></p>
+
+<ul>
+  <li><font face="Arial">Author= I am famous</font></li>
+</ul>
+
+<p><font face="Arial">It is quite legal to have multiple $prefixes$ in child 
+subfolders (with attendant configs). They are ignored.</font></p>
+
+<p><font face="Arial">They are used at the time you choose to issue only a pbo 
+of that subfolder. It is the subject of pbo patching and outside the scope of 
+this document.</font></p>
+
+<p>&nbsp;</p>
+
+<p><u><b><font face="Arial">Historical $PBOPREFIX$</font></b></u></p>
+
+<p><font face="Arial">$PBOPREFIX$.txt is an alias for any of the following file 
+names</font></p>
+
+<ul>
+  <li><font face="Arial">$PBOPREFIX$</font></li>
+  <li><font face="Arial">$PBOPREFIX$.txt</font></li>
+  <li><font face="Arial">pboPrefix.txt</font></li>
+</ul>
+
+<p><font face="Arial">The reasons for the different names are a progression from 
+the early dayz of xbox elite to the present time. The dll recognises any of them 
+as being valid.</font></p>
+
+<p><u><b><font face="Arial" size="5">Rtm Skeletons</font></b></u></p>
+
+<p><font face="Arial"><b>All</b> animation.rtm's can be binarised (for engines 
+arrowhead and beyond). BinPbo can only binarise ofp2_manskeleton. This packer 
+does better.</font></p>
+
+<p><font face="Arial">pboPacker examines the rtm for the 'correct' skeleton to 
+use. By default, this is <b>ofp2_manskeleton</b>.</font></p>
+
+<p><font face="Arial">For all other skeletons pboPacker reads the model.cfg of
+<b>this</b> pbo and uses the last (or only) class cfgskeletons entry.</font></p>
+
+<p><font face="Arial">example:</font></p>
+
+<p><font face="Arial">//model.cfg in <b>this</b> pbo folder</font></p>
+
+<p><font face="Arial">class CfgSkeletons<br>
+{<br>
+&nbsp; class Default;</font></p>
+
+<p><font face="Arial">&nbsp; .........</font></p>
+
+<p><font face="Arial"><br>
+&nbsp;class <span style="background-color: #00FF00">BridgeSkel</span> : Default<br>
+&nbsp;{<br>
+&nbsp;&nbsp; skeletonInherit = &quot;Default&quot;;<br>
+&nbsp; skeletonBones[] =<br>
+&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp; &quot;1&quot;,&quot;&quot;,&nbsp; //components that will animate on 
+destruction<br>
+&nbsp;&nbsp;&nbsp; &quot;2&quot;,&quot;&quot;,<br>
+&nbsp;&nbsp;&nbsp; &quot;3&quot;,&quot;&quot;,<br>
+&nbsp;&nbsp;&nbsp; &quot;4&quot;,&quot;&quot;<br>
+&nbsp; };<br>
+&nbsp;};<br>
+};</font></p>
+
+<p><font face="Arial">For whatever reason the packer cannot binarise the rtm, there is 
+no ill effect, the rtm simply appears in the pbo as a plain jane.</font></p>
+
+<p><font face="Arial">For this mechanism to work&nbsp; the following rules 
+apply:</font></p>
+
+<ul>
+  <li><font face="Arial">Only rtms containing a common skeleton can be binarised in 
+  <b>this</b> pbo. You can have any number of p3ds and any nubner of skeleton 
+  classes pertaining to those p3d's in the model.cfg for this pbo, but the <b>last</b> 
+  skeleton class must pertain to this pbo's collection of rtms (and potentially 
+  p3d's as well)..</font></li>
+  <li><font face="Arial">The first model.cfg encountered in a reverse traverse 
+  is the model.cfg used by pboProject to binarise rtm's</font></li>
+  <li><font face="Arial">A reverse traverse occurs in identical manner to bis. 
+  There need not be a model.cfg in the pbo folder, but one just behind it, or 
+  just behind that, and etc.</font></li>
+</ul>
+
+<p><font face="Arial">Reading the above rules, it should be obvious that you 
+can't have soldier.p3d's and bridge.p3d's in the same pbo.</font></p>
+
+<p><font face="Arial">As a general rule, there is no issue here, since, in 
+general, a pbo contains nothing but one or several variations of the same tank, 
+bridge, building or spotted giraffe.</font></p>
+
+<hr>
+
+<p><font face="Arial">Enjoy</font></p>
+
+<p><font face="Arial">Mike Andrew, Norfolk Island, Oct 2013</font></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+</body>
+
+</html>

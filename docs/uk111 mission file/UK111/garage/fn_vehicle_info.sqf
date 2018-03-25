@@ -1,0 +1,10 @@
+if (!hasInterface || isServer) exitWith {};
+private ["_control", "_index", "_vehicle", "_class"];
+disableSerialization;
+_control = _this select 0;
+_index = _this select 1;
+_vehicle = StoreVehicleList select _index;
+_class = _control lbData _index;
+((findDisplay 3800) displayCtrl 3803) ctrlSetStructuredText parseText "All gear from vehicle is wiped when stored!";
+ctrlShow [3803,true];
+ctrlShow [3830,true];

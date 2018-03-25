@@ -1,0 +1,256 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-au">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>well here we are</title>
+</head>
+
+<body>
+
+<p><font face="Arial">MoveFolder Version 1.xx by Mikero<br>
+<br>
+see readMeGeneral and&nbsp; fixes<br>
+&nbsp;</font></p>
+<hr>
+<font face="Arial"><i><b>MoveFolder</b></i> is the successor to SetP3d which was written in 02script and quite difficult to 
+maintain.</font><p><font face="Arial">The <b><i>intent</i> </b>of<b> </b> <i><b>MoveFolder</b></i> 
+is to move some, or all of the content of a pbo or series of pbos, to another 
+one. </font></p>
+<blockquote>
+  <p><font face="Arial">Because of BI's astonishing inability to use relative 
+  addressing, p3d's must reference the pbo they are in to get at their own data. 
+  Ditto, rvmats, ditto sqx, ditto configs. If you move anything to another pbo 
+  (folder), the items within that folder need their addressing revised. Insane, 
+  but there you go.</font></p>
+</blockquote>
+<p><font face="Arial"> <i><b>MoveFolder</b></i>&nbsp; allows any combination p3d's, 
+wrps, rvmats, bisurfs and configs and <b>all</b> their associated data to be transferred&nbsp; to a different pbo. 
+It does so by renaming (and copying) all appropriate file references encountered in these 
+files to the new prefix. <b> <i>MoveFolder</i></b> <b>only</b> alters 
+items in the target folder, all other files are unaffected.</font></p>
+<p><font face="Arial"><b>MoveFolder</b> can be terrifying to the un-initiated. 
+The sheer volume of changes it makes to files can be staggering, and can take a 
+long time to complete. The two things to bear in mind are:</font></p>
+<ul>
+  <li><font face="Arial">No matter what it does, no matter how gigantic (or 
+  trivial) the changes made:
+  <span style="font-weight: 700; background-color: #00FF00">movefolder does not 
+  touch or alter existing source(s). </span></font></li>
+  <li><font face="Arial"><span style="font-weight: 700">you</span> no longer 
+  have to do&nbsp; these changes by hand with the attendant mistakes and hours 
+  of your time trying to.</font></li>
+</ul>
+<p><font face="Arial"><i><b>MoveFolder</b></i> has two distinct 
+modes of operation: </font></p>
+<ul>
+  <li><font face="Arial">standard p3d alteration, or, </font></li>
+  <li><font face="Arial">using a config.cpp/bin</font></li>
+</ul>
+<p><font face="Arial">The need for this application are many but prime examples 
+would be:</font></p>
+<ul>
+  <li><font face="Arial">Merging multiple pbo's into a single pbo.</font></li>
+  <li><font face="Arial">splitting a big pbo into smaller ones.</font></li>
+  <li><font face="Arial">retrieving only those p3ds of relevance from arma1,dayz 
+  or ifa to a different engine</font></li>
+</ul>
+<p><font face="Arial"><i><b>MoveFolder</b></i> works with <b>any</b> mixture of plain jane 
+or binarised file formats of <b>any</b> file version.</font></p>
+<p><font face="Arial"><i><b>MoveFolder</b></i> is not intended for use with 
+missions. your mileage will vary. For islands see end of document.</font></p>
+<hr>
+<p><font face="Arial"><b>Installation:</b></font></p>
+<p><font face="Arial"><i><b><span style="background-color: #00FF00">MoveFolder</span></b></i><span style="background-color: #00FF00"> uses the venerable MoveObject.exe as it's 
+core. you must <b>also</b> have a copy of moveobject.exe installed</span></font></p>
+<p><font face="Arial"><i><b>MoveFolder</b></i> comes with an auto-installer. This ensures 
+it is part of mikero's pbo tools suite. Many of the tools interact with each 
+other. MoveFolder is no exception.</font></p>
+<p><font face="Arial">If you choose to install it manually, you clearly know 
+what you're doing.</font></p>
+<hr>
+<p><b><font face="Arial">How to:</font></b></p>
+<p><font face="Arial">All operations require a 'Pdrive'. <i><b>MoveFolder</b></i> 
+infers the drive from the folder-to-make. It is normally P:\. If you specify 
+C:\&quot;my documents\some\where&quot;, you also believe in Santa Klaus.</font></p>
+<p><u><font face="Arial">Method 1: p3d's only</font></u></p>
+<ol>
+  <li><font face="Arial">simply create a new folder in 'Pdrive':\any\where. This folder 
+  is, ultimately, your new pbo.</font></li>
+  <li><font face="Arial">drop any number of p3d's, and only p3d's,&nbsp; into that folder. 
+   
+  </font></li>
+  <li><font face="Arial">use the gui to browse to this <b>destination</b></font></li>
+  <li><font face="Arial">crunch.</font></li>
+</ol>
+<p><font face="Arial">Assuming all references in those p3d's point to valid files elsewhere on the 
+'pdrive', <i><b>MoveFolder</b></i> will build a corresponding data\ folder accordingly. 
+<i><b>MoveFolder</b></i> recursively scans this folder as rvmats or proxies are being added, 
+checking them in turn for their own external references, and so on.</font></p>
+<p><font face="Arial">If&nbsp; a p3d does not have valid references. eg my\great\addon\data\sexy.paa 
+does not exist. then you, not <i><b>MoveFolder</b></i> , has a problem. You can hardly expect 
+it to copy phantoms.</font></p>
+<p><font face="Arial">You can subsequently add to this folder, other p3d's. 
+<i><b>MoveFolder</b></i> will account for them. The already done, p3d's (and rvmats) are not 
+affected.</font></p>
+<p><font face="Arial">You can then add or create config. sounds or scripts or 
+anything else into this folder. Should you subsequently use MoveFolder again 
+(because you need yet another p3d) it has no effect on what's there already 
+including your added scripts (eg).</font></p>
+<p><u><font face="Arial">Method2:: config only</font></u></p>
+<p><font face="Arial">1) browse to the <b>source </b>folder containing <b>the</b> config of interest  </font></p>
+<p><font face="Arial">2) browse to a newly created <b>empty</b> destination folder or use the 
+browse facility to create one.</font></p>
+<p><font face="Arial">3) crunch</font></p>
+<p><i><font face="Arial">A sanity check is made for method 2 that the 
+destination folder is empty. There is no particular reason for this other than 
+to prevent you inadvertently destroying some\thing you didn't intend.</font></i></p>
+<hr>
+<p><b><font face="Arial">Nitty Gritty</font></b></p>
+  <p><font face="Arial"><b>source:  </b>The source config.cpp or bin.<u> It's location does 
+  not have any bearing on the location of the files it refers to.</u></font></p>
+  <p><font face="Arial"><b>destination:</b> The new folder where you want these items 
+  to be built. this folder subsequently becomes a pbo in it's own right.</font></p>
+<p><b><font face="Arial">gui options:</font></b></p>
+<ul>
+  <li><font face="Arial">Move CA/A3</font><p><font face="Arial">Off by default. 
+  if you want future proofing against the engine check this option to copy all 
+  relevant files into this new space. This makes the p3d truly independent.</font></p>
+  <p>&nbsp;</li>
+  <li><font face="Arial">Move CA/A3 Proxies (relevant only if moving ca/a3 in 
+  general)</font></li>
+</ul>
+<blockquote>
+  <p><font face="Arial">Off by default. Any proxies p3d's used&nbsp; are placed 
+  in this folder too. It is 'standard practice' for building furniture eg to be 
+  in a separate pbo.</font></p>
+  <p><font face="Arial">set this option if you want to copy that furniture too.</font></p>
+  </blockquote>
+  <ul>
+    <li><font face="Arial">move other proxies</font></li>
+  </ul>
+  <blockquote>
+  <p><font face="Arial">Independently you can choose to move proxies from other 
+  areas, in addition to ca/a3, or not ca/a3 at all</font></p>
+  <p><font face="Arial">The reason for this independence is you may wish to 
+  preserve your p3ds already in the target folder that are referencing proxies 
+  other than ca, and at the same time start moving in ca proxies.</font></p>
+</blockquote>
+<ul>
+  <li dir="ltr">
+  <p dir="ltr"><font face="Arial">Keep replacement list<br>
+  <br>
+  for tracing purposes when things don't go as you expect. the list of files to 
+  be swapped round is left in the destination folder. It is not a good idea to 
+  keep this buttn active as the replacement list may end up in to pbo for no 
+  useful purpose.</font></p>
+  </li>
+  <li dir="ltr">
+  <p dir="ltr">&nbsp;</p>
+  </li>
+  <li><font face="Arial">Pause output</font></li>
+</ul>
+<blockquote>
+  <p><font face="Arial">show the results of moveobject's renaming operations, 
+  rather than briefly flash the screen.</font></p>
+  <hr>
+</blockquote>
+<p><b><font face="Arial">Architecture</font></b></p>
+<p><font face="Arial"><i><b>MoveFolder</b></i> provides the following tree architecture</font></p>
+<p><font face="Arial">Pdrive:\Any\Prefix\FolderOfP3d(s)</font></p>
+<ul>
+  <li><font face="Arial">&nbsp;'FolderOfP3ds' becomes the new pbo</font></li>
+  <li><font face="Arial">Any\Prefix is  your project and tag name</font></li>
+</ul>
+<p><font face="Arial">all p3d's must be in this root folder.  </font></p>
+<p><font face="Arial">all sounds will be written to ~Sounds\</font></p>
+<p><font face="Arial">all rtm's will be written to ~Anims\</font></p>
+<p><font face="Arial">all sqx will be written to ~Scripts\</font></p>
+<p><font face="Arial">all textures and materials will be written to ~data\</font></p>
+<p><font face="Arial">.</font></p>
+<ul>
+  <li><font face="Arial">texture rules</font></li>
+</ul>
+
+<p><font face="Arial"><i><b>MoveFolder</b></i> considers pax, png or tga to be equivalent. it copies whichever of 
+these files is found with the latest file date for unbinarised p3d's and copies 
+only a pax for binarised.</font></p>
+
+<hr>
+
+<p><u><b><font face="Arial" size="5">config.cpp and bin</font></b></u></p>
+<p><font face="Arial">Creating new pbo's from just p3d content is not normally sufficient. configs 
+which handle those p3d's normally have additional damage rvmats, picture= and 
+icon= specifiers, along with sounds rtms and scripts. While these additional files are 
+often only related to the p3d, there is nothing in the p3d that utilises them. 
+Hence they wont be detected for transfer.</font></p>
+<p><font face="Arial">MoveFolder will create the necessary contents of a pbo 
+folder simply by examining a config.cpp or config.bin sourced from some other 
+folder.</font></p>
+<p><font face="Arial">For this mode of operation, all that is required is the config. (not p3d's)</font></p>
+<p><font face="Arial">Any and all file references detected in the config are 
+copied over and massaged (with the usual options applying of 'move ca/a3' and 
+'move proxies'). This includes p3d's.</font></p>
+<p><font face="Arial">be aware that the end result is a NEW config.cpp in the target folder.</font></p>
+<p><b><font face="Arial">Independent config&nbsp; pbo</font></b></p>
+<p><font face="Arial">it is common practice for designers to separate their 
+pbo's into ones containing p3ds and data, and one containing a config only, for 
+those models.</font></p>
+<p><font face="Arial">the produced config.cpp can be transferred to any pbo the 
+designer wishes. it is NOT prefix sensitive.</font></p>
+<hr>
+<p><b><font face="Arial">model.cfg via config.cpp</font></b></p>
+<p><font face="Arial">For unbinarised p3d's MoveFolder checks for the existence 
+of a 'model.cfg' or a 'nameofmodel.cfg' in the same folder as the p3d</font></p>
+<p><font face="Arial">if present,it copies it to the root of the target folder.</font></p>
+<p><font face="Arial">there is a possibility of failure where two or more 
+model.cfg's exist emanating from different p3d source folders</font></p>
+<p>&nbsp;</p>
+<hr>
+<p>identical file names from sources</p>
+<p>where a filename conflicts with the same name but from a diffferent source 
+folder. example</p>
+<p>ca\data\default.rvmat</p>
+<p>ca\any\where\else\default.rvmat</p>
+<p>a check is made for indentical content. If the same. the first file 
+encountered is used as a substitute for the others.</p>
+<p>where files are not identical they are labelled</p>
+<p><b>cpy_</b>&lt;filename.ext&gt;</p>
+<p>eg</p>
+<p><b>cpy_</b>default.rvmat</p>
+<p>This process is iterative.Where three files eg are from different sources, 
+the results would be</p>
+<p>default.rvmat</p>
+<p><b>cpy_</b>default.rvmat</p>
+<p><b>cpy_cpy_</b>default.rvmat</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<hr>
+<p><b>Islands</b></p>
+<p>There is currently modest support for moving islands.</p>
+<p>MoveFolder behaves slightly different for islands in that it assume you want 
+to move the island and it's textures but NOT the p3d objects associated with it.</p>
+<p>For this reason, p3d's are ignored when a wrp is detected</p>
+<p>The only other difference is that textures and rvmats go into a ~layers\ 
+folder. (pictures and icons described in a config.cpp still go into ~data\</p>
+<p>&nbsp;</p>
+<p>CLEAN</p>
+<p>clean is the most powerful of all the abilities. The intent is to remove 
+unused crud from the data folder. As a natural progression to developing your 
+models you probably choose to use different textures, different paa's. Another 
+cause is when you delete a p3d as no longer needed. Clean, will discover that 
+it's paa's aren't being used by anything else, and remove them,</p>
+<p>note that clean cannot account for paa's (or rvmats) you might only be using 
+in the config.cpp.</p>
+
+<p>for this reason, a backup folder is created of the original data. it is your 
+responsibiltiy, when satisified, to remove it.</p>
+
+<p>&nbsp;</p>
+
+</body>
+
+</html>

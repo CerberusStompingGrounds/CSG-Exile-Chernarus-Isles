@@ -1,0 +1,14 @@
+cutText ["","BLACK IN",20];
+[100] call BIS_fnc_bloodEffect;
+_layer = "BIS_fnc_respawnCounter" call bis_fnc_rscLayer;
+_layer cutText ["", "plain"];
+[ExileClientBleedOutThread] call ExileClient_system_thread_removeTask;
+ExileClientBleedOutThread = -1;
+player setVariable["revivePermitted",false,true];
+false call ExileClient_gui_postProcessing_toggleDialogBackgroundBlur;
+true call ExileClient_gui_hud_toggle;
+["endBambiStateRequest"] call ExileClient_system_network_send;
+[ExileClientEndBambiStateThread] call ExileClient_system_thread_removeTask;
+ExileClientPlayerIsBambi = false;
+false call ExileClient_gui_hud_toggleBambiIcon;
+player setVariable["reviveAntiDupe",1,true];

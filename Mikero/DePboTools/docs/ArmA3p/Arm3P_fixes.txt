@@ -1,0 +1,92 @@
+version  
+1.29
+dta files
+	copied all dta bin files to p:\dta
+	converted all dta\bin files to rap if they are rap (future proofing bis)
+
+now let's you choose which drive to extract to (other than a,b,c or d)
+
+if the drive doesn't exist, it will let you create one, or simply re-assign what you forgot to do
+
+
+1.28
+removed deroad.exe as unsupported
+
+1.27
+extracts marksman PBOS
+no longer extracts any dubbing pbos
+1.26
+put proper warning message at end of all tasks that p:\buldozer.exe has been removed
+1.25
+now adds BINARISED roads to p:\temp
+
+p:\buldozer is no longer supported.
+the amount of support dlls's for this has become ridiculous
+
+you need to change TB / OB settings to point to steams\arma3.exe
+
+rem 1.24 marksman dlc sounds from alwarren
+rem 1.23 debinarises roads
+rem 1.22 marksman dlc
+
+rem 1.21 kart subfolder
+1.20 added curator
+1.19
+corrected recovery of dubbing_radio_data.pbo
+gave more verbose msgs for 'access denied' and other errors
+1.18
+put an intensely annoying error message to stop users ignoring faults and
+subsequently plastering forums with why wont t.b work etc etc etc
+half of them never even NOTICED there was an error. the other half ignored it!
+
+1.17
+added karts and curator to extraction list
+
+1.16
+if registry can't be found, set locations in concrete
+
+1.15
+both hklm and hkcu accounted for
+1.14
+removed extraction of dubbing_f
+1.13
+moves product bin and etc to p:\dta
+now checks that registry keys exist for mikero tools
+
+1.12
+changed to case insensitive search for texheaders.bin
+
+1.11
+created self installe version
+added prompt to check user really wants to scribble over P:
+amended some bat pipes to account for win8 uac permissions
+prevented erroneous texheaders.bin from being written to p:
+
+1.8
+changed xcopy to copy command to prevent prompt message
+
+1.7
+WARNING
+now installs all a3 dta folders in dta directly. this will overwrite arma2 equivalents (p:\ca is not affected)
+
+installed buldozer and it's dlls'as per http://ohplz.ca/tuts/00/index.html
+
+
+
+
+1.6 head (skype-sweden) removed erroneous missing reg key messages
+
+1.5 fixed secondary scan looking for steam's x86 folder
+
+1.4
+uses steam folder regkey if all else fails to locate arma3.exe
+now accounts for texheaders.bin in the dta folder
+
+1.3
+added autosearch for steam registry, bis no longer set their own path it seems
+added pause after an error find so that you can click on this beasty from a windows gui
+
+1.2
+
+added missing errorchecks that extractions failed
+

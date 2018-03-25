@@ -1,0 +1,202 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-au">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>well here we are</title>
+</head>
+
+<body>
+
+<p><font face="Arial">Dos Console mode (non gui) operation.</font></p>
+<p><font face="Arial">Similar to all other Mikero Dos tools pboProject will 
+operate in dos mode command line when parameters are specified.</font></p>
+<p><font face="Arial">Like all Mikero dos tools, options are CasEinSenSitive and 
+follow expected conventions.</font></p>
+<hr>
+<p><font face="Arial">In it's simplest form:</font></p>
+<p><font face="Arial">&nbsp;&nbsp;&nbsp; pboProject.exe&nbsp; SourceFolder</font></p>
+<p><font face="Arial">will use the existing parameters previously set up in the 
+Gui in a separate session (such as workspace, and other options), to create the 
+relevant pbo(s).</font></p>
+<ul>
+  <li><font face="Arial">It is equivalent to being in the gui in the first 
+  instance, selecting a source folder, followed by a Crunch. The difference 
+  being the gui is not displayed.</font></li>
+</ul>
+<p><b><font face="Arial">For batch mode operation use the -P option</font></b></p>
+<ul>
+  <li><font face="Arial">pboProject.exe&nbsp; -P SourceFolder</font></li>
+</ul>
+<p><font face="Arial">In this mode, control is returned (after processing) to 
+the underlying batch file with good, or bad, status as appropriate. pboProject 
+is closed.</font></p>
+<p><u><font face="Arial">It is highly recommended that you initially set up the 
+parameters you want in the gui and use the above simple syntax.</font></u></p>
+<p>Note that you can get genuine bad status but no error displayed because the 
+temporary dos console has been closed. You can fix this by NOT using the -Pause 
+option to discover the source of the error.</p>
+<p><font face="Arial" size="5">Nitty Gritty options</font></p>
+<p><b><font face="Arial">The default for all options (other than -P) is the 
+previously stored values during a gui session of pboProject</font></b></p>
+<p><font face="Arial"><b>Syntax: </b>(baccus naur format)</font></p>
+<p><font face="Arial">pboProject&nbsp; [+/-options...] SourceFolder [+/-moreOptions....]</font></p>
+<p><font face="Arial">Options (and the sourcefolder) may appear in any order or 
+sequence on the command line. The intent is to allow intuitive use by the user, 
+or to assist in easy scripting for a batch file.</font></p>
+<p><font face="Arial">The source folder is mandatory. It must be part of the 
+workspace</font></p>
+<p><font face="Arial">Both + and - are option indicators. The meaning is context 
+sensitive. Thus:</font></p>
+<ul>
+  <li><font face="Arial">+Clean means set the gui's full build option (clean 
+  temp).</font></li>
+  <li><font face="Arial">-Clean means clear the gui's full build.</font></li>
+  <li><font face="Arial">No Clean option means use whatever is currently set.</font></li>
+</ul>
+<p><font face="Arial">Option= accept either as being equivalent. (+W= or -W=)</font></p>
+<p><font face="Arial">All options are optional.</font></p>
+<p><font face="Arial">Quotes are required for spaced file names</font></p>
+<p><font face="Arial">Most options can be specified in short or long form. 
+example:</font></p>
+<blockquote>
+  <p><font face="Arial">-Workspace=&quot;\some\folder\some\where&quot;</font></p>
+  <p><font face="Arial">-W=&quot;\some\folder\some\where&quot;</font></p>
+  <p><font face="Arial">For brevity in the below text, short and long form are 
+  specified below as</font></p>
+  <p><font face="Arial">-<b>W</b>orkspace=[&quot;]some\where[&quot;]</font></p>
+</blockquote>
+<p><font face="Arial">The '=' character can be separated from its tokens with 
+white space if desired.</font></p>
+<p><font face="Arial">option=whatever must be separated from further options by 
+a comma separator or white space</font></p>
+<p><font face="Arial">Example:</font></p>
+<p><font face="Arial">-W=&quot;some\where&quot;,Mod=&quot;\some\where\else&quot;&nbsp;&nbsp; more 
+options...</font></p>
+<p><font face="Arial">alternative syntax:</font></p>
+<p><font face="Arial">-w=&quot;some\where&quot;&nbsp;&lt;space&gt;&nbsp; Mod=&quot;\some\where\else&quot;&nbsp;&nbsp; 
+more options....</font></p>
+<p>&nbsp;</p>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" height="52">
+  <tr>
+    <td width="14%" height="18"><font face="Arial">-<b>W</b>orkspace=</font></td>
+    <td width="43%" height="18"><font face="Arial">\any\where</font></td>
+    <td width="43%" height="18"><font face="Arial">a root drive or a folder</font></td>
+  </tr>
+  <tr>
+    <td width="14%" height="19"><font face="Arial">-<b>M</b>od=</font></td>
+    <td width="43%" height="19">&nbsp;</td>
+    <td width="43%" height="19">output to MOD folder TREE, not just 
+    addons,missions or blah</td>
+  </tr>
+  <tr>
+    <td width="14%" height="24"><font face="Arial">+<b>/-N</b>oisy</font></td>
+    <td width="43%" height="24">&nbsp;</td>
+    <td width="43%" height="24">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19"><font face="Arial">+/-<b>S</b>trip</font></td>
+    <td width="43%" height="19"><font face="Arial">deprecated</font></td>
+    <td width="43%" height="19">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19"><font face="Arial">+/-<b>C</b>lean</font></td>
+    <td width="43%" height="19">&nbsp;</td>
+    <td width="43%" height="19">erases project's temp space and rebuilds</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19"><font face="Arial">+/-Q</font></td>
+    <td width="43%" height="19"><font face="Arial">do NOT compress mission.sqm</font></td>
+    <td width="43%" height="19">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="18"><font face="Arial">-<b>E</b>ngine=</font></td>
+    <td width="43%" height="18"><font face="Arial">Arrowhead (default) or arma3</font></td>
+    <td width="43%" height="18"></td>
+  </tr>
+  <tr>
+    <td width="14%" height="19"><font face="Arial">-<b>P</b></font></td>
+    <td width="43%" height="19"><font face="Arial">Do not pause</font></td>
+    <td width="43%" height="19">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19"><font face="Arial">-<b>I</b>slands=\any\where</font></td>
+    <td width="43%" height="19"><font face="Arial">comma,separated,list,of 
+    paths\to\any\where</font></td>
+    <td width="43%" height="19">should not be required</td>
+  </tr>
+  <tr>
+    <td width="14%" height="18"><b><font face="Arial">+</font></b><font face="Arial"><b>K</b>ey=\any\where</font></td>
+    <td width="43%" height="18"><font face="Arial">sign pbo's using new 
+    privatekey</font></td>
+    <td width="43%" height="18"></td>
+  </tr>
+  <tr>
+    <td width="14%" height="18"><b><font face="Arial">+</font></b><font face="Arial"><b>K</b>ey</font></td>
+    <td width="43%" height="18"><font face="Arial">sign these pbos using 
+    existing privatekey</font></td>
+    <td width="43%" height="18"></td>
+  </tr>
+  <tr>
+    <td width="14%" height="18"><b><font face="Arial">-</font></b><font face="Arial"><b>K</b>ey</font></td>
+    <td width="43%" height="18"><font face="Arial">don't sign these pbos (but 
+    preserve existing privatekey if any)</font></td>
+    <td width="43%" height="18"></td>
+  </tr>
+  <tr>
+    <td width="14%" height="1"></td>
+    <td width="43%" height="1"></td>
+    <td width="43%" height="1"></td>
+  </tr>
+  <tr>
+    <td width="14%" height="19">+/-!</td>
+    <td width="43%" height="19">Obfuscate. (to be consistent with makepbo's same 
+    symbol)</td>
+    <td width="43%" height="19">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19">+/-<b>O</b>bfuscate</td>
+    <td width="43%" height="19">&nbsp;</td>
+    <td width="43%" height="19">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19">+-X</td>
+    <td width="43%" height="19">deprecated</td>
+    <td width="43%" height="19">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19">+-R</td>
+    <td width="43%" height="19">Rebuild cfgPatches</td>
+    <td width="43%" height="19">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19">+-&amp;</td>
+    <td width="43%" height="19">deprecated</td>
+    <td width="43%" height="19">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="14%" height="19">+/-Z</td>
+    <td width="43%" height="19">compress</td>
+    <td width="43%" height="19">using list defined in gui</td>
+  </tr>
+</table>
+<font FACE="Consolas" SIZE="2">
+<p></font></p>
+<p><font face="Arial" color="#FF0000">Note carefully:&nbsp; These options 
+persist across sessions.</font></p>
+<p><font face="Arial">As an eg. If you +Obfuscate a pbo, all subsequent 
+invocations of pboProject will continue to obfuscate until turned off.</font></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>
